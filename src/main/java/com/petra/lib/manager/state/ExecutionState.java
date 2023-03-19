@@ -2,5 +2,7 @@ package com.petra.lib.manager.state;
 
 public enum ExecutionState {
     START,
-    INITIALIZING
+    INITIALIZING,
+    REQUEST_SOURCE_DATA,
+    REQUEST_SOURCE_DATA_ERROR,
 }

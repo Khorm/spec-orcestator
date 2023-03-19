@@ -1,11 +1,12 @@
 package com.petra.lib.signal.new_signal;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petra.lib.signal.consumer.Receiver;
+import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.signal.producer.Sender;
 import com.petra.lib.variable.mapper.VariableMapper;
 import com.petra.lib.variable.process.ProcessVariable;
 import com.petra.lib.signal.model.ExecutionRequest;
-import com.petra.lib.signal.model.ExecutionResponse;
 import com.petra.lib.signal.model.Version;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -26,25 +27,30 @@ public class Signal {
 
     @EqualsAndHashCode.Include
     Long id;
-    Version signalVersion;
+    String signalVersion;
     VariableMapper signalMapper;
+    Consumer<SignalTransferModel> executionHandler;
 
-    public Long getId(){
-        return id;
-    }
-
-    public Version getVersion(){
-        return signalVersion;
-    }
-
-    public void start(Consumer<ExecutionResponse> messageHandler){
-        receiver.start(messageHandler);
-    }
 
     public void send(UUID scenarioId, Collection<ProcessVariable> valueList,
-                     BiConsumer<Exception, ExecutionRequest> sendErrorHandler) {
+                     BiConsumer<Exception, SignalTransferModel> sendErrorHandler) {
         Collection<ProcessVariable> signalValues = signalMapper.map(valueList);
-        ExecutionRequest executionRequest = new ExecutionRequest(scenarioId, signalVersion, signalValues);
-        sender.send(executionRequest, sendErrorHandler);
+        SignalTransferModel signalTransferModel = new SignalTransferModel(signalValues, signalVersion, id, scenarioId);
+        sender.send(signalTransferModel, sendErrorHandler);
+    }
+
+    public void accept(){
+        receiver.accept();
+    }
+
+    private void receive(String message){
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            SignalTransferModel signalTransferModel = objectMapper.readValue(message, SignalTransferModel.class);
+            executionHandler.accept(signalTransferModel);
+//            threadManager.executeAndWait(() -> executionHandler.accept(signalModel));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

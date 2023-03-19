@@ -16,6 +16,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @Getter
+@Deprecated
 public class ExecutionResponse {
     UUID scenarioId;
     Collection<ProcessVariable> consumerProcessVariables;

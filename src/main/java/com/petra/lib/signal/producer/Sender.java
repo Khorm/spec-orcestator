@@ -1,10 +1,11 @@
 package com.petra.lib.signal.producer;
 
 import com.petra.lib.signal.model.ExecutionRequest;
+import com.petra.lib.signal.model.SignalTransferModel;
 
 import java.util.function.BiConsumer;
 
 public interface Sender {
 
-    void send(ExecutionRequest executionRequest, BiConsumer<Exception, ExecutionRequest> sendErrorHandler);
+    void send(SignalTransferModel executionRequest, BiConsumer<Exception, SignalTransferModel> sendErrorHandler);
 }

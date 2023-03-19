@@ -1,6 +1,6 @@
 package com.petra.lib.signal.factory;
 
-import com.petra.lib.signal.model.SignalModel;
+import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.signal.KafkaBridge;
 import com.petra.lib.signal.ProducerSignal;
 import com.petra.lib.variable.mapper.VariableMapper;
@@ -19,11 +19,11 @@ import java.util.Map;
 
 public final class SignalFactory {
 
-     public static ProducerSignal createProducerSignal(SignalModel signalModel, String bootstrapServers){
+     public static ProducerSignal createProducerSignal(SignalTransferModel signalTransferModel, String bootstrapServers){
 
-          VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(signalModel.getVariableModels());
+          VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(signalTransferModel.getVariableModels());
 
-          Consumer<String, String> kafkaConsumer = createConsumer(getConsumerProps(bootstrapServers, signalModel.getName()));
+          Consumer<String, String> kafkaConsumer = createConsumer(getConsumerProps(bootstrapServers, signalTransferModel.getName()));
           Producer<String, String> kafkaProducer = createProducer(getProducerProps(bootstrapServers));
 
 

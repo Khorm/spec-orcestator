@@ -6,7 +6,7 @@ import com.petra.lib.action.new_action.ExecutionResult;
 import com.petra.lib.manager.state.ExecutionBehavior;
 import com.petra.lib.manager.ExecutionContext;
 import com.petra.lib.manager.ExecutionHandler;
-import com.petra.lib.manager.ExecutionState;
+import com.petra.lib.manager.ExecutionStateManager;
 import com.petra.lib.variable.base.VariableList;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -15,7 +15,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 /**
  * Класс выполняет функционал обработки активности
  */
-public class ActionExecutionState implements ExecutionState {
+public class ActionExecutionStateManager implements ExecutionStateManager {
 
     /**
      * Менеджер транзакций

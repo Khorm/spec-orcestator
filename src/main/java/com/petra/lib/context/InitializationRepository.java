@@ -1,10 +1,10 @@
 package com.petra.lib.context;
 
-import com.petra.lib.signal.model.SignalModel;
+import com.petra.lib.signal.model.SignalTransferModel;
 
 class InitializationRepository {
 
-    void saveStarterSignal(SignalModel signalModel){
+    void saveStarterSignal(SignalTransferModel signalTransferModel){
         сохранить
     }
 }

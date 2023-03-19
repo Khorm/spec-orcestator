@@ -14,6 +14,7 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 @Getter
+@Deprecated
 public class ExecutionRequest {
 
     UUID scenarioId;

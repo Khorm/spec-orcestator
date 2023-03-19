@@ -1,7 +1,7 @@
 package com.petra.lib.manager;
 
 import com.petra.lib.manager.state.ExecutionBehavior;
-import com.petra.lib.signal.model.SignalModel;
+import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.variable.base.VariableList;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -18,23 +18,23 @@ import java.util.List;
 @Log4j2
 public class ExecutionManager {
 
-    List<ExecutionState> stateList;
+    List<ExecutionStateManager> stateList;
     VariableList variableList;
     ThreadManager threadManager;
 
-    private void start(SignalModel signalModel){
-        ExecutionContext executionContext = new ExecutionContext(variableList, signalModel);
+    private void start(SignalTransferModel signalTransferModel){
+        ExecutionContext executionContext = new ExecutionContext(variableList, signalTransferModel);
         stateList.get(0).execute(executionContext, this::executeNext);
     }
 
-    private void executeNext(ExecutionContext executionContext, ExecutionState executedState, ExecutionBehavior executionBehavior){
-        Iterator<ExecutionState> iter = stateList.iterator();
+    private void executeNext(ExecutionContext executionContext, ExecutionStateManager executedState, ExecutionBehavior executionBehavior){
+        Iterator<ExecutionStateManager> iter = stateList.iterator();
         while (iter.hasNext()){
-            ExecutionState executionState = iter.next();
-            if (executionState.equals(executedState)){
+            ExecutionStateManager executionStateManager = iter.next();
+            if (executionStateManager.equals(executedState)){
                 if (iter.hasNext() && executionBehavior == ExecutionBehavior.NEXT) {
-                    ExecutionState nextExecutionState = iter.next();
-                    executeTask(executionContext, nextExecutionState);
+                    ExecutionStateManager nextExecutionStateManager = iter.next();
+                    executeTask(executionContext, nextExecutionStateManager);
                 }
                 return;
             }
@@ -42,7 +42,7 @@ public class ExecutionManager {
     }
 
 
-    private void executeTask(ExecutionContext executionContext, ExecutionState task){
+    private void executeTask(ExecutionContext executionContext, ExecutionStateManager task){
         threadManager.execute(() -> {
             try {
                 task.execute(executionContext, this::executeNext);
