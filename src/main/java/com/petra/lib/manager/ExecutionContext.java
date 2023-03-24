@@ -3,6 +3,7 @@ package com.petra.lib.manager;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.variable.base.VariableList;
+import com.petra.lib.variable.mapper.VariableMapper;
 import com.petra.lib.variable.process.ProcessVariablesCollection;
 import com.petra.lib.variable.process.ProcessVariable;
 import lombok.AccessLevel;
@@ -14,15 +15,20 @@ import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ExecutionContext {
+
     ProcessVariablesCollection processVariablesCollection;
 
     @Getter
     SignalTransferModel enterSignalTransferModel;
 
-    ExecutionContext(VariableList variableList, SignalTransferModel enterSignalTransferModel){
-        processVariablesCollection = new ProcessVariablesCollection(variableList);
+    @Getter
+    Integer group;
+
+
+    ExecutionContext(VariableList variableList, VariableMapper inputValueMap, SignalTransferModel enterSignalTransferModel, Integer group){
+        processVariablesCollection = new ProcessVariablesCollection(variableList, inputValueMap);
+        this.group = group;
         this.enterSignalTransferModel = enterSignalTransferModel;
-//        this.blockId = blockId;
     }
 
     public synchronized Collection<ProcessVariable> getVariablesList(){
@@ -34,9 +40,8 @@ public class ExecutionContext {
     }
 
 
-    public synchronized void setVariables(Collection<ProcessVariable> variables, Long signalId){
-        asdsa
-        variables.forEach(processVariablesCollection::putProcessVariable);
+    public synchronized void setVariables(Collection<ProcessVariable> inputValues){
+        processVariablesCollection.insertOuterVariables(inputValues);
     }
 
     public synchronized Collection<ProcessVariable> getSignalVariables(){
@@ -46,5 +51,11 @@ public class ExecutionContext {
     public UUID getScenarioId(){
         return enterSignalTransferModel.getScenarioId();
     }
+
+
+    public String getVariablesJson() throws JsonProcessingException {
+        return processVariablesCollection.getVariablesJson();
+    }
+
 
 }

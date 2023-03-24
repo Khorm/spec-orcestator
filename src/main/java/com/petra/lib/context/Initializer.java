@@ -1,9 +1,10 @@
 package com.petra.lib.context;
 
-import com.petra.lib.manager.state.ExecutionBehavior;
 import com.petra.lib.manager.ExecutionContext;
 import com.petra.lib.manager.ExecutionHandler;
 import com.petra.lib.manager.ExecutionStateManager;
+import com.petra.lib.manager.state.ExecutionState;
+import com.petra.lib.registration.ExecutionRepository;
 import com.petra.lib.variable.mapper.VariableMapper;
 import com.petra.lib.variable.process.ProcessVariable;
 import lombok.AccessLevel;
@@ -12,19 +13,31 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
 
+/**
+ * Менеджер управляет инициализацией запуска блока и проверкой блока на предыдущее исполнение
+ */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class Initializer implements ExecutionStateManager {
-    VariableMapper enterVariableMapper;
-    InitializationRepository initializationRepository;
+
+    ExecutionRepository executionRepository;
+    Long blockId;
+    ExecutionHandler executionHandler;
 
 
     @Override
-    public void execute(ExecutionContext executionContext, ExecutionHandler executionHandler) {
-        initializationRepository.saveStarterSignal(executionContext.getEnterSignalTransferModel());
+    public void execute(ExecutionContext executionContext) {
+        boolean isExecutedBefore = executionRepository.isExecutedBefore(executionContext.getScenarioId(), blockId);
+        if (isExecutedBefore){
+            return;
+        }
         Collection<ProcessVariable> signalVariables = executionContext.getSignalVariables();
-        Collection<ProcessVariable> blockVariables = enterVariableMapper.map(signalVariables);
-        executionContext.setVariables(blockVariables);
-        executionHandler.executeNext(executionContext, this, ExecutionBehavior.NEXT);
+        executionContext.setVariables(signalVariables);
+        executionHandler.executeNext(executionContext, this);
+    }
+
+    @Override
+    public ExecutionState getManagerState() {
+        return ExecutionState.INITIALIZING;
     }
 }

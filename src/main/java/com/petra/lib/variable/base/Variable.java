@@ -1,6 +1,5 @@
 package com.petra.lib.variable.base;
 
-import com.petra.lib.variable.process.ProcessVariable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

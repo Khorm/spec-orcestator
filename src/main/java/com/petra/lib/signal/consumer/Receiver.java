@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 public interface Receiver {
 
+    void start();
     void accept();
 
 }

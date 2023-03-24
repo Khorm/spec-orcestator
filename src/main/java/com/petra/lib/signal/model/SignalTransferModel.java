@@ -14,7 +14,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SignalTransferModel {
     Collection<ProcessVariable> signalVariables;
-    String version;
+    Version version;
     Long signalId;
     UUID scenarioId;
 }

@@ -32,8 +32,7 @@ public class KafkaReceiver implements Receiver {
     }
 
     @Override
-    public synchronized void start(java.util.function.Consumer<String> messageHandler) {
-        this.messageHandler = messageHandler;
+    public synchronized void start() {
         listenerThread.start();
     }
 

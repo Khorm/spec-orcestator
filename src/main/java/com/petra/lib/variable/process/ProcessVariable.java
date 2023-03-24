@@ -8,7 +8,8 @@ import lombok.*;
 public class ProcessVariable {
 
     private Long id;
-    private Object value;
+    private transient Object value;
+    private transient boolean wasParsed;
     private String valueJson;
 
     public ProcessVariable(Long id, Object value) {
@@ -17,12 +18,19 @@ public class ProcessVariable {
     }
 
     public Object getValue(){
-        return value;
+        if (wasParsed) {
+            return value;
+        }
+        throw new IllegalStateException();
     }
 
     public Object getValue(Class<?> clazz) throws JsonProcessingException {
+        if (wasParsed){
+            return value;
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         value = objectMapper.readValue(valueJson, clazz);
+        wasParsed = true;
         return value;
     }
 }

@@ -1,11 +1,5 @@
 package com.petra.lib.workflow.observer;
 
-import com.petra.lib.signal.model.ExecutionResponse;
-
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * Менеджер подписки на элементы сценария
  */

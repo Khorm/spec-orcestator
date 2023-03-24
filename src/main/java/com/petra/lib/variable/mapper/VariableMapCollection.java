@@ -10,7 +10,7 @@ import java.util.Optional;
  * Возвращает переменную консумера по айди переменной продюсера
  */
 @RequiredArgsConstructor
-public class VariableMapCollection {
+class VariableMapCollection {
     private final Map<Long, Long> producerConsumerMap;
 
     Long findConsumerVariableByProducerVariable(Long producerVariableId) {
