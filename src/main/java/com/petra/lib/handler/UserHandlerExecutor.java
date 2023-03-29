@@ -1,19 +1,26 @@
 package com.petra.lib.handler;
 
 import com.petra.lib.manager.ExecutionContext;
+import com.petra.lib.manager.ExecutionHandler;
 import com.petra.lib.manager.ExecutionStateManager;
 import com.petra.lib.manager.state.ExecutionState;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class UserHandlerExecutor implements ExecutionStateManager {
 
-    private final UserHandler userHandler;
+    UserHandler userHandler;
+    ExecutionHandler executionHandler;
+
 
     @Override
     public void execute(ExecutionContext executionContext) {
         UserContextImpl userContext = new UserContextImpl(executionContext);
         userHandler.execute(userContext);
+        executionHandler.executeNext(executionContext, getManagerState());
     }
 
     @Override

@@ -1,21 +1,7 @@
 package com.petra.lib.workflow;
 
-import com.petra.lib.block.AbsExecutingBlock;
-import com.petra.lib.block.ExecutingBlock;
-import com.petra.lib.executor.Executor;
-import com.petra.lib.workflow.graph.Graph;
-import com.petra.lib.workflow.graph.GraphIterator;
-import com.petra.lib.signal.model.ExecutionRequest;
-import com.petra.lib.signal.model.ExecutionResponse;
-import com.petra.lib.workflow.model.RollbackRequest;
-import com.petra.lib.signal.model.Version;
-import com.petra.lib.workflow.observer.ScenarioObserverManager;
-import com.petra.lib.workflow.repository.WorkflowRepository;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
-import org.springframework.transaction.PlatformTransactionManager;
-
-import java.util.*;
 
 /**
  * Оркестратор локальных и удаленных активностей и других оркестраторов.

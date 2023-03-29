@@ -1,12 +1,10 @@
 package com.petra.lib.signal.consumer;
 
-import com.petra.lib.signal.model.ExecutionResponse;
-
 import java.util.function.Consumer;
 
 public interface Receiver {
 
     void start();
-    void accept();
+    void setHandler(Consumer<String> messageHandler);
 
 }

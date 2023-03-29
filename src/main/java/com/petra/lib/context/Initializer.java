@@ -5,10 +5,8 @@ import com.petra.lib.manager.ExecutionHandler;
 import com.petra.lib.manager.ExecutionStateManager;
 import com.petra.lib.manager.state.ExecutionState;
 import com.petra.lib.registration.ExecutionRepository;
-import com.petra.lib.variable.mapper.VariableMapper;
 import com.petra.lib.variable.process.ProcessVariable;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
@@ -17,12 +15,17 @@ import java.util.Collection;
  * Менеджер управляет инициализацией запуска блока и проверкой блока на предыдущее исполнение
  */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor
 public class Initializer implements ExecutionStateManager {
 
-    ExecutionRepository executionRepository;
     Long blockId;
     ExecutionHandler executionHandler;
+    ExecutionRepository executionRepository;
+
+    public Initializer(Long blockId, ExecutionHandler executionHandler){
+        this.blockId = blockId;
+        this.executionRepository = new ExecutionRepository();
+        this.executionHandler = executionHandler;
+    }
 
 
     @Override
@@ -33,11 +36,12 @@ public class Initializer implements ExecutionStateManager {
         }
         Collection<ProcessVariable> signalVariables = executionContext.getSignalVariables();
         executionContext.setVariables(signalVariables);
-        executionHandler.executeNext(executionContext, this);
+        executionHandler.executeNext(executionContext, getManagerState());
     }
 
     @Override
     public ExecutionState getManagerState() {
         return ExecutionState.INITIALIZING;
     }
+
 }

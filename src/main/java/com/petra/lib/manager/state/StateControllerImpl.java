@@ -1,13 +1,21 @@
 package com.petra.lib.manager.state;
 
+import com.petra.lib.manager.ExecutionStateManager;
+
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public final class StateControllerImpl implements StateController{
 
     private final Map<ExecutionState, ExecutionState> stateInheritance = new HashMap<>();
+    /**
+     * список стейтменеджеров с применеными стейтами
+     */
+    private final Map<ExecutionState, ExecutionStateManager> stateList;
 
-    private StateControllerImpl(){
+    public StateControllerImpl(Map<ExecutionState, ExecutionStateManager> stateList){
+        this.stateList = stateList;
         stateInheritance.put(ExecutionState.INITIALIZING, ExecutionState.REQUEST_SOURCE_DATA);
         stateInheritance.put(ExecutionState.REQUEST_SOURCE_DATA, ExecutionState.EXECUTING);
         stateInheritance.put(ExecutionState.EXECUTING, ExecutionState.EXECUTION_REGISTRATION);
@@ -15,7 +23,12 @@ public final class StateControllerImpl implements StateController{
     }
 
     @Override
-    public ExecutionState getNextState(ExecutionState prevState) {
-        return stateInheritance.get(prevState);
+    public Optional<ExecutionState> getNextState(ExecutionState prevState) {
+        return Optional.ofNullable(stateInheritance.get(prevState));
+    }
+
+    @Override
+    public ExecutionStateManager getState(ExecutionState state) {
+        return stateList.get(state);
     }
 }

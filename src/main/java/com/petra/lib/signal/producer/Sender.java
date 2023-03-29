@@ -1,6 +1,5 @@
 package com.petra.lib.signal.producer;
 
-import com.petra.lib.signal.model.ExecutionRequest;
 import com.petra.lib.signal.model.SignalTransferModel;
 
 import java.util.function.BiConsumer;

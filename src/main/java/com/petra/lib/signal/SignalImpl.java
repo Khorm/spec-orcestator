@@ -9,7 +9,6 @@ import com.petra.lib.variable.mapper.VariableMapper;
 import com.petra.lib.variable.process.ProcessVariable;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
@@ -18,7 +17,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 class SignalImpl implements Signal {
     Receiver receiver;
@@ -28,28 +26,44 @@ class SignalImpl implements Signal {
     Long id;
     Version signalVersion;
     VariableMapper signalMapper;
-    Consumer<SignalTransferModel> executionHandler;
+
+    SignalObserver observer;
+//    BiConsumer<Exception, SignalTransferModel> sendErrorHandler;
 
 
-    public void send(UUID scenarioId, Collection<ProcessVariable> valueList,
-                     BiConsumer<Exception, SignalTransferModel> sendErrorHandler) {
-        Collection<ProcessVariable> signalValues = signalMapper.map(valueList);
-        SignalTransferModel signalTransferModel = new SignalTransferModel(signalValues, signalVersion, id, scenarioId);
-        sender.send(signalTransferModel, sendErrorHandler);
+    SignalImpl(Receiver receiver, Sender sender, Long id, Version signalVersion,
+               VariableMapper signalMapper, SignalObserver observer) {
+        this.receiver = receiver;
+        this.receiver.setHandler(this::receive);
+        this.sender = sender;
+        this.id = id;
+        this.signalVersion = signalVersion;
+        this.signalMapper = signalMapper;
+        this.observer = observer;
     }
 
-    public void accept() {
-        receiver.accept();
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    public void send(UUID scenarioId, Collection<ProcessVariable> valueList) {
+        Collection<ProcessVariable> signalValues = signalMapper.map(valueList);
+        SignalTransferModel signalTransferModel = new SignalTransferModel(signalValues, signalVersion, id, scenarioId);
+        sender.send(signalTransferModel, observer::error);
     }
 
     private void receive(String message) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             SignalTransferModel signalTransferModel = objectMapper.readValue(message, SignalTransferModel.class);
-            executionHandler.accept(signalTransferModel);
+//            executionHandler.accept(signalTransferModel);
+            observer.executed(signalTransferModel);
 //            threadManager.executeAndWait(() -> executionHandler.accept(signalModel));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 }

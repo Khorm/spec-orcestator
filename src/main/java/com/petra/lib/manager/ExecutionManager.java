@@ -7,25 +7,18 @@ import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.variable.base.VariableList;
 import com.petra.lib.variable.mapper.VariableMapper;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.Map;
+import java.util.Optional;
 
 
 /**
  * Класс управляющий вызовом любого исполняемого блока
  */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor
 @Log4j2
-class ExecutionManager implements ExecutionHandler {
-
-    /**
-     * список стейтменеджеров с применеными стейтами
-     */
-    Map<ExecutionState, ExecutionStateManager> stateList;
+public class ExecutionManager implements ExecutionHandler {
 
     /**
      * список переменных блока
@@ -45,24 +38,34 @@ class ExecutionManager implements ExecutionHandler {
     /**
      * входящие сообщения
      */
-    Signal inputSignal;
+//    Signal inputSignal;
 
     /**
      * контроллер переключения стейтов
      */
     StateController stateController;
 
+    public ExecutionManager(VariableList variableList, ThreadManager threadManager, VariableMapper inputMapper,  StateController stateController) {
+        this.variableList = variableList;
+        this.threadManager = threadManager;
+        this.inputMapper = inputMapper;
+//        this.inputSignal = inputSignal;
+        this.stateController = stateController;
+    }
+
 
     private void start(SignalTransferModel signalTransferModel, Integer group) {
         ExecutionContext executionContext = new ExecutionContext(variableList, inputMapper, signalTransferModel, group);
-        ExecutionStateManager firstState = stateList.get(ExecutionState.INITIALIZING);
+        ExecutionStateManager firstState = stateController.getState(ExecutionState.INITIALIZING);
         executeTask(executionContext, firstState);
     }
 
     public void executeNext(ExecutionContext executionContext, ExecutionState executedState) {
-//        ExecutionState executedState = executedStateManager.getManagerState();
-        ExecutionStateManager nextExecState = stateList.get(stateController.getNextState(executedState));
-        executeTask(executionContext, nextExecState);
+        Optional<ExecutionState> nextState = stateController.getNextState(executedState);
+        if (nextState.isPresent()) {
+            ExecutionStateManager nextExecState = stateController.getState(nextState.get());
+            executeTask(executionContext, nextExecState);
+        }
     }
 
 

@@ -1,12 +1,13 @@
 package com.petra.lib.signal.source;
 
+import com.petra.lib.manager.factory.SourceSignalModel;
 import com.petra.lib.signal.Signal;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -20,6 +21,27 @@ class SourceSignalList {
 
     @Getter
     int sourceSignalsCount;
+
+    public SourceSignalList(Collection<SourceSignalModel> sourceSignalList, List<Signal> signals){
+        sourceSignalsCount = signals.size();
+
+        sourceSignals = signals.stream()
+                .collect(Collectors.toMap(signal -> signal.getId(), Function.identity()));
+
+        childrenByParent = new HashMap<>();
+        parentsByChild = new HashMap<>();
+        starterSignals = new HashSet<>();
+        for (SourceSignalModel signalModel : sourceSignalList){
+            childrenByParent.put(signalModel.getId(), new HashSet<>(signalModel.getChildIds()));
+            if (signalModel.getParentIds().isEmpty()){
+                starterSignals.add(signals.stream().filter(signal -> signal.getId().equals(signalModel.getId())).findFirst().get());
+            }else {
+                parentsByChild.put(signalModel.getId(), new HashSet<>(signalModel.getParentIds()));
+
+            }
+        }
+
+    }
 
     Set<Signal> getNextAvailableSignals(Set<Long> executedSignals) {
         if (executedSignals == null || executedSignals.isEmpty()) {

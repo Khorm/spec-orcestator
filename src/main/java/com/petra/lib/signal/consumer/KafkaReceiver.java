@@ -1,6 +1,5 @@
 package com.petra.lib.signal.consumer;
 
-import com.petra.lib.signal.model.ExecutionResponse;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -8,6 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 
 import java.time.Duration;
+import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class KafkaReceiver implements Receiver {
@@ -22,8 +22,9 @@ public class KafkaReceiver implements Receiver {
         listenerThread = new Thread(() -> {
             while (true) {
                 //max.poll.records
-                ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ZERO);
-                for (ConsumerRecord<String, String> record : records) {
+                ConsumerRecords<UUID, String> records = kafkaConsumer.poll(Duration.ZERO);
+                for (ConsumerRecord<UUID, String> record : records) {
+
                     String message = record.value();
                     messageHandler.accept(message);
                 }
@@ -37,7 +38,7 @@ public class KafkaReceiver implements Receiver {
     }
 
     @Override
-    public void accept() {
-        kafkaConsumer.commitSync();
+    public void setHandler(java.util.function.Consumer<String> messageHandler) {
+        this.messageHandler = messageHandler;
     }
 }
