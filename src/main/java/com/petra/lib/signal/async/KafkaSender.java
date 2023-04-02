@@ -1,8 +1,9 @@
-package com.petra.lib.signal.producer;
+package com.petra.lib.signal.async;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petra.lib.signal.model.SignalTransferModel;
+import com.petra.lib.signal.Sender;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

@@ -9,6 +9,7 @@ import com.petra.lib.manager.ThreadManager;
 import com.petra.lib.manager.state.ExecutionState;
 import com.petra.lib.manager.state.StateControllerImpl;
 import com.petra.lib.registration.RegistrationState;
+import com.petra.lib.release.ReleaseState;
 import com.petra.lib.response.ResponseState;
 import com.petra.lib.signal.Signal;
 import com.petra.lib.signal.SignalFactory;
@@ -44,8 +45,13 @@ public final class BlockFactory {
 
         stateList.put(ExecutionState.EXECUTION_REGISTRATION, new RegistrationState(actionModel.getId(), executionManagerWrapper));
 
-//        Signal inputSignal = SignalFactory.createSignal(actionModel.getRequest());
-        stateList.put(ExecutionState.EXECUTION_RESPONSE, createExecutionResponse(actionModel.getRequest(), executionManagerWrapper));
+        SignalObserverWrapper signalObserverWrapper = new SignalObserverWrapper();
+        Signal inputSignal = SignalFactory.createSignal(actionModel.getRequest(), signalObserverWrapper);
+        stateList.put(ExecutionState.EXECUTION_RELEASE, new ReleaseState(inputSignal));
+
+        ResponseState responseState = new ResponseState(inputSignal, executionManagerWrapper);
+        signalObserverWrapper.setListener(responseState);
+        stateList.put(ExecutionState.EXECUTION_RESPONSE, responseState);
 
         StateControllerImpl stateController = new StateControllerImpl(stateList);
 
@@ -67,13 +73,6 @@ public final class BlockFactory {
         return sourceSignalRequestManager;
     }
 
-    private static ResponseState createExecutionResponse(SignalModel signalModel, ExecutionManagerWrapper executionManagerWrapper){
-        SignalObserverWrapper signalObserverWrapper = new SignalObserverWrapper();
-        Signal inputSignal = SignalFactory.createSignal(signalModel, signalObserverWrapper);
-        ResponseState responseState = new ResponseState(inputSignal, executionManagerWrapper);
-        signalObserverWrapper.setListener(responseState);
-        return responseState;
-    }
 
 
 }

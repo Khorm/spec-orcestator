@@ -44,4 +44,9 @@ public class Initializer implements ExecutionStateManager {
         return ExecutionState.INITIALIZING;
     }
 
+    @Override
+    public void start() {
+        //do nothin
+    }
+
 }

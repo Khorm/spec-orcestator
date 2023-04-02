@@ -1,7 +1,6 @@
 package com.petra.lib.signal.source;
 
 import com.petra.lib.manager.ExecutionContext;
-import com.petra.lib.manager.ExecutionHandler;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,20 +8,17 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.BiConsumer;
 
 /**
  * Хранящийся во время запросов контекст
  */
+
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
-class ContextData {
+class ContextModel {
 
     @Getter
     ExecutionContext context;
-
-    @Getter
-    ExecutionHandler executionHandler;
     Set<Long> executedSourceSignalIds = new HashSet<>();
 
     Set<Long> getExecutedSourceSignalIds(){

@@ -1,10 +1,12 @@
-package com.petra.lib.signal;
+package com.petra.lib.signal.async;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petra.lib.signal.consumer.Receiver;
+import com.petra.lib.signal.Signal;
+import com.petra.lib.signal.SignalObserver;
+import com.petra.lib.signal.Receiver;
 import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.signal.model.Version;
-import com.petra.lib.signal.producer.Sender;
+import com.petra.lib.signal.Sender;
 import com.petra.lib.variable.mapper.VariableMapper;
 import com.petra.lib.variable.process.ProcessVariable;
 import lombok.AccessLevel;
@@ -13,8 +15,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
 import java.util.UUID;
-import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -52,6 +52,11 @@ class SignalImpl implements Signal {
         Collection<ProcessVariable> signalValues = signalMapper.map(valueList);
         SignalTransferModel signalTransferModel = new SignalTransferModel(signalValues, signalVersion, id, scenarioId);
         sender.send(signalTransferModel, observer::error);
+    }
+
+    @Override
+    public void executeSignal() {
+        receiver.release();
     }
 
     private void receive(String message) {

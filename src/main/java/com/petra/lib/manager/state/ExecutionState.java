@@ -5,7 +5,9 @@ public enum ExecutionState {
     REQUEST_SOURCE_DATA(false),
     EXECUTING(false),
     EXECUTION_REGISTRATION(false),
+    EXECUTION_RELEASE(false),
     EXECUTION_RESPONSE(true),
+
 
     ERROR(false)
 
@@ -15,9 +17,8 @@ public enum ExecutionState {
 
     ExecutionState(boolean isExecuteInNewThread){
         this.isExecuteInNewThread = isExecuteInNewThread;
+
     }
-
-
 
     public boolean isExecuteInNewThread(){
         return isExecuteInNewThread;

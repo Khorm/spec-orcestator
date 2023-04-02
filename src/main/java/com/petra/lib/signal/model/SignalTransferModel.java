@@ -1,5 +1,6 @@
 package com.petra.lib.signal.model;
 
+import com.petra.lib.signal.SignalType;
 import com.petra.lib.variable.process.ProcessVariable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,4 +18,5 @@ public class SignalTransferModel {
     Version version;
     Long signalId;
     UUID scenarioId;
+    SignalType signalType;
 }

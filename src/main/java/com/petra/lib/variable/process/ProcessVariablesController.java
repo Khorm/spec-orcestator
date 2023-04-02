@@ -17,7 +17,7 @@ import java.util.Map;
  */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
-public class ProcessVariablesCollection {
+public class ProcessVariablesController {
 
     VariableList variableList;
     VariableMapper inputValueMap;

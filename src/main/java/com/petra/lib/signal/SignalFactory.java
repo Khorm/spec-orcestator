@@ -1,8 +1,8 @@
 package com.petra.lib.signal;
 
-import com.petra.lib.signal.consumer.KafkaReceiver;
-import com.petra.lib.signal.model.SignalTransferModel;
-import com.petra.lib.signal.producer.KafkaSender;
+import com.petra.lib.signal.async.SignalImpl;
+import com.petra.lib.signal.async.KafkaReceiver;
+import com.petra.lib.signal.async.KafkaSender;
 import com.petra.lib.variable.mapper.VariableMapper;
 import com.petra.lib.variable.mapper.VariableMapperFactory;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -30,17 +30,6 @@ public final class SignalFactory {
         return signal;
     }
 
-//    public static Signal createListeningSignalSignal(SignalModel signalModel, java.util.function.Consumer<SignalTransferModel> executionHandler) {
-//        KafkaReceiver kafkaReceiver = new KafkaReceiver(createConsumer(getConsumerProps(null, null)));
-//        KafkaSender kafkaSender = new KafkaSender(createProducer(getProducerProps(null)));
-//        VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(signalModel.getVariableModelCollection());
-//
-//        SignalImpl signal = new SignalImpl(kafkaReceiver, kafkaSender, signalModel.getId(), signalModel.getVersion(),
-//                variableMapper, executionHandler);
-//        return signal;
-//    }
-
-
     private static Consumer<UUID, String> createConsumer(Map<String, Object> props) {
         DefaultKafkaConsumerFactory<UUID, String> kafkaConsumerFactory = new DefaultKafkaConsumerFactory<>(props);
         return kafkaConsumerFactory.createConsumer();
@@ -58,6 +47,8 @@ public final class SignalFactory {
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         return props;
     }
 
@@ -69,6 +60,4 @@ public final class SignalFactory {
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return props;
     }
-
-
 }
