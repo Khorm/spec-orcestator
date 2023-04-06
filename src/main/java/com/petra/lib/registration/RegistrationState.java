@@ -7,6 +7,7 @@ import com.petra.lib.manager.ExecutionStateManager;
 import com.petra.lib.manager.state.ExecutionState;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 import java.util.UUID;
@@ -17,16 +18,18 @@ public class RegistrationState implements ExecutionStateManager {
     ExecutionRepository executionRepository;
     Long blockId;
     ExecutionHandler executionHandler;
+    PlatformTransactionManager transactionManager;
 
     @Override
     public void start() {
 
     }
 
-    public RegistrationState(Long blockId, ExecutionHandler executionHandler, DataSource dataSource) {
+    public RegistrationState(Long blockId, ExecutionHandler executionHandler, DataSource dataSource, PlatformTransactionManager transactionManager) {
         this.blockId = blockId;
         this.executionRepository = new ExecutionRepository(dataSource);
         this.executionHandler = executionHandler;
+        this.transactionManager = transactionManager;
     }
 
     @Override
@@ -34,7 +37,9 @@ public class RegistrationState implements ExecutionStateManager {
         UUID scenarioId = executionContext.getScenarioId();
         String variables = executionContext.getVariablesJson();
         executionRepository.saveExecution(scenarioId, blockId, variables);
+        transactionManager.commit(executionContext.getTransactionStatus());
         executionHandler.executeNext(executionContext, getManagerState());
+
     }
 
     @Override

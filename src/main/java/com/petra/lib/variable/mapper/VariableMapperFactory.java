@@ -14,4 +14,8 @@ public final class VariableMapperFactory {
         return variableMapper;
     }
 
+    public static VariableMapper createDummyMapper(){
+        return new VariableMapperDummy();
+    }
+
 }

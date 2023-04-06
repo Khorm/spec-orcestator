@@ -33,7 +33,6 @@ public class KafkaReceiver implements ReceiverSignal {
                         ) {
         this.kafkaConsumer = kafkaConsumer;
         this.kafkaProducer = kafkaProducer;
-//        this.messageHandler = messageHandler;
         this.signalId = signalId;
 
         listenerThread = new Thread(() -> {

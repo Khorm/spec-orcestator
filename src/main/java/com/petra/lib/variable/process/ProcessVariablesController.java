@@ -38,6 +38,10 @@ public class ProcessVariablesController {
         localVariables.forEach(this::putProcessVariable);
     }
 
+    public void setVariables(Collection<ProcessVariable> variables){
+        variables.forEach(this::putProcessVariable);
+    }
+
     public String getVariablesJson() throws JsonProcessingException {
         return new ObjectMapper().writeValueAsString(getAllVariables());
     }

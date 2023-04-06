@@ -3,6 +3,7 @@ package com.petra.lib.signal.sync;
 import com.petra.lib.manager.ExecutionContext;
 import com.petra.lib.signal.SenderSignal;
 import com.petra.lib.signal.SignalObserver;
+import com.petra.lib.signal.SignalType;
 import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.signal.model.Version;
 import com.petra.lib.variable.mapper.VariableMapper;
@@ -12,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
+import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SyncSender implements SenderSignal {
@@ -45,10 +47,10 @@ public class SyncSender implements SenderSignal {
     }
 
     @Override
-    public void send(ExecutionContext context) {
-        Collection<ProcessVariable> signalVariables = signalMapper.map(context.getVariablesList());
-        SignalTransferModel request = new SignalTransferModel(signalVariables, version, signalId, context.getScenarioId());
-        SignalTransferModel result = null;
+    public void send(Collection<ProcessVariable> senderVariables, UUID scenarioId) {
+        Collection<ProcessVariable> signalVariables = signalMapper.map(senderVariables);
+        SignalTransferModel request = new SignalTransferModel(signalVariables, version, signalId, scenarioId, SignalType.REQUEST);
+        SignalTransferModel result;
         try {
             result = sourceClient.getSource(request);
         } catch (Exception e) {

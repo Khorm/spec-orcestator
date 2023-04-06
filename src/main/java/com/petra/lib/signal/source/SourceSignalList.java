@@ -1,7 +1,7 @@
 package com.petra.lib.signal.source;
 
 import com.petra.lib.manager.factory.SourceSignalModel;
-import com.petra.lib.signal.Signal;
+import com.petra.lib.signal.SenderSignal;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -14,15 +14,15 @@ import java.util.stream.Stream;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 class SourceSignalList {
 
-    Map<Long, Signal> sourceSignals;
+    Map<Long, SenderSignal> sourceSignals;
     Map<Long, Set<Long>> childrenByParent;
     Map<Long, Set<Long>> parentsByChild;
-    Set<Signal> starterSignals;
+    Set<SenderSignal> starterSignals;
 
     @Getter
     int sourceSignalsCount;
 
-    public SourceSignalList(Collection<SourceSignalModel> sourceSignalList, List<Signal> signals){
+    SourceSignalList(Collection<SourceSignalModel> sourceSignalList, List<SenderSignal> signals) {
         sourceSignalsCount = signals.size();
 
         sourceSignals = signals.stream()
@@ -31,11 +31,11 @@ class SourceSignalList {
         childrenByParent = new HashMap<>();
         parentsByChild = new HashMap<>();
         starterSignals = new HashSet<>();
-        for (SourceSignalModel signalModel : sourceSignalList){
+        for (SourceSignalModel signalModel : sourceSignalList) {
             childrenByParent.put(signalModel.getId(), new HashSet<>(signalModel.getChildIds()));
-            if (signalModel.getParentIds().isEmpty()){
+            if (signalModel.getParentIds().isEmpty()) {
                 starterSignals.add(signals.stream().filter(signal -> signal.getId().equals(signalModel.getId())).findFirst().get());
-            }else {
+            } else {
                 parentsByChild.put(signalModel.getId(), new HashSet<>(signalModel.getParentIds()));
 
             }
@@ -43,7 +43,11 @@ class SourceSignalList {
 
     }
 
-    Set<Signal> getNextAvailableSignals(Set<Long> executedSignals) {
+    void start() {
+        sourceSignals.values().forEach(SenderSignal::start);
+    }
+
+    Set<SenderSignal> getNextAvailableSignals(Set<Long> executedSignals) {
         if (executedSignals == null || executedSignals.isEmpty()) {
             return starterSignals;
         }

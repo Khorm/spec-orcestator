@@ -9,6 +9,7 @@ import com.petra.lib.variable.process.ProcessVariable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import org.springframework.transaction.TransactionStatus;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -21,7 +22,13 @@ public class ExecutionContext {
     @Getter
     SignalTransferModel enterSignalTransferModel;
 
-    ExecutionContext(VariableList variableList, VariableMapper inputValueMap, SignalTransferModel enterSignalTransferModel){
+    @Getter
+    TransactionStatus transactionStatus;
+
+
+    public ExecutionContext(VariableList variableList, VariableMapper inputValueMap,
+                            SignalTransferModel enterSignalTransferModel, TransactionStatus transactionStatus){
+        this.transactionStatus = transactionStatus;
         processVariablesController = new ProcessVariablesController(variableList, inputValueMap);
         this.enterSignalTransferModel = enterSignalTransferModel;
     }
@@ -35,8 +42,12 @@ public class ExecutionContext {
     }
 
 
-    public synchronized void setVariables(Collection<ProcessVariable> inputValues){
+    public synchronized void setSignalVariables(Collection<ProcessVariable> inputValues){
         processVariablesController.insertOuterVariables(inputValues);
+    }
+
+    public synchronized void setLoadVariables(Collection<ProcessVariable> inputValues){
+        processVariablesController.setVariables(inputValues);
     }
 
     public synchronized Collection<ProcessVariable> getSignalVariables(){

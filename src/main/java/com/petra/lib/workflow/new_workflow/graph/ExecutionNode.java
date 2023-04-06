@@ -1,6 +1,6 @@
-package com.petra.lib.signal.model;
+package com.petra.lib.workflow.new_workflow.graph;
 
-import com.petra.lib.signal.SignalType;
+import com.petra.lib.signal.SenderSignal;
 import com.petra.lib.variable.process.ProcessVariable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,14 +11,14 @@ import java.util.Collection;
 import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@Getter
 @RequiredArgsConstructor
-public class SignalTransferModel {
-    Collection<ProcessVariable> signalVariables;
-    Version version;
-    Long signalId;
-    UUID scenarioId;
-    SignalType signalType;
-    Long senderId;
-    Long receiverId;
+public class ExecutionNode {
+
+    @Getter
+    Long id;
+    SenderSignal signal;
+
+    public void execute(Collection<ProcessVariable> processVariables, UUID scenarioId){
+        signal.send(processVariables, scenarioId);
+    }
 }

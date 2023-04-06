@@ -1,4 +1,4 @@
-package com.petra.lib.manager.seal;
+package com.petra.lib.manager.thread;
 
 import com.petra.lib.signal.ReceiverSignal;
 import com.petra.lib.signal.SignalListener;
@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-class Seal implements SignalListener, ReceiverSignal {
+class ExecutionThreadController implements SignalListener, ReceiverSignal {
 
     SignalListener signalListener;
     ReceiverSignal receiverSignal;

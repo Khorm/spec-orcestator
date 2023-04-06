@@ -1,5 +1,6 @@
 package com.petra.lib.context;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petra.lib.manager.ExecutionContext;
 import com.petra.lib.manager.ExecutionHandler;
 import com.petra.lib.manager.ExecutionStateManager;
@@ -21,21 +22,23 @@ public class Initializer implements ExecutionStateManager {
     ExecutionHandler executionHandler;
     ExecutionRepository executionRepository;
 
-    public Initializer(Long blockId, ExecutionHandler executionHandler){
+    public Initializer(Long blockId, ExecutionHandler executionHandler, ExecutionRepository executionRepository){
         this.blockId = blockId;
-        this.executionRepository = new ExecutionRepository();
+        this.executionRepository = executionRepository;
         this.executionHandler = executionHandler;
     }
 
 
     @Override
-    public void execute(ExecutionContext executionContext) {
+    public void execute(ExecutionContext executionContext) throws JsonProcessingException {
         boolean isExecutedBefore = executionRepository.isExecutedBefore(executionContext.getScenarioId(), blockId);
         if (isExecutedBefore){
+            executionContext.setLoadVariables(executionRepository.getVariables(executionContext.getScenarioId(),blockId));
+            executionHandler.executeState(executionContext, ExecutionState.EXECUTION_RESPONSE);
             return;
         }
         Collection<ProcessVariable> signalVariables = executionContext.getSignalVariables();
-        executionContext.setVariables(signalVariables);
+        executionContext.setSignalVariables(signalVariables);
         executionHandler.executeNext(executionContext, getManagerState());
     }
 

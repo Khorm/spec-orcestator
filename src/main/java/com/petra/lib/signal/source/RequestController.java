@@ -3,11 +3,9 @@ package com.petra.lib.signal.source;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petra.lib.manager.ExecutionContext;
-import com.petra.lib.manager.ExecutionHandler;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -19,77 +17,77 @@ import java.util.UUID;
 @RequiredArgsConstructor
 class RequestController {
 
-//    Map<UUID, ContextData> uuidRequestDataMap = new HashMap<>();
-//    Map<UUID, Thread> timerMap = new HashMap<>();
-//    Long connectionTimeout;
-    private final NamedParameterJdbcTemplate jdbcTemplate;
-
-    void addNewRequestData(ExecutionContext context/*, ExecutionHandler executionHandler*/) throws JsonProcessingException {
-//        if (uuidRequestDataMap.containsKey(context.getScenarioId())) return;
+////    Map<UUID, ContextData> uuidRequestDataMap = new HashMap<>();
+////    Map<UUID, Thread> timerMap = new HashMap<>();
+////    Long connectionTimeout;
+//    private final NamedParameterJdbcTemplate jdbcTemplate;
 //
-//        Thread timer = new Thread(() -> {
-//            try {
-//                TimeUnit.MILLISECONDS.sleep(connectionTimeout);
-//                timeout(context.getScenarioId());
-//            } catch (InterruptedException e) {
-//                //stop timer
-//            }
-//        });
-//        timer.start();
-//        timerMap.put(context.getScenarioId(), timer);
+//    void addNewRequestData(ExecutionContext context/*, ExecutionHandler executionHandler*/) throws JsonProcessingException {
+////        if (uuidRequestDataMap.containsKey(context.getScenarioId())) return;
+////
+////        Thread timer = new Thread(() -> {
+////            try {
+////                TimeUnit.MILLISECONDS.sleep(connectionTimeout);
+////                timeout(context.getScenarioId());
+////            } catch (InterruptedException e) {
+////                //stop timer
+////            }
+////        });
+////        timer.start();
+////        timerMap.put(context.getScenarioId(), timer);
+////
+////        ContextData contextData = new ContextData(context, executionHandler);
+////        uuidRequestDataMap.put(context.getScenarioId(), contextData);
+//        SqlParameterSource namedParameters = new MapSqlParameterSource()
+//                .addValue("scenarioId", context.getScenarioId())
+//                .addValue("context", context.getVariablesJson());
+//        jdbcTemplate.update("INSERT INTO SOURCE_REQUEST_HISTORY VALUES(scenarioId, context)", namedParameters);
 //
-//        ContextData contextData = new ContextData(context, executionHandler);
-//        uuidRequestDataMap.put(context.getScenarioId(), contextData);
-        SqlParameterSource namedParameters = new MapSqlParameterSource()
-                .addValue("scenarioId", context.getScenarioId())
-                .addValue("context", context.getVariablesJson());
-        jdbcTemplate.update("INSERT INTO SOURCE_REQUEST_HISTORY VALUES(scenarioId, context)", namedParameters);
-
-    }
-
-    void addExecutedSourceId(UUID scenarioId, Long signal){
-        SqlParameterSource namedParameters = new MapSqlParameterSource()
-                .addValue("scenarioId", scenarioId);
-        String sourcesList = jdbcTemplate.queryForObject("SELECT EXECUTED_SOURCES FROM SOURCE_REQUEST_HISTORY WHERE SCENARIO_ID = :scenarioId",
-                namedParameters, String.class);
-
-        new ObjectMapper()
-
-        jdbcTemplate.update("UPDATE SOURCE_REQUEST_HISTORY SET ", context.getVariablesJson());
-//        uuidRequestDataMap.get(scenarioId).setExecutedSourceSignal(signal);
-    }
-
-//    synchronized ExecutionHandler getExecutionHandler(UUID scenarioId){
-//        return uuidRequestDataMap.get(scenarioId).getExecutionHandler();
 //    }
-
-    Set<Long> getExecutedSignals(UUID scenarioId){
-//        return uuidRequestDataMap.get(scenarioId).getExecutedSourceSignalIds();
-    }
-
-    ExecutionContext getExecutionContext(UUID scenarioId){
-//        return uuidRequestDataMap.get(scenarioId).getContext();
-    }
-
-    ContextModel clear(UUID scenarioId){
-//        Thread timer = timerMap.get(scenarioId);
-//        timer.interrupt();
-//        return uuidRequestDataMap.remove(scenarioId);
-    }
-
-    boolean checkIsScenarioContains(UUID scenarioId){
-//        return uuidRequestDataMap.containsKey(scenarioId);
-    }
-
-    int getReceivedSignalsSize(UUID scenarioId){
-//        return uuidRequestDataMap.get(scenarioId).executedSourceSignalsSize();
-    }
-
-//    private synchronized void timeout(UUID scenarioId){
-//        if (!uuidRequestDataMap.containsKey(scenarioId)) return;
-//        ContextData contextData = clear(scenarioId);
-//        contextData.getExecutionHandler().executeNext(contextData.getContext(), ExecutionState.ERROR);
+//
+//    void addExecutedSourceId(UUID scenarioId, Long signal){
+//        SqlParameterSource namedParameters = new MapSqlParameterSource()
+//                .addValue("scenarioId", scenarioId);
+//        String sourcesList = jdbcTemplate.queryForObject("SELECT EXECUTED_SOURCES FROM SOURCE_REQUEST_HISTORY WHERE SCENARIO_ID = :scenarioId",
+//                namedParameters, String.class);
+//
+//        new ObjectMapper()
+//
+//        jdbcTemplate.update("UPDATE SOURCE_REQUEST_HISTORY SET ", context.getVariablesJson());
+////        uuidRequestDataMap.get(scenarioId).setExecutedSourceSignal(signal);
 //    }
+//
+////    synchronized ExecutionHandler getExecutionHandler(UUID scenarioId){
+////        return uuidRequestDataMap.get(scenarioId).getExecutionHandler();
+////    }
+//
+//    Set<Long> getExecutedSignals(UUID scenarioId){
+////        return uuidRequestDataMap.get(scenarioId).getExecutedSourceSignalIds();
+//    }
+//
+//    ExecutionContext getExecutionContext(UUID scenarioId){
+////        return uuidRequestDataMap.get(scenarioId).getContext();
+//    }
+//
+//    ContextModel clear(UUID scenarioId){
+////        Thread timer = timerMap.get(scenarioId);
+////        timer.interrupt();
+////        return uuidRequestDataMap.remove(scenarioId);
+//    }
+//
+//    boolean checkIsScenarioContains(UUID scenarioId){
+////        return uuidRequestDataMap.containsKey(scenarioId);
+//    }
+//
+//    int getReceivedSignalsSize(UUID scenarioId){
+////        return uuidRequestDataMap.get(scenarioId).executedSourceSignalsSize();
+//    }
+//
+////    private synchronized void timeout(UUID scenarioId){
+////        if (!uuidRequestDataMap.containsKey(scenarioId)) return;
+////        ContextData contextData = clear(scenarioId);
+////        contextData.getExecutionHandler().executeNext(contextData.getContext(), ExecutionState.ERROR);
+////    }
 
 
 }

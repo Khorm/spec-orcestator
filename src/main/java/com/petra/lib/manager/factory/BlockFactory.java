@@ -14,7 +14,6 @@ import com.petra.lib.response.ResponseState;
 import com.petra.lib.signal.Signal;
 import com.petra.lib.signal.SignalFactory;
 import com.petra.lib.signal.SignalModel;
-import com.petra.lib.signal.SignalObserver;
 import com.petra.lib.signal.source.SourceSignalRequestManager;
 import com.petra.lib.variable.base.VariableList;
 import com.petra.lib.variable.factory.VariableFactory;
@@ -55,7 +54,7 @@ public final class BlockFactory {
 
         StateControllerImpl stateController = new StateControllerImpl(stateList);
 
-        ExecutionManager executionManager = new ExecutionManager(variableList, threadManager, variableMapper, stateController);
+        ExecutionManager executionManager = new ExecutionManager(variableList, threadManager, variableMapper, stateController, transactionManager);
         executionManagerWrapper.setExecutionManager(executionManager);
 
         return executionManager;
