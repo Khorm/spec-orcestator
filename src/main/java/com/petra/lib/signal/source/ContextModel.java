@@ -1,6 +1,6 @@
 package com.petra.lib.signal.source;
 
-import com.petra.lib.manager.ExecutionContext;
+import com.petra.lib.manager.block.ExecutionContext;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

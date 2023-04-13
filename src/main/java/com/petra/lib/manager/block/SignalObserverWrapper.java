@@ -1,9 +1,10 @@
-package com.petra.lib.manager.factory;
+package com.petra.lib.manager.block;
 
 import com.petra.lib.signal.SignalObserver;
 import com.petra.lib.signal.model.SignalTransferModel;
 import lombok.Setter;
 
+@Deprecated
 class SignalObserverWrapper implements SignalObserver {
 
     @Setter

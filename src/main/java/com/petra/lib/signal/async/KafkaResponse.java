@@ -2,10 +2,13 @@ package com.petra.lib.signal.async;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petra.lib.signal.ReceiverSignal;
+import com.petra.lib.manager.block.ThreadManager;
+import com.petra.lib.signal.ResponseSignal;
 import com.petra.lib.signal.SignalListener;
 import com.petra.lib.signal.SignalType;
 import com.petra.lib.signal.model.SignalTransferModel;
+import com.petra.lib.signal.model.Version;
+import com.petra.lib.variable.process.ProcessVariable;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -15,25 +18,35 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.time.Duration;
+import java.util.Collection;
 import java.util.UUID;
-import java.util.function.BiConsumer;
 
+/**
+ * Сигнал, получащий данные и отвечающий на них
+ */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class KafkaReceiver implements ReceiverSignal {
+public class KafkaResponse implements ResponseSignal {
 
     Consumer<String, String> kafkaConsumer;
     Producer<UUID, String> kafkaProducer;
     Thread listenerThread;
     Long signalId;
+    Long blockId;
     ObjectMapper objectMapper = new ObjectMapper();
+    Version answerVersion;
 
 
-    public KafkaReceiver(Consumer kafkaConsumer, Producer<UUID, String> kafkaProducer,
-                         SignalListener messageHandler, Long signalId
-                        ) {
+    public KafkaResponse(Consumer kafkaConsumer, Producer<UUID, String> kafkaProducer,
+                         SignalListener messageHandler,
+                         Long blockId,
+                         Version answerVersion,
+                         Long signalId) {
+
         this.kafkaConsumer = kafkaConsumer;
         this.kafkaProducer = kafkaProducer;
         this.signalId = signalId;
+        this.blockId = blockId;
+        this.answerVersion = answerVersion;
 
         listenerThread = new Thread(() -> {
             while (true) {
@@ -44,7 +57,7 @@ public class KafkaReceiver implements ReceiverSignal {
                     String message = record.value();
                     try {
                         SignalTransferModel model = objectMapper.readValue(message, SignalTransferModel.class);
-                        messageHandler.executeSignal(model);
+                        ThreadManager.execute(() -> messageHandler.executeSignal(model));
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                     }
@@ -53,53 +66,66 @@ public class KafkaReceiver implements ReceiverSignal {
         });
     }
 
+
     @Override
     public Long getId() {
         return signalId;
     }
 
     @Override
-    public void start() {
+    public void startSignal() {
         listenerThread.start();
     }
 
     @Override
-    public void setAnswer(SignalTransferModel answer) {
+    public void setAnswer(Collection<ProcessVariable> contextVariables, UUID scenarioId) {
         kafkaConsumer.commitSync();
-
         ProducerRecord<UUID, String> record;
         try {
+            SignalTransferModel answer = new SignalTransferModel(contextVariables,
+                    answerVersion,
+                    signalId,
+                    scenarioId,
+                    blockId,
+                    SignalType.RESPONSE);
+
             record = new ProducerRecord<>(answer.getScenarioId().toString(),
                     objectMapper.writeValueAsString(answer));
         } catch (JsonProcessingException e) {
+            e.printStackTrace();
 //            sendErrorHandler.accept(e, answer);
             return;
         }
         kafkaProducer.send(record, (metadata, exception) -> {
             if (exception != null) {
+                exception.printStackTrace();
 //                sendErrorHandler.accept(exception, answer);
             }
         });
     }
 
     @Override
-    public void executionError(SignalTransferModel executingRequest) {
+    public void executionError(UUID scenarioId) {
         kafkaConsumer.commitSync();
 
         ProducerRecord<UUID, String> record = null;
-        SignalTransferModel errorSignalTransferModel = new SignalTransferModel(null,
-                executingRequest.getVersion(),
-                getId(),
-                executingRequest.getScenarioId(),
-                SignalType.ERROR);
-        try {            
+        SignalTransferModel errorSignalTransferModel = new SignalTransferModel(
+                null,
+                answerVersion,
+                signalId,
+                scenarioId,
+                blockId,
+                SignalType.ERROR
+        );
+        try {
             record = new ProducerRecord<>(errorSignalTransferModel.getScenarioId().toString(),
                     objectMapper.writeValueAsString(errorSignalTransferModel));
         } catch (JsonProcessingException e) {
-
+            e.printStackTrace();
         }
         kafkaProducer.send(record, (metadata, exception) -> {
             if (exception != null) {
+                exception.printStackTrace();
 //                sendErrorHandler.accept(exception, errorSignalTransferModel);
             }
         });

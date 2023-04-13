@@ -18,7 +18,6 @@ public class SignalTransferModel {
     Version version;
     Long signalId;
     UUID scenarioId;
+    Long senderBlockId;
     SignalType signalType;
-    Long senderId;
-    Long receiverId;
 }

@@ -1,8 +1,11 @@
 package com.petra.lib.signal;
 
-import com.petra.lib.signal.async.SignalImpl;
-import com.petra.lib.signal.async.KafkaReceiver;
-import com.petra.lib.signal.async.KafkaSender;
+import com.petra.lib.signal.async.KafkaRequest;
+import com.petra.lib.signal.async.KafkaResponse;
+import com.petra.lib.signal.model.Version;
+import com.petra.lib.signal.sync.SyncRequest;
+import com.petra.lib.signal.sync.SyncResponse;
+import com.petra.lib.variable.factory.VariableModel;
 import com.petra.lib.variable.mapper.VariableMapper;
 import com.petra.lib.variable.mapper.VariableMapperFactory;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -14,20 +17,47 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public final class SignalFactory {
 
-    public static Signal createSignal(SignalModel signalModel, SignalObserver signalObserver) {
-        KafkaReceiver kafkaReceiver = new KafkaReceiver(createConsumer(getConsumerProps(null, null)));
-        KafkaSender kafkaSender = new KafkaSender(createProducer(getProducerProps(null)));
-        VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(signalModel.getVariableModelCollection());
+    public static RequestSignal createSyncRequestSignal(String URL, SignalObserver messageHandler,
+                                                        Collection<VariableModel> requestSignalVariables,
+                                                        Long signalId, Version version,
+                                                        Long blockId) {
+        VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(requestSignalVariables);
+        return new SyncRequest(URL, messageHandler, variableMapper, blockId, version, signalId);
+    }
 
-        SignalImpl signal = new SignalImpl(kafkaReceiver, kafkaSender, signalModel.getId(), signalModel.getVersion(),
-                variableMapper,signalObserver);
-        return signal;
+
+    public static ResponseSignal createSyncResponseSignal(String hostname, int port,
+                                                          SignalListener handler, Long blockId, Version answerVersion,
+                                                          Long signalId) {
+//        VariableMapper answerMapper = VariableMapperFactory.createVariableMapper(answerSignalVariables);
+        return new SyncResponse(hostname, port, handler, blockId, answerVersion, signalId);
+    }
+
+    public static RequestSignal createAsyncRequestSignal(String bootstrapServers, Long blockId,
+                                                         Collection<VariableModel> requestSignalVariables,
+                                                         Version requestVersion, Long signalId, SignalObserver messageHandler) {
+        Producer<UUID, String> producer = createProducer(getProducerProps(bootstrapServers));
+        Consumer<UUID, String> consumer = createConsumer(getConsumerProps(bootstrapServers, "test"));
+        VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(requestSignalVariables);
+
+        return new KafkaRequest(producer, consumer, blockId, variableMapper, requestVersion, signalId, messageHandler);
+    }
+
+    public static ResponseSignal createAsyncResponseSignal(String bootstrapServers, SignalListener handler, Long blockId,
+                                                           Version responseVersion,
+                                                           Long signalId) {
+        Producer<UUID, String> kafkaProducer = createProducer(getProducerProps(bootstrapServers));
+        Consumer<UUID, String> kafkaConsumer = createConsumer(getConsumerProps(bootstrapServers, "test"));
+//        VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(responseSignalVariables);
+
+        return new KafkaResponse(kafkaConsumer, kafkaProducer, handler, blockId, responseVersion, signalId);
     }
 
     private static Consumer<UUID, String> createConsumer(Map<String, Object> props) {

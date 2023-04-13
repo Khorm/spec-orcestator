@@ -1,11 +1,9 @@
-package com.petra.lib.manager.factory;
+package com.petra.lib.manager.block;
 
-import com.petra.lib.manager.ExecutionContext;
-import com.petra.lib.manager.ExecutionHandler;
-import com.petra.lib.manager.ExecutionManager;
 import com.petra.lib.manager.state.ExecutionState;
 import lombok.Setter;
 
+@Deprecated
 class ExecutionManagerWrapper implements ExecutionHandler {
 
     @Setter
@@ -14,5 +12,10 @@ class ExecutionManagerWrapper implements ExecutionHandler {
     @Override
     public void executeNext(ExecutionContext executionContext, ExecutionState executedState) {
         executionManager.executeNext(executionContext, executedState);
+    }
+
+    @Override
+    public void executeState(ExecutionContext executionContext, ExecutionState executedState) {
+        executionManager.executeState(executionContext, executedState);
     }
 }

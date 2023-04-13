@@ -1,25 +1,13 @@
 package com.petra.lib.signal.async;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petra.lib.signal.Signal;
-import com.petra.lib.signal.SignalObserver;
-import com.petra.lib.signal.Receiver;
-import com.petra.lib.signal.model.SignalTransferModel;
-import com.petra.lib.signal.model.Version;
-import com.petra.lib.signal.Sender;
-import com.petra.lib.variable.mapper.VariableMapper;
-import com.petra.lib.variable.process.ProcessVariable;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Collection;
-import java.util.UUID;
-
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-class SignalImpl implements Signal {
-    Receiver receiver;
+class SignalImpl /*implements Signal*/ {
+    /*Receiver receiver;
     Sender sender;
 
     @EqualsAndHashCode.Include
@@ -69,6 +57,6 @@ class SignalImpl implements Signal {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 }

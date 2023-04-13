@@ -5,7 +5,6 @@ public enum ExecutionState {
     REQUEST_SOURCE_DATA(false),
     EXECUTING(false),
     EXECUTION_REGISTRATION(false),
-    EXECUTION_RELEASE(false),
     EXECUTION_RESPONSE(true),
 
 

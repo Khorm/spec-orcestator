@@ -1,4 +1,4 @@
-package com.petra.lib.manager.factory;
+package com.petra.lib.manager.block;
 
 import com.petra.lib.signal.SignalModel;
 import lombok.AccessLevel;

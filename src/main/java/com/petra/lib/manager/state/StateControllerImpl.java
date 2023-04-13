@@ -1,27 +1,32 @@
 package com.petra.lib.manager.state;
 
-import com.petra.lib.manager.ExecutionStateManager;
+import com.petra.lib.manager.block.ExecutionStateManager;
+import com.petra.lib.signal.SignalListener;
 
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public final class StateControllerImpl implements StateController{
+final class StateControllerImpl implements StateController {
 
     private final Map<ExecutionState, ExecutionState> stateInheritance = new EnumMap<>(ExecutionState.class);
     /**
      * список стейтменеджеров с применеными стейтами
      */
-    private final Map<ExecutionState, ExecutionStateManager> stateList;
 
-    public StateControllerImpl(Map<ExecutionState, ExecutionStateManager> stateList){
-        this.stateList = stateList;
+    private final Map<ExecutionState, ExecutionStateManager> stateList = new HashMap<>();
+
+    StateControllerImpl() {
         stateInheritance.put(ExecutionState.INITIALIZING, ExecutionState.REQUEST_SOURCE_DATA);
         stateInheritance.put(ExecutionState.REQUEST_SOURCE_DATA, ExecutionState.EXECUTING);
         stateInheritance.put(ExecutionState.EXECUTING, ExecutionState.EXECUTION_REGISTRATION);
-        stateInheritance.put(ExecutionState.EXECUTION_REGISTRATION, ExecutionState.EXECUTION_RELEASE);
-        stateInheritance.put(ExecutionState.EXECUTION_RELEASE, ExecutionState.EXECUTION_RESPONSE);
+        stateInheritance.put(ExecutionState.EXECUTION_REGISTRATION, ExecutionState.EXECUTION_RESPONSE);
+    }
+
+    @Override
+    public void registerManager(ExecutionState executionState, ExecutionStateManager manager) {
+        stateList.put(executionState, manager);
     }
 
     @Override

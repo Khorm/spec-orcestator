@@ -11,6 +11,6 @@ import java.lang.reflect.Type;
 public class SignalDecoder implements Decoder {
     @Override
     public Object decode(Response response, Type type) throws IOException, DecodeException, FeignException {
-        return null;
+        return dec;
     }
 }

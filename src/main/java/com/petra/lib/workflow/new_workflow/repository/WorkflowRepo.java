@@ -1,7 +1,6 @@
 package com.petra.lib.workflow.new_workflow.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.petra.lib.manager.ExecutionContext;
 import com.petra.lib.variable.process.ProcessVariable;
 
 import java.util.Collection;

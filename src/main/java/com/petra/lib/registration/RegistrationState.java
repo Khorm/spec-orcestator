@@ -1,9 +1,9 @@
 package com.petra.lib.registration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.petra.lib.manager.ExecutionContext;
-import com.petra.lib.manager.ExecutionHandler;
-import com.petra.lib.manager.ExecutionStateManager;
+import com.petra.lib.manager.block.ExecutionContext;
+import com.petra.lib.manager.block.ExecutionHandler;
+import com.petra.lib.manager.block.ExecutionStateManager;
 import com.petra.lib.manager.state.ExecutionState;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -25,9 +25,10 @@ public class RegistrationState implements ExecutionStateManager {
 
     }
 
-    public RegistrationState(Long blockId, ExecutionHandler executionHandler, DataSource dataSource, PlatformTransactionManager transactionManager) {
+    public RegistrationState(Long blockId, ExecutionHandler executionHandler,
+                             ExecutionRepository executionRepository, PlatformTransactionManager transactionManager) {
         this.blockId = blockId;
-        this.executionRepository = new ExecutionRepository(dataSource);
+        this.executionRepository = executionRepository;
         this.executionHandler = executionHandler;
         this.transactionManager = transactionManager;
     }

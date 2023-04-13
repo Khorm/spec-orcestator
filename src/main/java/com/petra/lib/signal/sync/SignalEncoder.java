@@ -9,6 +9,6 @@ import java.lang.reflect.Type;
 public class SignalEncoder implements Encoder {
     @Override
     public void encode(Object object, Type bodyType, RequestTemplate template) throws EncodeException {
-
+    enc
     }
 }

@@ -1,10 +1,10 @@
 package com.petra.lib.response;
 
-import com.petra.lib.manager.ExecutionContext;
-import com.petra.lib.manager.ExecutionHandler;
-import com.petra.lib.manager.ExecutionStateManager;
+import com.petra.lib.manager.block.ExecutionContext;
+import com.petra.lib.manager.block.ExecutionHandler;
+import com.petra.lib.manager.block.ExecutionStateManager;
 import com.petra.lib.manager.state.ExecutionState;
-import com.petra.lib.signal.Signal;
+import com.petra.lib.signal.ResponseSignal;
 import com.petra.lib.signal.SignalObserver;
 import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.variable.process.ProcessVariable;
@@ -19,14 +19,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ResponseState implements ExecutionStateManager, SignalObserver {
 
-    Signal signal;
+    ResponseSignal responseSignal;
     ExecutionHandler executionHandler;
 
     @Override
     public void execute(ExecutionContext executionContext) throws Exception {
         UUID scenarioId = executionContext.getScenarioId();
         Collection<ProcessVariable> variableList = executionContext.getVariablesList();
-        signal.send(scenarioId, variableList);
+        responseSignal.setAnswer(variableList, scenarioId);
         executionHandler.executeNext(executionContext, getManagerState());
     }
 
@@ -36,12 +36,16 @@ public class ResponseState implements ExecutionStateManager, SignalObserver {
     }
 
     @Override
+    public void start() {
+    }
+
+    @Override
     public void executed(SignalTransferModel signalTransferModel) {
         //do nothin
     }
 
     @Override
     public void error(Exception e, SignalTransferModel signalTransferModel) {
-        System.out.println(e);
+        e.printStackTrace();
     }
 }

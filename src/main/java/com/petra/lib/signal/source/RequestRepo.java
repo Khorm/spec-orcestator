@@ -1,7 +1,7 @@
 package com.petra.lib.signal.source;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.petra.lib.manager.ExecutionContext;
+import com.petra.lib.manager.block.ExecutionContext;
 
 import java.util.Set;
 import java.util.UUID;

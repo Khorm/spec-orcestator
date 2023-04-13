@@ -1,7 +1,7 @@
 package com.petra.lib.signal.source;
 
-import com.petra.lib.manager.factory.SourceSignalModel;
-import com.petra.lib.signal.SenderSignal;
+import com.petra.lib.manager.block.SourceSignalModel;
+import com.petra.lib.signal.RequestSignal;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -14,15 +14,15 @@ import java.util.stream.Stream;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 class SourceSignalList {
 
-    Map<Long, SenderSignal> sourceSignals;
+    Map<Long, RequestSignal> sourceSignals;
     Map<Long, Set<Long>> childrenByParent;
     Map<Long, Set<Long>> parentsByChild;
-    Set<SenderSignal> starterSignals;
+    Set<RequestSignal> starterSignals;
 
     @Getter
     int sourceSignalsCount;
 
-    SourceSignalList(Collection<SourceSignalModel> sourceSignalList, List<SenderSignal> signals) {
+    SourceSignalList(Collection<SourceSignalModel> sourceSignalList, List<RequestSignal> signals) {
         sourceSignalsCount = signals.size();
 
         sourceSignals = signals.stream()
@@ -44,10 +44,10 @@ class SourceSignalList {
     }
 
     void start() {
-        sourceSignals.values().forEach(SenderSignal::start);
+        sourceSignals.values().forEach(RequestSignal::startSignal);
     }
 
-    Set<SenderSignal> getNextAvailableSignals(Set<Long> executedSignals) {
+    Set<RequestSignal> getNextAvailableSignals(Set<Long> executedSignals) {
         if (executedSignals == null || executedSignals.isEmpty()) {
             return starterSignals;
         }

@@ -1,12 +1,11 @@
 package com.petra.lib.signal.source;
 
-import com.petra.lib.manager.ExecutionContext;
-import com.petra.lib.manager.ExecutionHandler;
-import com.petra.lib.manager.ExecutionStateManager;
-import com.petra.lib.manager.factory.SourceSignalModel;
+import com.petra.lib.manager.block.ExecutionContext;
+import com.petra.lib.manager.block.ExecutionHandler;
+import com.petra.lib.manager.block.ExecutionStateManager;
+import com.petra.lib.manager.block.SourceSignalModel;
 import com.petra.lib.manager.state.ExecutionState;
-import com.petra.lib.signal.SenderSignal;
-import com.petra.lib.signal.Signal;
+import com.petra.lib.signal.RequestSignal;
 import com.petra.lib.signal.SignalObserver;
 import com.petra.lib.signal.model.SignalTransferModel;
 import lombok.AccessLevel;
@@ -24,10 +23,19 @@ public class SourceSignalRequestManager implements ExecutionStateManager, Signal
     SourceSignalList sourceSignalList;
     ExecutionHandler executionHandler;
 
+    /**
+     *
+     * @param sourceSignalList
+     * Список сигналов для соурса
+     * @param signals
+     * Сами сигналы
+     * @param executionHandler
+     * Обработчик ответа
+     */
     public SourceSignalRequestManager(Collection<SourceSignalModel> sourceSignalList,
-                                      List<SenderSignal> signals, ExecutionHandler executionHandler,
-                                      RequestRepo requestRepo){
-        this.requestRepo = requestRepo;
+                                      List<RequestSignal> signals, ExecutionHandler executionHandler
+                                      ){
+        this.requestRepo = new LocalRequestRepo();
         this.sourceSignalList = new SourceSignalList(sourceSignalList, signals);
         this.executionHandler = executionHandler;
     }
@@ -38,7 +46,7 @@ public class SourceSignalRequestManager implements ExecutionStateManager, Signal
         try {
             requestRepo.addNewRequestData(executionContext);
             Set<Long> executedSignalsId = requestRepo.getExecutedSignals(executionContext.getScenarioId());
-            Set<SenderSignal> signalsToExecute = sourceSignalList.getNextAvailableSignals(executedSignalsId);
+            Set<RequestSignal> signalsToExecute = sourceSignalList.getNextAvailableSignals(executedSignalsId);
             signalsToExecute.forEach(signal -> {
                 signal.send(executionContext.getVariablesList(), executionContext.getScenarioId());
             });
@@ -65,7 +73,7 @@ public class SourceSignalRequestManager implements ExecutionStateManager, Signal
 
         UUID scenarioId = signalTransferModel.getScenarioId();
         ExecutionContext context = requestRepo.getExecutionContext(scenarioId);
-        context.setVariables(signalTransferModel.getSignalVariables());
+        context.setSignalVariables(signalTransferModel.getSignalVariables());
         requestRepo.addExecutedSourceId(scenarioId, signalTransferModel.getSignalId());
 
         if (requestRepo.getReceivedSignalsSize(scenarioId) == sourceSignalList.getSourceSignalsCount()){

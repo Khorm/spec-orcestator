@@ -1,11 +1,14 @@
-package com.petra.lib.manager;
+package com.petra.lib.manager.block;
 
 import com.petra.lib.manager.state.ExecutionState;
 import com.petra.lib.manager.state.StateController;
+import com.petra.lib.signal.ResponseSignal;
+import com.petra.lib.signal.SignalListener;
 import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.variable.base.VariableList;
 import com.petra.lib.variable.mapper.VariableMapper;
 import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -20,6 +23,7 @@ import java.util.Optional;
  * Класс управляющий вызовом любого исполняемого блока
  */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@RequiredArgsConstructor
 @Log4j2
 public class ExecutionManager implements ExecutionHandler {
 
@@ -29,19 +33,14 @@ public class ExecutionManager implements ExecutionHandler {
     VariableList variableList;
 
     /**
-     * Управление менеджерами
-     */
-    ThreadManager threadManager;
-
-    /**
      * маппер от входящего сигнала
      */
     VariableMapper inputMapper;
 
     /**
-     * входящие сообщения
+     * Управление менеджерами
      */
-//    Signal inputSignal;
+//    ThreadManager threadManager;
 
     /**
      * контроллер переключения стейтов
@@ -49,14 +48,6 @@ public class ExecutionManager implements ExecutionHandler {
     StateController stateController;
 
     PlatformTransactionManager transactionManager;
-
-    public ExecutionManager(VariableList variableList, ThreadManager threadManager, VariableMapper inputMapper, StateController stateController, PlatformTransactionManager transactionManager) {
-        this.variableList = variableList;
-        this.threadManager = threadManager;
-        this.inputMapper = inputMapper;
-        this.stateController = stateController;
-        this.transactionManager = transactionManager;
-    }
 
 
     private void start(SignalTransferModel signalTransferModel) {
@@ -73,8 +64,7 @@ public class ExecutionManager implements ExecutionHandler {
     public void executeNext(ExecutionContext executionContext, ExecutionState executedState) {
         Optional<ExecutionState> nextState = stateController.getNextState(executedState);
         if (nextState.isPresent()) {
-            ExecutionStateManager nextExecState = stateController.getState(nextState.get());
-            executeTask(executionContext, nextExecState);
+            executeState(executionContext, nextState.get());
         }
     }
 
@@ -88,7 +78,7 @@ public class ExecutionManager implements ExecutionHandler {
     private void executeTask(ExecutionContext executionContext, ExecutionStateManager task) {
         ExecutionState executionState = task.getManagerState();
         if (executionState.isExecuteInNewThread()) {
-            threadManager.execute(() -> {
+            ThreadManager.execute(() -> {
                 try {
                     task.execute(executionContext);
                 } catch (Exception e) {

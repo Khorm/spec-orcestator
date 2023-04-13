@@ -1,4 +1,4 @@
-package com.petra.lib.manager;
+package com.petra.lib.manager.block;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petra.lib.signal.model.SignalTransferModel;

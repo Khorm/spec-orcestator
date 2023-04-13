@@ -1,8 +1,8 @@
 package com.petra.lib.handler;
 
-import com.petra.lib.manager.ExecutionContext;
-import com.petra.lib.manager.ExecutionHandler;
-import com.petra.lib.manager.ExecutionStateManager;
+import com.petra.lib.manager.block.ExecutionContext;
+import com.petra.lib.manager.block.ExecutionHandler;
+import com.petra.lib.manager.block.ExecutionStateManager;
 import com.petra.lib.manager.state.ExecutionState;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +26,10 @@ public class UserHandlerExecutor implements ExecutionStateManager {
     @Override
     public ExecutionState getManagerState() {
         return ExecutionState.EXECUTING;
+    }
+
+    @Override
+    public void start() {
+        //do nothin
     }
 }
