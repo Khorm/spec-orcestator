@@ -1,0 +1,18 @@
+petra:
+  kafka:
+    servers: 'test'
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/tst
+    username: dm
+    password: dm
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+      format_sql: true
+      generate_statistics: true

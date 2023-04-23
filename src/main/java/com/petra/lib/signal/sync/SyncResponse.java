@@ -1,7 +1,7 @@
 package com.petra.lib.signal.sync;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petra.lib.manager.block.ThreadManager;
+import com.petra.lib.manager.thread.ThreadManager;
 import com.petra.lib.signal.ResponseSignal;
 import com.petra.lib.signal.SignalListener;
 import com.petra.lib.signal.SignalType;

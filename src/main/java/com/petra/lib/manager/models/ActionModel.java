@@ -1,19 +1,22 @@
-package com.petra.lib.manager.block;
+package com.petra.lib.manager.models;
 
+import com.petra.lib.manager.block.SourceSignalModel;
 import com.petra.lib.signal.SignalModel;
 import com.petra.lib.variable.factory.VariableModel;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
+@ToString
 public class ActionModel {
     Long id;
     String name;
     Collection<VariableModel> variables;
     Collection<SourceSignalModel> sources;
-    SignalModel request;
+    SignalModel executionSignal;
 }

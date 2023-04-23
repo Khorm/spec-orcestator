@@ -5,12 +5,14 @@ import com.petra.lib.variable.factory.VariableModel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
+@ToString
 public class SignalModel {
     Long id;
     Version version;

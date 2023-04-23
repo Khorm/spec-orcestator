@@ -1,4 +1,4 @@
-package com.petra.lib.variable.factory;
+package com.petra.lib.manager.models;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -7,11 +7,10 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
 
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
-@ToString
-public class VariableModel {
-    Long id;
-    String name;
-    Collection<Long> variableSources;
+public class ConfigModel {
+    Collection<ActionModel> actions;
+    Collection<ActionModel> sources;
 }

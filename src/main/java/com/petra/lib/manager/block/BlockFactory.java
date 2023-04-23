@@ -3,6 +3,7 @@ package com.petra.lib.manager.block;
 import com.petra.lib.context.Initializer;
 import com.petra.lib.handler.UserHandler;
 import com.petra.lib.handler.UserHandlerExecutor;
+import com.petra.lib.manager.models.ActionModel;
 import com.petra.lib.manager.state.StateController;
 import com.petra.lib.registration.ExecutionRepository;
 import com.petra.lib.registration.RegistrationState;
@@ -27,10 +28,35 @@ public final class BlockFactory {
     private BlockFactory() {
     }
 
-    public static ExecutionManager createAction(ActionModel actionModel,
+//    public static ExecutionManager createAction(ActionModel actionModel,
+//                                                UserHandler userHandler, ExecutionRepository executionRepository,
+//                                                PlatformTransactionManager transactionManager,
+//                                                String bootstrapServers) {
+//        VariableList variableList = VariableFactory.createVariableList(actionModel.getVariables());
+//        VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(actionModel.getVariables());
+//
+//
+//        StateController stateController = StateController.createStateController();
+//
+//        ExecutionManager executionManager = new ExecutionManager(variableList, variableMapper,
+//                stateController, transactionManager);
+//
+//        ResponseSignal blockResponseSignal = initInitializerState(actionModel.getId(), executionManager,
+//                executionRepository, stateController, bootstrapServers, actionModel.getExecutionSignal());
+//
+//        initDataRequestState(executionManager, actionModel.getSources(), stateController, actionModel.getId());
+//        initExecutingState(userHandler, executionManager, stateController);
+//        initRegistrationState(actionModel.getId(), transactionManager, executionRepository, executionManager, stateController);
+//        initResponseState(executionManager, stateController, blockResponseSignal);
+//
+//        return executionManager;
+//    }
+
+
+    public static ExecutionManager createSource(ActionModel actionModel,
                                                 UserHandler userHandler, ExecutionRepository executionRepository,
                                                 PlatformTransactionManager transactionManager,
-                                                String bootstrapServers) {
+                                                String sourceUrl) {
         VariableList variableList = VariableFactory.createVariableList(actionModel.getVariables());
         VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(actionModel.getVariables());
 
@@ -41,7 +67,7 @@ public final class BlockFactory {
                 stateController, transactionManager);
 
         ResponseSignal blockResponseSignal = initInitializerState(actionModel.getId(), executionManager,
-                executionRepository, stateController, bootstrapServers, actionModel.getRequest());
+                executionRepository, stateController, sourceUrl, actionModel.getExecutionSignal());
 
         initDataRequestState(executionManager, actionModel.getSources(), stateController, actionModel.getId());
         initExecutingState(userHandler, executionManager, stateController);
@@ -53,13 +79,20 @@ public final class BlockFactory {
 
     private static ResponseSignal initInitializerState(Long blockId, ExecutionHandler executionHandler,
                                                        ExecutionRepository executionRepository, StateController stateController,
-                                                       String bootstrapServers, SignalModel blockSignalModel
-    ) {
+                                                       String URL, SignalModel blockSignalModel) {
         Initializer initializer = new Initializer(blockId, executionHandler, executionRepository);
         stateController.registerManager(initializer.getManagerState(), initializer);
-        ResponseSignal blockResponseSignal = SignalFactory.createAsyncResponseSignal(
-                bootstrapServers,
-                initializer,
+//        ResponseSignal blockResponseSignal = SignalFactory.createAsyncResponseSignal(
+//                bootstrapServers,
+//                initializer,
+//                blockId,
+//                blockSignalModel.getVersion(),
+//                blockSignalModel.getId()
+//        );
+        ResponseSignal blockResponseSignal = SignalFactory.createSyncResponseSignal(
+                URL,
+                8080
+                ,initializer,
                 blockId,
                 blockSignalModel.getVersion(),
                 blockSignalModel.getId()

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %p [%c] - %m%n"/>
+        </Console>
+        <File name="File" fileName="logs/myapp.log">
+            <PatternLayout pattern="%d %p [%c] - %m%n"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+<!--            <AppenderRef ref="File"/>-->
+        </Root>
+        <Logger name="com.petra" level="debug" additivity="false">
+<!--            <AppenderRef ref="File"/>-->
+            <AppenderRef ref="Console"/>
+        </Logger>
+    </Loggers>
+</Configuration>

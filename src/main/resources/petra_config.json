@@ -1,0 +1,31 @@
+{
+  "sources": [
+    {
+      "id": 1,
+      "name": "test_source_1",
+      "variables": [
+        {
+          "id": 1,
+          "name": "fst_variable",
+          "variableSources": [2]
+        }
+      ],
+      "executionSignal": {
+        "id": 1,
+        "version": {
+          "major": 1,
+          "minor": 0,
+          "patch": 0
+        },
+        "name": "signal_one",
+        "requestVariableCollection": [
+          {
+            "id": 2,
+            "name": "signal_var_1"
+          }
+        ],
+        "path": ""
+      }
+    }
+  ]
+}

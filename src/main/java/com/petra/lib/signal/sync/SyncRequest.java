@@ -1,6 +1,6 @@
 package com.petra.lib.signal.sync;
 
-import com.petra.lib.manager.block.ThreadManager;
+import com.petra.lib.manager.thread.ThreadManager;
 import com.petra.lib.signal.RequestSignal;
 import com.petra.lib.signal.SignalObserver;
 import com.petra.lib.signal.SignalType;

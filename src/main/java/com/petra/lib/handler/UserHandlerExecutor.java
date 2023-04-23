@@ -8,17 +8,22 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 public class UserHandlerExecutor implements ExecutionStateManager {
 
     UserHandler userHandler;
     ExecutionHandler executionHandler;
-
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("petra");
 
     @Override
     public void execute(ExecutionContext executionContext) {
-        UserContextImpl userContext = new UserContextImpl(executionContext);
+        EntityManager entityManager = emf.createEntityManager();
+        UserContextImpl userContext = new UserContextImpl(executionContext, entityManager);
         userHandler.execute(userContext);
         executionHandler.executeNext(executionContext, getManagerState());
     }
