@@ -5,11 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.*;
 
 @Getter
+@ToString(onlyExplicitlyIncluded = true)
+@NoArgsConstructor
 public class ProcessVariable {
 
     private Long id;
     private transient Object value;
     private transient boolean wasParsed;
+    @ToString.Include
     private String valueJson;
 
     public ProcessVariable(Long id, Object value) {

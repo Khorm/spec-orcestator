@@ -1,7 +1,6 @@
 package com.petra.lib.manager.state;
 
-import com.petra.lib.manager.block.ExecutionStateManager;
-import com.petra.lib.signal.SignalListener;
+import com.petra.lib.manager.block.JobStateManager;
 
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -10,32 +9,32 @@ import java.util.Optional;
 
 final class StateControllerImpl implements StateController {
 
-    private final Map<ExecutionState, ExecutionState> stateInheritance = new EnumMap<>(ExecutionState.class);
+    private final Map<JobState, JobState> stateInheritance = new EnumMap<>(JobState.class);
     /**
      * список стейтменеджеров с применеными стейтами
      */
 
-    private final Map<ExecutionState, ExecutionStateManager> stateList = new HashMap<>();
+    private final Map<JobState, JobStateManager> stateList = new HashMap<>();
 
     StateControllerImpl() {
-        stateInheritance.put(ExecutionState.INITIALIZING, ExecutionState.REQUEST_SOURCE_DATA);
-        stateInheritance.put(ExecutionState.REQUEST_SOURCE_DATA, ExecutionState.EXECUTING);
-        stateInheritance.put(ExecutionState.EXECUTING, ExecutionState.EXECUTION_REGISTRATION);
-        stateInheritance.put(ExecutionState.EXECUTION_REGISTRATION, ExecutionState.EXECUTION_RESPONSE);
+        stateInheritance.put(JobState.INITIALIZING, JobState.REQUEST_SOURCE_DATA);
+        stateInheritance.put(JobState.REQUEST_SOURCE_DATA, JobState.EXECUTING);
+        stateInheritance.put(JobState.EXECUTING, JobState.EXECUTION_REGISTRATION);
+        stateInheritance.put(JobState.EXECUTION_REGISTRATION, JobState.EXECUTION_RESPONSE);
     }
 
     @Override
-    public void registerManager(ExecutionState executionState, ExecutionStateManager manager) {
-        stateList.put(executionState, manager);
+    public void registerManager(JobState jobState, JobStateManager manager) {
+        stateList.put(jobState, manager);
     }
 
     @Override
-    public Optional<ExecutionState> getNextState(ExecutionState prevState) {
+    public Optional<JobState> getNextState(JobState prevState) {
         return Optional.ofNullable(stateInheritance.get(prevState));
     }
 
     @Override
-    public ExecutionStateManager getState(ExecutionState state) {
+    public JobStateManager getState(JobState state) {
         return stateList.get(state);
     }
 }

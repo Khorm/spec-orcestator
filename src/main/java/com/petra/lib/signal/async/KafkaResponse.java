@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petra.lib.manager.thread.ThreadManager;
 import com.petra.lib.signal.ResponseSignal;
-import com.petra.lib.signal.SignalListener;
+import com.petra.lib.signal.SignalResponseListener;
 import com.petra.lib.signal.SignalType;
 import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.signal.model.Version;
@@ -24,7 +24,7 @@ import java.util.UUID;
 /**
  * Сигнал, получащий данные и отвечающий на них
  */
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class KafkaResponse implements ResponseSignal {
 
     Consumer<String, String> kafkaConsumer;
@@ -34,10 +34,10 @@ public class KafkaResponse implements ResponseSignal {
     Long blockId;
     ObjectMapper objectMapper = new ObjectMapper();
     Version answerVersion;
+    SignalResponseListener signalResponseListener;
 
 
     public KafkaResponse(Consumer kafkaConsumer, Producer<UUID, String> kafkaProducer,
-                         SignalListener messageHandler,
                          Long blockId,
                          Version answerVersion,
                          Long signalId) {
@@ -57,7 +57,7 @@ public class KafkaResponse implements ResponseSignal {
                     String message = record.value();
                     try {
                         SignalTransferModel model = objectMapper.readValue(message, SignalTransferModel.class);
-                        ThreadManager.execute(() -> messageHandler.executeSignal(model));
+                        ThreadManager.execute(() -> signalResponseListener.executeSignal(model));
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                     }
@@ -82,12 +82,13 @@ public class KafkaResponse implements ResponseSignal {
         kafkaConsumer.commitSync();
         ProducerRecord<UUID, String> record;
         try {
-            SignalTransferModel answer = new SignalTransferModel(contextVariables,
-                    answerVersion,
-                    signalId,
+            SignalTransferModel answer = new SignalTransferModel(
                     scenarioId,
+                    signalId,
+                    answerVersion,
                     blockId,
-                    SignalType.RESPONSE);
+                    SignalType.RESPONSE,
+                    contextVariables);
 
             record = new ProducerRecord<>(answer.getScenarioId().toString(),
                     objectMapper.writeValueAsString(answer));
@@ -110,12 +111,12 @@ public class KafkaResponse implements ResponseSignal {
 
         ProducerRecord<UUID, String> record = null;
         SignalTransferModel errorSignalTransferModel = new SignalTransferModel(
-                null,
-                answerVersion,
-                signalId,
                 scenarioId,
+                signalId,
+                answerVersion,
                 blockId,
-                SignalType.ERROR
+                SignalType.ERROR,
+                null
         );
         try {
             record = new ProducerRecord<>(errorSignalTransferModel.getScenarioId().toString(),
@@ -129,5 +130,10 @@ public class KafkaResponse implements ResponseSignal {
 //                sendErrorHandler.accept(exception, errorSignalTransferModel);
             }
         });
+    }
+
+    @Override
+    public void setListener(SignalResponseListener signalResponseListener) {
+        this.signalResponseListener = signalResponseListener;
     }
 }

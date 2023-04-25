@@ -1,7 +1,7 @@
 package com.petra.lib.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.petra.lib.manager.block.ExecutionContext;
+import com.petra.lib.manager.block.JobContext;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
 @RequiredArgsConstructor
 class UserContextImpl implements UserContext{
 
-    ExecutionContext context;
+    JobContext context;
     EntityManager entityManager;
 
     @Override

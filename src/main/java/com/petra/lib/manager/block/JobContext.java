@@ -8,29 +8,37 @@ import com.petra.lib.variable.process.ProcessVariablesController;
 import com.petra.lib.variable.process.ProcessVariable;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import org.springframework.transaction.TransactionStatus;
 
 import java.util.Collection;
 import java.util.UUID;
 
+/**
+ * Job context during execution
+ */
+@ToString(onlyExplicitlyIncluded = true)
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ExecutionContext {
+public class JobContext {
 
     ProcessVariablesController processVariablesController;
 
+    /**
+     * Request signal model
+     */
     @Getter
-    SignalTransferModel enterSignalTransferModel;
+    SignalTransferModel requestSignalTransferModel;
 
     @Getter
     TransactionStatus transactionStatus;
 
 
-    public ExecutionContext(VariableList variableList, VariableMapper inputValueMap,
-                            SignalTransferModel enterSignalTransferModel, TransactionStatus transactionStatus){
+    public JobContext(VariableList variableList, VariableMapper inputValueMap,
+                      SignalTransferModel requestSignalTransferModel, TransactionStatus transactionStatus){
         this.transactionStatus = transactionStatus;
         processVariablesController = new ProcessVariablesController(variableList, inputValueMap);
-        this.enterSignalTransferModel = enterSignalTransferModel;
+        this.requestSignalTransferModel = requestSignalTransferModel;
     }
 
     public synchronized Collection<ProcessVariable> getVariablesList(){
@@ -51,11 +59,11 @@ public class ExecutionContext {
     }
 
     public synchronized Collection<ProcessVariable> getSignalVariables(){
-        return enterSignalTransferModel.getSignalVariables();
+        return requestSignalTransferModel.getSignalVariables();
     }
 
     public UUID getScenarioId(){
-        return enterSignalTransferModel.getScenarioId();
+        return requestSignalTransferModel.getScenarioId();
     }
 
 

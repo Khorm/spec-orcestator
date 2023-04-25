@@ -5,7 +5,7 @@ import com.petra.lib.signal.model.SignalTransferModel;
 /**
  * Интерфейс слушателя сигнала
  */
-public interface SignalObserver {
+public interface SignalRequestListener {
     void executed(SignalTransferModel signalTransferModel);
     void error(Exception e, SignalTransferModel signalTransferModel);
 }

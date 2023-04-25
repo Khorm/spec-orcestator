@@ -4,18 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petra.lib.annotation.SourceHandler;
 import com.petra.lib.handler.UserHandler;
 import com.petra.lib.manager.block.BlockFactory;
-import com.petra.lib.manager.block.ExecutionManager;
+import com.petra.lib.worker.manager.JobStaticManager;
+import com.petra.lib.worker.manager.JobStaticManagerImpl;
 import com.petra.lib.manager.models.ConfigModel;
-import com.petra.lib.registration.ExecutionRepository;
+import com.petra.lib.registration.JobRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -38,11 +39,13 @@ public final class PetraFactory implements ApplicationContextAware {
 
     @Value("petra.kafka.servers")
     String kafkaServers;
+    final ConfigurableApplicationContext context;
 
     @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    public synchronized void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        System.out.println(context);
         Map<String, Object> sourceHandlers = applicationContext.getBeansWithAnnotation(SourceHandler.class);
-        ExecutionRepository executionRepository = new ExecutionRepository(dataSource);
+        JobRepository jobRepository = new JobRepository(dataSource);
 
         try {
             Resource config = applicationContext.getResource("classpath:petra_config.json");
@@ -50,13 +53,15 @@ public final class PetraFactory implements ApplicationContextAware {
             ObjectMapper objectMapper = new ObjectMapper();
             ConfigModel configModel = objectMapper.readValue(configJson, ConfigModel.class);
             log.debug(configModel.toString());
-            Collection<ExecutionManager> sourceExecutors = configModel.getSources().stream()
+            Collection<JobStaticManager> sourceExecutors = configModel.getSources().stream()
                     .map(actionModel -> BlockFactory.createSource(actionModel,
                             (UserHandler) sourceHandlers.get(actionModel.getName()),
-                            executionRepository,
+                            jobRepository,
                             platformTransactionManager,
-                            actionModel.getExecutionSignal().getPath()
+                            actionModel.getExecutionSignal().getPath(),
+                            context.getBeanFactory()
                             )).collect(Collectors.toList());
+            sourceExecutors.forEach(JobStaticManager::start);
 
         } catch (IOException e) {
             e.printStackTrace();

@@ -1,12 +1,12 @@
 package com.petra.lib.signal.source;
 
-import com.petra.lib.manager.block.ExecutionContext;
-import com.petra.lib.manager.block.ExecutionHandler;
-import com.petra.lib.manager.block.ExecutionStateManager;
+import com.petra.lib.manager.block.JobContext;
+import com.petra.lib.worker.manager.JobStaticManager;
+import com.petra.lib.manager.block.JobStateManager;
 import com.petra.lib.manager.block.SourceSignalModel;
-import com.petra.lib.manager.state.ExecutionState;
+import com.petra.lib.manager.state.JobState;
 import com.petra.lib.signal.RequestSignal;
-import com.petra.lib.signal.SignalObserver;
+import com.petra.lib.signal.SignalRequestListener;
 import com.petra.lib.signal.model.SignalTransferModel;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -17,11 +17,11 @@ import java.util.Set;
 import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class SourceSignalRequestManager implements ExecutionStateManager, SignalObserver {
+public class SourceSignalRequestManager implements JobStateManager, SignalRequestListener {
 
     RequestRepo requestRepo;
     SourceSignalList sourceSignalList;
-    ExecutionHandler executionHandler;
+    JobStaticManager jobStaticManager;
 
     /**
      *
@@ -29,36 +29,36 @@ public class SourceSignalRequestManager implements ExecutionStateManager, Signal
      * Список сигналов для соурса
      * @param signals
      * Сами сигналы
-     * @param executionHandler
+     * @param jobStaticManager
      * Обработчик ответа
      */
     public SourceSignalRequestManager(Collection<SourceSignalModel> sourceSignalList,
-                                      List<RequestSignal> signals, ExecutionHandler executionHandler
+                                      List<RequestSignal> signals, JobStaticManager jobStaticManager
                                       ){
         this.requestRepo = new LocalRequestRepo();
         this.sourceSignalList = new SourceSignalList(sourceSignalList, signals);
-        this.executionHandler = executionHandler;
+        this.jobStaticManager = jobStaticManager;
     }
 
 
     @Override
-    public void execute(ExecutionContext executionContext) {
+    public void execute(JobContext jobContext) {
         try {
-            requestRepo.addNewRequestData(executionContext);
-            Set<Long> executedSignalsId = requestRepo.getExecutedSignals(executionContext.getScenarioId());
+            requestRepo.addNewRequestData(jobContext);
+            Set<Long> executedSignalsId = requestRepo.getExecutedSignals(jobContext.getScenarioId());
             Set<RequestSignal> signalsToExecute = sourceSignalList.getNextAvailableSignals(executedSignalsId);
             signalsToExecute.forEach(signal -> {
-                signal.send(executionContext.getVariablesList(), executionContext.getScenarioId());
+                signal.send(jobContext.getVariablesList(), jobContext.getScenarioId());
             });
         }catch (Exception e){
-            requestRepo.clear(executionContext.getScenarioId());
-            executionHandler.executeNext(executionContext, ExecutionState.ERROR);
+            requestRepo.clear(jobContext.getScenarioId());
+            jobStaticManager.executeNext(jobContext, JobState.ERROR);
         }
     }
 
     @Override
-    public ExecutionState getManagerState() {
-        return ExecutionState.REQUEST_SOURCE_DATA;
+    public JobState getManagerState() {
+        return JobState.REQUEST_SOURCE_DATA;
     }
 
     @Override
@@ -72,13 +72,13 @@ public class SourceSignalRequestManager implements ExecutionStateManager, Signal
         if (!requestRepo.checkIsScenarioContains(signalTransferModel.getScenarioId())) return;
 
         UUID scenarioId = signalTransferModel.getScenarioId();
-        ExecutionContext context = requestRepo.getExecutionContext(scenarioId);
+        JobContext context = requestRepo.getExecutionContext(scenarioId);
         context.setSignalVariables(signalTransferModel.getSignalVariables());
         requestRepo.addExecutedSourceId(scenarioId, signalTransferModel.getSignalId());
 
         if (requestRepo.getReceivedSignalsSize(scenarioId) == sourceSignalList.getSourceSignalsCount()){
             requestRepo.clear(scenarioId);
-            executionHandler.executeNext(context, ExecutionState.REQUEST_SOURCE_DATA);
+            jobStaticManager.executeNext(context, JobState.REQUEST_SOURCE_DATA);
         }else {
             execute(context);
         }
@@ -86,8 +86,8 @@ public class SourceSignalRequestManager implements ExecutionStateManager, Signal
 
     @Override
     public void error(Exception e, SignalTransferModel signalTransferModel) {
-        ExecutionContext executionContext = requestRepo.getExecutionContext(signalTransferModel.getScenarioId());
+        JobContext jobContext = requestRepo.getExecutionContext(signalTransferModel.getScenarioId());
         requestRepo.clear(signalTransferModel.getScenarioId());
-        executionHandler.executeNext(executionContext, ExecutionState.ERROR);
+        jobStaticManager.executeNext(jobContext, JobState.ERROR);
     }
 }

@@ -36,8 +36,10 @@ class AnswersMap {
 
     synchronized SignalTransferModel remove(UUID key) {
         Answer answer = answers.remove(key);
-        answer.blocked = false;
-        answer.notify();
+        synchronized (answer.mutex) {
+            answer.blocked = false;
+            answer.mutex.notify();
+        }
         return answer.signalTransferModel;
     }
 

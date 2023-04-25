@@ -14,6 +14,7 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 
@@ -24,40 +25,35 @@ import java.util.UUID;
 
 public final class SignalFactory {
 
-    public static RequestSignal createSyncRequestSignal(String URL, SignalObserver messageHandler,
-                                                        Collection<VariableModel> requestSignalVariables,
-                                                        Long signalId, Version version,
-                                                        Long blockId) {
-        VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(requestSignalVariables);
-        return new SyncRequest(URL, messageHandler, variableMapper, blockId, version, signalId);
+    public static RequestSignal createSyncRequestSignal(SignalModel signal, Long blockId) {
+        VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(signal.getRequestVariableCollection());
+        return new SyncRequest(signal.getPath(),  variableMapper, blockId,
+                signal.getVersion(), signal.getId());
     }
 
 
-    public static ResponseSignal createSyncResponseSignal(String hostname, int port,
-                                                          SignalListener handler, Long blockId, Version answerVersion,
-                                                          Long signalId) {
+    public static ResponseSignal createSyncResponseSignal(SignalModel signal, Long blockId,
+                                                          ConfigurableListableBeanFactory beanFactory) {
 //        VariableMapper answerMapper = VariableMapperFactory.createVariableMapper(answerSignalVariables);
-        return new SyncResponse(hostname, port, handler, blockId, answerVersion, signalId);
+        return new SyncResponse(signal.getPath(), signal.getName(), blockId, signal.getVersion(), signal.getId(), beanFactory);
     }
 
-    public static RequestSignal createAsyncRequestSignal(String bootstrapServers, Long blockId,
-                                                         Collection<VariableModel> requestSignalVariables,
-                                                         Version requestVersion, Long signalId, SignalObserver messageHandler) {
-        Producer<UUID, String> producer = createProducer(getProducerProps(bootstrapServers));
-        Consumer<UUID, String> consumer = createConsumer(getConsumerProps(bootstrapServers, "test"));
-        VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(requestSignalVariables);
-
-        return new KafkaRequest(producer, consumer, blockId, variableMapper, requestVersion, signalId, messageHandler);
+    public static RequestSignal createAsyncRequestSignal(SignalModel signal, String bootstrapServers, Long blockId) {
+//        Producer<UUID, String> producer = createProducer(getProducerProps(bootstrapServers));
+//        Consumer<UUID, String> consumer = createConsumer(getConsumerProps(bootstrapServers, signal.getPath()));
+//        VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(signal.getRequestVariableCollection());
+//
+//        return new KafkaRequest(producer, consumer, blockId, variableMapper, signal.getVersion(),
+//                signal.getId(), null, signal.getName());
+        return null;
     }
 
-    public static ResponseSignal createAsyncResponseSignal(String bootstrapServers, SignalListener handler, Long blockId,
-                                                           Version responseVersion,
-                                                           Long signalId) {
+    public static ResponseSignal createAsyncResponseSignal(SignalModel signal, String bootstrapServers, Long blockId) {
         Producer<UUID, String> kafkaProducer = createProducer(getProducerProps(bootstrapServers));
         Consumer<UUID, String> kafkaConsumer = createConsumer(getConsumerProps(bootstrapServers, "test"));
 //        VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(responseSignalVariables);
 
-        return new KafkaResponse(kafkaConsumer, kafkaProducer, handler, blockId, responseVersion, signalId);
+        return new KafkaResponse(kafkaConsumer, kafkaProducer, blockId, signal.getVersion(), signal.getId());
     }
 
     private static Consumer<UUID, String> createConsumer(Map<String, Object> props) {

@@ -1,23 +1,22 @@
 package com.petra.lib.registration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.petra.lib.manager.block.ExecutionContext;
-import com.petra.lib.manager.block.ExecutionHandler;
-import com.petra.lib.manager.block.ExecutionStateManager;
-import com.petra.lib.manager.state.ExecutionState;
+import com.petra.lib.manager.block.JobContext;
+import com.petra.lib.worker.manager.JobStaticManager;
+import com.petra.lib.manager.block.JobStateManager;
+import com.petra.lib.manager.state.JobState;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.sql.DataSource;
 import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class RegistrationState implements ExecutionStateManager {
+public class RegistrationState implements JobStateManager {
 
-    ExecutionRepository executionRepository;
+    JobRepository jobRepository;
     Long blockId;
-    ExecutionHandler executionHandler;
+    JobStaticManager jobStaticManager;
     PlatformTransactionManager transactionManager;
 
     @Override
@@ -25,27 +24,27 @@ public class RegistrationState implements ExecutionStateManager {
 
     }
 
-    public RegistrationState(Long blockId, ExecutionHandler executionHandler,
-                             ExecutionRepository executionRepository, PlatformTransactionManager transactionManager) {
+    public RegistrationState(Long blockId, JobStaticManager jobStaticManager,
+                             JobRepository jobRepository, PlatformTransactionManager transactionManager) {
         this.blockId = blockId;
-        this.executionRepository = executionRepository;
-        this.executionHandler = executionHandler;
+        this.jobRepository = jobRepository;
+        this.jobStaticManager = jobStaticManager;
         this.transactionManager = transactionManager;
     }
 
     @Override
-    public void execute(ExecutionContext executionContext) throws JsonProcessingException {
-        UUID scenarioId = executionContext.getScenarioId();
-        String variables = executionContext.getVariablesJson();
-        executionRepository.saveExecution(scenarioId, blockId, variables);
-        transactionManager.commit(executionContext.getTransactionStatus());
-        executionHandler.executeNext(executionContext, getManagerState());
+    public void execute(JobContext jobContext) throws JsonProcessingException {
+        UUID scenarioId = jobContext.getScenarioId();
+        String variables = jobContext.getVariablesJson();
+        jobRepository.saveExecution(scenarioId, blockId, variables);
+        transactionManager.commit(jobContext.getTransactionStatus());
+        jobStaticManager.executeNext(jobContext, getManagerState());
 
     }
 
     @Override
-    public ExecutionState getManagerState() {
-        return ExecutionState.EXECUTION_REGISTRATION;
+    public JobState getManagerState() {
+        return JobState.EXECUTION_REGISTRATION;
     }
 
 }

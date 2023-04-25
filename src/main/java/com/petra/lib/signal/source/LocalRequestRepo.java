@@ -1,6 +1,6 @@
 package com.petra.lib.signal.source;
 
-import com.petra.lib.manager.block.ExecutionContext;
+import com.petra.lib.manager.block.JobContext;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,7 @@ import java.util.UUID;
 class LocalRequestRepo implements RequestRepo {
     private final Map<UUID, ContextModel> uuidRequestDataMap = new HashMap<>();
 
-    public void addNewRequestData(ExecutionContext context) {
+    public void addNewRequestData(JobContext context) {
         if (uuidRequestDataMap.containsKey(context.getScenarioId())) return;
         ContextModel contextData = new ContextModel(context);
         uuidRequestDataMap.put(context.getScenarioId(), contextData);
@@ -24,7 +24,7 @@ class LocalRequestRepo implements RequestRepo {
         return uuidRequestDataMap.get(scenarioId).getExecutedSourceSignalIds();
     }
 
-    public ExecutionContext getExecutionContext(UUID scenarioId) {
+    public JobContext getExecutionContext(UUID scenarioId) {
         return uuidRequestDataMap.get(scenarioId).getContext();
     }
 

@@ -1,24 +1,8 @@
 package com.petra.lib.workflow.new_workflow;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.petra.lib.manager.block.ExecutionContext;
-import com.petra.lib.manager.block.ExecutionHandler;
-import com.petra.lib.manager.block.ExecutionStateManager;
-import com.petra.lib.manager.state.ExecutionState;
-import com.petra.lib.signal.SignalObserver;
-import com.petra.lib.signal.SignalType;
-import com.petra.lib.signal.model.SignalTransferModel;
-import com.petra.lib.variable.mapper.VariableMapperFactory;
-import com.petra.lib.variable.process.ProcessVariable;
-import com.petra.lib.workflow.new_workflow.graph.ExecutionGraph;
-import com.petra.lib.workflow.new_workflow.graph.ExecutionNode;
-import com.petra.lib.workflow.new_workflow.repository.WorkflowRepo;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-
-import java.util.Collection;
-import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor

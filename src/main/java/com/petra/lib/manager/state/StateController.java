@@ -1,15 +1,15 @@
 package com.petra.lib.manager.state;
 
-import com.petra.lib.manager.block.ExecutionStateManager;
-import com.petra.lib.signal.SignalListener;
+import com.petra.lib.manager.block.JobStateManager;
 
 import java.util.Optional;
 
+@Deprecated
 public interface StateController {
 
-    Optional<ExecutionState> getNextState(ExecutionState prevState);
-    ExecutionStateManager getState(ExecutionState state);
-    void registerManager(ExecutionState executionState, ExecutionStateManager manager);
+    Optional<JobState> getNextState(JobState prevState);
+    JobStateManager getState(JobState state);
+    void registerManager(JobState jobState, JobStateManager manager);
 
     static StateController createStateController() {
         return new StateControllerImpl();

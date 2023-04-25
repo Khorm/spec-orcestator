@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface RequestSignal extends Signal {
 
     void send(Collection<ProcessVariable> senderVariables, UUID scenarioId);
+    void setObserver(SignalRequestListener signalRequestListener);
 }

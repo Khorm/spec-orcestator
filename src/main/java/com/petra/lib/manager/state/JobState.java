@@ -1,6 +1,9 @@
 package com.petra.lib.manager.state;
 
-public enum ExecutionState {
+public enum JobState {
+    /**
+     * Initialize job
+     */
     INITIALIZING(true),
     REQUEST_SOURCE_DATA(false),
     EXECUTING(false),
@@ -14,7 +17,7 @@ public enum ExecutionState {
 
     private final boolean isExecuteInNewThread;
 
-    ExecutionState(boolean isExecuteInNewThread){
+    JobState(boolean isExecuteInNewThread){
         this.isExecuteInNewThread = isExecuteInNewThread;
 
     }

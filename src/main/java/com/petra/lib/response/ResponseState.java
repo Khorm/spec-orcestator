@@ -1,11 +1,11 @@
 package com.petra.lib.response;
 
-import com.petra.lib.manager.block.ExecutionContext;
-import com.petra.lib.manager.block.ExecutionHandler;
-import com.petra.lib.manager.block.ExecutionStateManager;
-import com.petra.lib.manager.state.ExecutionState;
+import com.petra.lib.manager.block.JobContext;
+import com.petra.lib.worker.manager.JobStaticManager;
+import com.petra.lib.manager.block.JobStateManager;
+import com.petra.lib.manager.state.JobState;
 import com.petra.lib.signal.ResponseSignal;
-import com.petra.lib.signal.SignalObserver;
+import com.petra.lib.signal.SignalRequestListener;
 import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.variable.process.ProcessVariable;
 import lombok.AccessLevel;
@@ -17,22 +17,22 @@ import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
-public class ResponseState implements ExecutionStateManager, SignalObserver {
+public class ResponseState implements JobStateManager, SignalRequestListener {
 
     ResponseSignal responseSignal;
-    ExecutionHandler executionHandler;
+    JobStaticManager jobStaticManager;
 
     @Override
-    public void execute(ExecutionContext executionContext) throws Exception {
-        UUID scenarioId = executionContext.getScenarioId();
-        Collection<ProcessVariable> variableList = executionContext.getVariablesList();
+    public void execute(JobContext jobContext) throws Exception {
+        UUID scenarioId = jobContext.getScenarioId();
+        Collection<ProcessVariable> variableList = jobContext.getVariablesList();
         responseSignal.setAnswer(variableList, scenarioId);
-        executionHandler.executeNext(executionContext, getManagerState());
+        jobStaticManager.executeNext(jobContext, getManagerState());
     }
 
     @Override
-    public ExecutionState getManagerState() {
-        return ExecutionState.EXECUTION_RESPONSE;
+    public JobState getManagerState() {
+        return JobState.EXECUTION_RESPONSE;
     }
 
     @Override

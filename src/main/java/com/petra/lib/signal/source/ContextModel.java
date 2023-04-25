@@ -1,6 +1,6 @@
 package com.petra.lib.signal.source;
 
-import com.petra.lib.manager.block.ExecutionContext;
+import com.petra.lib.manager.block.JobContext;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Set;
 class ContextModel {
 
     @Getter
-    ExecutionContext context;
+    JobContext context;
     Set<Long> executedSourceSignalIds = new HashSet<>();
 
     Set<Long> getExecutedSourceSignalIds(){

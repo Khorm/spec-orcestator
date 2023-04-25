@@ -2,22 +2,22 @@ package com.petra.lib.signal.model;
 
 import com.petra.lib.signal.SignalType;
 import com.petra.lib.variable.process.ProcessVariable;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
 import java.util.UUID;
 
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class SignalTransferModel {
-    Collection<ProcessVariable> signalVariables;
-    Version version;
-    Long signalId;
     UUID scenarioId;
+    Long signalId;
+    Version version;
     Long senderBlockId;
     SignalType signalType;
+    Collection<ProcessVariable> signalVariables;
 }

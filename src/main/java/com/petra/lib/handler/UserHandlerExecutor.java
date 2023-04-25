@@ -1,9 +1,9 @@
 package com.petra.lib.handler;
 
-import com.petra.lib.manager.block.ExecutionContext;
-import com.petra.lib.manager.block.ExecutionHandler;
-import com.petra.lib.manager.block.ExecutionStateManager;
-import com.petra.lib.manager.state.ExecutionState;
+import com.petra.lib.manager.block.JobContext;
+import com.petra.lib.worker.manager.JobStaticManager;
+import com.petra.lib.manager.block.JobStateManager;
+import com.petra.lib.manager.state.JobState;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,23 +14,23 @@ import javax.persistence.Persistence;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
-public class UserHandlerExecutor implements ExecutionStateManager {
+public class UserHandlerExecutor implements JobStateManager {
 
     UserHandler userHandler;
-    ExecutionHandler executionHandler;
+    JobStaticManager jobStaticManager;
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("petra");
 
     @Override
-    public void execute(ExecutionContext executionContext) {
+    public void execute(JobContext jobContext) {
         EntityManager entityManager = emf.createEntityManager();
-        UserContextImpl userContext = new UserContextImpl(executionContext, entityManager);
+        UserContextImpl userContext = new UserContextImpl(jobContext, entityManager);
         userHandler.execute(userContext);
-        executionHandler.executeNext(executionContext, getManagerState());
+        jobStaticManager.executeNext(jobContext, getManagerState());
     }
 
     @Override
-    public ExecutionState getManagerState() {
-        return ExecutionState.EXECUTING;
+    public JobState getManagerState() {
+        return JobState.EXECUTING;
     }
 
     @Override

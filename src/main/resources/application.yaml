@@ -4,9 +4,9 @@ petra:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost/tst
-    username: dm
-    password: dm
+    url: jdbc:postgresql://localhost/petra_test_db
+    username: ${dbUsername}
+    password: ${dbPassword}
     driver-class-name: org.postgresql.Driver
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect

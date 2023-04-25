@@ -15,10 +15,10 @@ import java.util.Collection;
 import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ExecutionRepository {
+public class JobRepository {
     NamedParameterJdbcTemplate jdbcTemplate;
 
-    public ExecutionRepository(DataSource dataSource) {
+    public JobRepository(DataSource dataSource) {
         jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
     }
 
@@ -27,7 +27,7 @@ public class ExecutionRepository {
                 .addValue("scenarioId", scenarioId)
                 .addValue("blockId", blockId);
 
-        return jdbcTemplate.queryForObject("EXISTS( SELECT * FROM EXECUTION_HISTORY WHERE SCENARIO_ID = :scenarioId" +
+        return jdbcTemplate.queryForObject("EXISTS( SELECT * FROM JOB_HISTORY WHERE SCENARIO_ID = :scenarioId" +
                 " AND BLOCK_ID = :blockId)", namedParameters, Boolean.class);
     }
 
@@ -35,12 +35,12 @@ public class ExecutionRepository {
         SqlParameterSource namedParameters = new MapSqlParameterSource()
                 .addValue("scenarioId", scenarioId)
                 .addValue("blockId", blockId)
-                .addValue("variables", variablesJson);
-        jdbcTemplate.update("INSERT INTO EXECUTION_HISTORY VALUES (scenarioId, blockId, variables)", namedParameters);
+                .addValue("result_variables", variablesJson);
+        jdbcTemplate.update("INSERT INTO JOB_HISTORY VALUES (scenarioId, blockId, result_variables)", namedParameters);
     }
 
     public Collection<ProcessVariable> getVariables(UUID scenarioId, Long blockId) throws JsonProcessingException {
-        String SQL = "SELECT variables FROM EXECUTION_HISTORY WHERE scenario_id = :scenarioId AND block_id = :blockId";
+        String SQL = "SELECT variables FROM JOB_HISTORY WHERE scenario_id = :scenarioId AND block_id = :blockId";
         SqlParameterSource namedParameters = new MapSqlParameterSource()
                 .addValue("scenarioId", scenarioId)
                 .addValue("blockId", blockId);
