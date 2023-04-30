@@ -8,7 +8,7 @@ import com.petra.lib.signal.SignalResponseListener;
 import com.petra.lib.signal.SignalType;
 import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.signal.model.Version;
-import com.petra.lib.variable.process.ProcessVariable;
+import com.petra.lib.manager.block.ProcessVariableDto;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.apache.kafka.clients.consumer.Consumer;
@@ -78,7 +78,7 @@ public class KafkaResponse implements ResponseSignal {
     }
 
     @Override
-    public void setAnswer(Collection<ProcessVariable> contextVariables, UUID scenarioId) {
+    public void setAnswer(Collection<ProcessVariableDto> contextVariables, UUID scenarioId) {
         kafkaConsumer.commitSync();
         ProducerRecord<UUID, String> record;
         try {
@@ -106,7 +106,7 @@ public class KafkaResponse implements ResponseSignal {
     }
 
     @Override
-    public void executionError(UUID scenarioId) {
+    public void setError(UUID scenarioId) {
         kafkaConsumer.commitSync();
 
         ProducerRecord<UUID, String> record = null;

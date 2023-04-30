@@ -7,7 +7,7 @@ import com.petra.lib.signal.SignalResponseListener;
 import com.petra.lib.signal.SignalType;
 import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.signal.model.Version;
-import com.petra.lib.variable.process.ProcessVariable;
+import com.petra.lib.manager.block.ProcessVariableDto;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
@@ -103,7 +103,7 @@ public class SyncResponse implements ResponseSignal {
     }
 
     @Override
-    public void setAnswer(Collection<ProcessVariable> contextVariables, UUID scenarioId) {
+    public void setAnswer(Collection<ProcessVariableDto> contextVariables, UUID scenarioId) {
         SignalTransferModel signalTransferModel = new SignalTransferModel(
                 scenarioId,
                 signalId,
@@ -116,7 +116,7 @@ public class SyncResponse implements ResponseSignal {
     }
 
     @Override
-    public void executionError(UUID scenarioId) {
+    public void setError(UUID scenarioId) {
         SignalTransferModel errorTransferModel = createErrorModel(scenarioId);
         answersMap.putOnlyIfExists(errorTransferModel);
     }

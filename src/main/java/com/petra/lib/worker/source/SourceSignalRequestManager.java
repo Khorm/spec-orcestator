@@ -1,8 +1,8 @@
-package com.petra.lib.signal.source;
+package com.petra.lib.worker.source;
 
 import com.petra.lib.manager.block.JobContext;
-import com.petra.lib.worker.manager.JobStaticManager;
-import com.petra.lib.manager.block.JobStateManager;
+import com.petra.lib.manager.block.JobStaticManager;
+import com.petra.lib.manager.state.JobStateManager;
 import com.petra.lib.manager.block.SourceSignalModel;
 import com.petra.lib.manager.state.JobState;
 import com.petra.lib.signal.RequestSignal;
@@ -43,6 +43,10 @@ public class SourceSignalRequestManager implements JobStateManager, SignalReques
 
     @Override
     public void execute(JobContext jobContext) {
+        if (sourceSignalList.getSourceSignalsCount() == 0){
+            jobStaticManager.executeState(jobContext, JobState.EXECUTING);
+            return;
+        }
         try {
             requestRepo.addNewRequestData(jobContext);
             Set<Long> executedSignalsId = requestRepo.getExecutedSignals(jobContext.getScenarioId());

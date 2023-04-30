@@ -1,7 +1,7 @@
 package com.petra.lib.workflow.new_workflow.graph;
 
 import com.petra.lib.signal.RequestSignal;
-import com.petra.lib.variable.process.ProcessVariable;
+import com.petra.lib.manager.block.ProcessVariableDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class ExecutionNode {
     Long id;
     RequestSignal signal;
 
-    public void execute(Collection<ProcessVariable> processVariables, UUID scenarioId){
-        signal.send(processVariables, scenarioId);
+    public void execute(Collection<ProcessVariableDto> processVariableDtos, UUID scenarioId){
+        signal.send(processVariableDtos, scenarioId);
     }
 }

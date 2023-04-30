@@ -1,7 +1,7 @@
 package com.petra.lib.variable.mapper;
 
 
-import com.petra.lib.variable.process.ProcessVariable;
+import com.petra.lib.manager.block.ProcessVariableDto;
 
 import java.util.Collection;
 
@@ -10,6 +10,8 @@ import java.util.Collection;
  */
 public interface VariableMapper {
 
-    Collection<ProcessVariable> map(Collection<ProcessVariable> producerCollection);
+    Collection<ProcessVariableDto> map(Collection<ProcessVariableDto> producerCollection);
+
+    ProcessVariableDto map(ProcessVariableDto producerVariable);
 
 }

@@ -18,5 +18,6 @@ public class SignalModel {
     Version version;
     String name;
     Collection<VariableModel> requestVariableCollection;
+    Collection<VariableModel> responseVariableCollection;
     String path;
 }

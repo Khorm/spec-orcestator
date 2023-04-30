@@ -11,6 +11,6 @@ import java.util.Collection;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 public class ConfigModel {
-    Collection<ActionModel> actions;
-    Collection<ActionModel> sources;
+    Collection<BlockModel> actions;
+    Collection<BlockModel> sources;
 }

@@ -1,4 +1,4 @@
-package com.petra.lib.signal.source;
+package com.petra.lib.worker.source;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petra.lib.manager.block.JobContext;

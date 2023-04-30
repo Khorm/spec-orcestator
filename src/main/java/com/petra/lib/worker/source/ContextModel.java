@@ -1,4 +1,4 @@
-package com.petra.lib.signal.source;
+package com.petra.lib.worker.source;
 
 import com.petra.lib.manager.block.JobContext;
 import lombok.AccessLevel;

@@ -1,4 +1,4 @@
-package com.petra.lib.signal.source;
+package com.petra.lib.worker.source;
 
 import com.petra.lib.manager.block.SourceSignalModel;
 import com.petra.lib.signal.RequestSignal;
@@ -25,12 +25,15 @@ class SourceSignalList {
     SourceSignalList(Collection<SourceSignalModel> sourceSignalList, List<RequestSignal> signals) {
         sourceSignalsCount = signals.size();
 
+
         sourceSignals = signals.stream()
                 .collect(Collectors.toMap(signal -> signal.getId(), Function.identity()));
 
         childrenByParent = new HashMap<>();
         parentsByChild = new HashMap<>();
         starterSignals = new HashSet<>();
+
+        if (sourceSignalList == null) return;
         for (SourceSignalModel signalModel : sourceSignalList) {
             childrenByParent.put(signalModel.getId(), new HashSet<>(signalModel.getChildIds()));
             if (signalModel.getParentIds().isEmpty()) {

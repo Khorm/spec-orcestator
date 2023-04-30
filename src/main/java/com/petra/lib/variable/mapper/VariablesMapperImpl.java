@@ -1,6 +1,6 @@
 package com.petra.lib.variable.mapper;
 
-import com.petra.lib.variable.process.ProcessVariable;
+import com.petra.lib.manager.block.ProcessVariableDto;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -19,29 +19,19 @@ class VariablesMapperImpl implements VariableMapper{
     private final VariableMapCollection consumerVariableCollection;
 
     @Override
-    public Collection<ProcessVariable> map(Collection<ProcessVariable> producerVariableCollection) {
-        Collection<ProcessVariable> consumerVariables = new ArrayList<>();
-        for (ProcessVariable producerVariable : producerVariableCollection) {
-            Long consumerVariableId = consumerVariableCollection.findConsumerVariableByProducerVariable(producerVariable.getId());
-            ProcessVariable consumerProcessVariable = new ProcessVariable(consumerVariableId, producerVariable.getValue());
-            consumerVariables.add(consumerProcessVariable);
+    public Collection<ProcessVariableDto> map(Collection<ProcessVariableDto> producerVariableCollection) {
+        Collection<ProcessVariableDto> consumerVariables = new ArrayList<>();
+        for (ProcessVariableDto producerVariable : producerVariableCollection) {
+            ProcessVariableDto consumerProcessVariableDto = map(producerVariable);
+            consumerVariables.add(consumerProcessVariableDto);
         }
         return consumerVariables;
     }
 
+    @Override
+    public ProcessVariableDto map(ProcessVariableDto producerVariable) {
+        Long consumerVariableId = consumerVariableCollection.findConsumerVariableByProducerVariable(producerVariable.getId());
+        return new ProcessVariableDto(consumerVariableId, producerVariable.getValue()); // ProcessVariableDto.createProcessVariableWithJson(consumerVariableId, producerVariable.getValueJson());
+    }
 
-    /**
-     * Заполнить переменные процесса из входящих переменных
-     * @param sourceValueList
-     * Входящщие переменные процесса
-     * @param ownerCollection
-     * Переменнаы процесса владельца
-     */
-//    private void mapProcessCollection(Collection<ProcessVariable> producerValueList, ProcessVariablesCollection ownerCollection) {
-//        for (ProcessVariable sourceVariable : sourceValueList) {
-//            Variable ownerVariable = variableMapCollection.findVariableBySource(sourceVariable);
-//            ProcessVariable ownerProcessVariable = ownerVariable.createProcessVariable(sourceVariable.getValue());
-//            ownerCollection.putProcessVariable(ownerProcessVariable);
-//        }
-//    }
 }

@@ -1,7 +1,7 @@
 package com.petra.lib.signal.model;
 
 import com.petra.lib.signal.SignalType;
-import com.petra.lib.variable.process.ProcessVariable;
+import com.petra.lib.manager.block.ProcessVariableDto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,5 +19,5 @@ public class SignalTransferModel {
     Version version;
     Long senderBlockId;
     SignalType signalType;
-    Collection<ProcessVariable> signalVariables;
+    Collection<ProcessVariableDto> signalVariables;
 }

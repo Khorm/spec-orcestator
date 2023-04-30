@@ -1,29 +1,30 @@
 package com.petra.lib.variable.base;
 
-import lombok.RequiredArgsConstructor;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class VariableList {
+    Map<Long, Variable> idVariableMap;
+    Map<String, Variable> nameVariableMap;
 
-    private final Collection<Variable> variables;
+    public VariableList(Collection<Variable> variables) {
+        idVariableMap = variables.stream()
+                .collect(Collectors.toMap(Variable::getId, Function.identity()));
+        nameVariableMap = variables.stream()
+                .collect(Collectors.toMap(Variable::getName, Function.identity()));
+    }
 
     public Variable getVariableById(Long id) {
-        for (Variable variable : variables) {
-            if (variable.getId().equals(id)) {
-                return variable;
-            }
-        }
-        throw new NullPointerException("Variable not found");
+        return idVariableMap.get(id);
     }
 
     public Variable getVariableByName(String name) {
-        for (Variable variable : variables) {
-            if (variable.getName().equals(name)) {
-                return variable;
-            }
-        }
-        throw new NullPointerException("Variable not found");
+        return nameVariableMap.get(name);
     }
 }

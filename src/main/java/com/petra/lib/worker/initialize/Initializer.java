@@ -2,26 +2,19 @@ package com.petra.lib.worker.initialize;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petra.lib.manager.block.JobContext;
-import com.petra.lib.manager.block.JobStateManager;
+import com.petra.lib.manager.state.JobStateManager;
 import com.petra.lib.manager.state.JobState;
-import com.petra.lib.registration.JobRepository;
-import com.petra.lib.signal.RequestSignal;
+import com.petra.lib.worker.repo.JobRepository;
 import com.petra.lib.signal.ResponseSignal;
-import com.petra.lib.signal.SignalRequestListener;
 import com.petra.lib.signal.SignalResponseListener;
 import com.petra.lib.signal.model.SignalTransferModel;
-import com.petra.lib.variable.base.VariableList;
 import com.petra.lib.variable.mapper.VariableMapper;
-import com.petra.lib.variable.process.ProcessVariable;
-import com.petra.lib.worker.manager.JobStaticManager;
+import com.petra.lib.manager.block.ProcessVariableDto;
+import com.petra.lib.manager.block.JobStaticManager;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.Collection;
 
@@ -45,12 +38,6 @@ public class Initializer implements JobStateManager, SignalResponseListener {
      * Job request signal listener
      */
     ResponseSignal blockResponseSignal;
-    PlatformTransactionManager transactionManager;
-
-    /**
-     * List of static block variables
-     */
-    VariableList variableList;
 
     /**
      * Request signal variable mapper
@@ -60,13 +47,15 @@ public class Initializer implements JobStateManager, SignalResponseListener {
     @Override
     public void execute(JobContext jobContext) throws JsonProcessingException {
         boolean isExecutedBefore = jobRepository.isExecutedBefore(jobContext.getScenarioId(), blockId);
+
         if (isExecutedBefore) {
-            jobContext.setLoadVariables(jobRepository.getVariables(jobContext.getScenarioId(), blockId));
+            log.debug("Job already executed {}", jobContext.toString());
+            Collection<ProcessVariableDto> savedVariables = jobRepository.getVariables(jobContext.getScenarioId(), blockId);
+            savedVariables.forEach(jobContext::setVariable);
             jobStaticManager.executeState(jobContext, JobState.EXECUTION_RESPONSE);
             return;
         }
-        Collection<ProcessVariable> signalVariables = jobContext.getSignalVariables();
-        jobContext.setSignalVariables(signalVariables);
+        log.debug("Job starts executed {}", jobContext.toString());
         jobStaticManager.executeState(jobContext, JobState.REQUEST_SOURCE_DATA);
     }
 
@@ -83,13 +72,14 @@ public class Initializer implements JobStateManager, SignalResponseListener {
     @Override
     public void executeSignal(SignalTransferModel request) {
         //обработать сигнал
-        DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
-        definition.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
-        definition.setTimeout(3);
-        TransactionStatus transactionStatus = transactionManager.getTransaction(definition);
+//        DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
+//        definition.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+//        definition.setTimeout(3);
+//        TransactionStatus transactionStatus = transactionManager.getTransaction(definition);
 
-        JobContext jobContext = new JobContext(variableList, inputMapper, request, transactionStatus);
-        log.info("Start execution {} with params {}", blockName, jobContext.toString());
+        Collection<ProcessVariableDto> processVariableDtos = inputMapper.map(request.getSignalVariables());
+        JobContext jobContext = new JobContext(request.getScenarioId(), processVariableDtos);
+        log.info("Start execution {} with params {}", blockName, request.toString());
         try {
             execute(jobContext);
         } catch (JsonProcessingException e) {

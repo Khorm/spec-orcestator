@@ -1,6 +1,8 @@
 petra:
   kafka:
     servers: 'test'
+  thread:
+    count: 4
 
 spring:
   datasource:
@@ -8,11 +10,15 @@ spring:
     username: ${dbUsername}
     password: ${dbPassword}
     driver-class-name: org.postgresql.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    generate-ddl: false
-    show-sql: true
-    hibernate:
-      ddl-auto: none
-      format_sql: true
-      generate_statistics: true
+#  jpa:
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#    generate-ddl: false
+#    show-sql: true
+#    entityManagerFactory:
+#      name: my-persistence-unit
+#    hibernate:
+#      ddl-auto: none
+#      format_sql: true
+#      generate_statistics: true
+#    transaction:
+#      manager-name: jpaTransactionManager

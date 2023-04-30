@@ -13,7 +13,7 @@ import java.util.Collection;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @ToString
-public class ActionModel {
+public class BlockModel {
     Long id;
     String name;
     Collection<VariableModel> variables;

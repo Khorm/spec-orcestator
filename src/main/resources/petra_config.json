@@ -8,7 +8,12 @@
           "id": 1,
           "name": "fst_variable",
           "variableSources": [2]
+        },
+        {
+          "id": 3,
+          "name": "scd_variable"
         }
+
       ],
       "executionSignal": {
         "id": 1,
@@ -22,6 +27,13 @@
           {
             "id": 2,
             "name": "signal_var_1"
+          }
+        ],
+        "responseVariableCollection": [
+          {
+            "id": 4,
+            "name": "next_signal_var_1",
+            "variableSources": [3]
           }
         ],
         "path": "petra_test"

@@ -1,4 +1,4 @@
-package com.petra.lib.handler;
+package com.petra.lib.worker.handler;
 
 public interface UserHandler {
 

@@ -1,5 +1,6 @@
-package com.petra.lib.manager.block;
+package com.petra.lib.manager.state;
 
+import com.petra.lib.manager.block.JobContext;
 import com.petra.lib.manager.state.JobState;
 
 public interface JobStateManager {

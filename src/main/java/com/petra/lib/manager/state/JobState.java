@@ -4,25 +4,30 @@ public enum JobState {
     /**
      * Initialize job
      */
-    INITIALIZING(true),
-    REQUEST_SOURCE_DATA(false),
-    EXECUTING(false),
-    EXECUTION_REGISTRATION(false),
-    EXECUTION_RESPONSE(true),
+    INITIALIZING,
 
+    /**
+     * Request source data
+     */
+    REQUEST_SOURCE_DATA,
 
-    ERROR(false)
+    /**
+     * Execute block
+     */
+    EXECUTING,
 
-    ;
+    /**
+     * Save execution result
+     */
+//    EXECUTION_REGISTRATION,
 
-    private final boolean isExecuteInNewThread;
+    /**
+     * Response
+     */
+    EXECUTION_RESPONSE,
 
-    JobState(boolean isExecuteInNewThread){
-        this.isExecuteInNewThread = isExecuteInNewThread;
-
-    }
-
-    public boolean isExecuteInNewThread(){
-        return isExecuteInNewThread;
-    }
+    /**
+     * Execution error
+     */
+    ERROR
 }

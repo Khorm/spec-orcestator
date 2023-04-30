@@ -1,4 +1,4 @@
-package com.petra.lib.signal.source;
+package com.petra.lib.worker.source;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

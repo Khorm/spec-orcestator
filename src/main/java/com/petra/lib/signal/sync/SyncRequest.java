@@ -7,7 +7,7 @@ import com.petra.lib.signal.SignalType;
 import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.signal.model.Version;
 import com.petra.lib.variable.mapper.VariableMapper;
-import com.petra.lib.variable.process.ProcessVariable;
+import com.petra.lib.manager.block.ProcessVariableDto;
 import feign.Feign;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
@@ -51,8 +51,8 @@ public class SyncRequest implements RequestSignal {
     }
 
     @Override
-    public void send(Collection<ProcessVariable> senderVariables, UUID scenarioId) {
-        Collection<ProcessVariable> signalVariables = signalMapper.map(senderVariables);
+    public void send(Collection<ProcessVariableDto> senderVariables, UUID scenarioId) {
+        Collection<ProcessVariableDto> signalVariables = signalMapper.map(senderVariables);
         SignalTransferModel request = new SignalTransferModel(scenarioId, signalId, version, blockId, SignalType.REQUEST, signalVariables);
         requestExecutor.execute(() -> {
             SignalTransferModel result;

@@ -8,7 +8,7 @@ import com.petra.lib.signal.SignalType;
 import com.petra.lib.signal.model.SignalTransferModel;
 import com.petra.lib.signal.model.Version;
 import com.petra.lib.variable.mapper.VariableMapper;
-import com.petra.lib.variable.process.ProcessVariable;
+import com.petra.lib.manager.block.ProcessVariableDto;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
@@ -50,9 +50,9 @@ public class KafkaRequest implements RequestSignal {
     }
 
     @Override
-    public void send(Collection<ProcessVariable> senderVariables, UUID scenarioId) {
+    public void send(Collection<ProcessVariableDto> senderVariables, UUID scenarioId) {
         ProducerRecord<UUID, String> record;
-        Collection<ProcessVariable> signalVariables = senderMapper.map(senderVariables);
+        Collection<ProcessVariableDto> signalVariables = senderMapper.map(senderVariables);
         SignalTransferModel signalTransferModel = new SignalTransferModel(
                 scenarioId,
                 signalId,
