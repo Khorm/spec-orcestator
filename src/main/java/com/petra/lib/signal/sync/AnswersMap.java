@@ -36,15 +36,29 @@ class AnswersMap {
 
     synchronized SignalTransferModel remove(UUID key) {
         Answer answer = answers.remove(key);
+//        synchronized (answer.mutex) {
+//            answer.blocked = false;
+//            answer.mutex.notify();
+//        }
+        return answer.signalTransferModel;
+    }
+
+    void releaseAnswer(UUID key) {
+        Answer answer;
+        synchronized (this) {
+            answer = answers.get(key);
+        }
         synchronized (answer.mutex) {
             answer.blocked = false;
             answer.mutex.notify();
         }
-        return answer.signalTransferModel;
     }
 
-    synchronized void waitAnswer(UUID scenarioId) {
-        Answer answer = answers.get(scenarioId);
+    void waitAnswer(UUID scenarioId) {
+        Answer answer;
+        synchronized (this) {
+            answer = answers.get(scenarioId);
+        }
         synchronized (answer.mutex) {
             {
                 try {
@@ -54,7 +68,7 @@ class AnswersMap {
                     e.printStackTrace();
                 }
             }
-            while (answers.get(scenarioId).blocked);
+            while (answers.get(scenarioId).blocked) ;
         }
     }
 

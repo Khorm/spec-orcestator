@@ -14,9 +14,33 @@ import java.util.Collection;
 @Getter
 @ToString
 public class BlockModel {
+    /**
+     * Block id
+     */
     Long id;
+
+    /**
+     * Block name
+     */
     String name;
+
+    /**
+     * Block execution variables
+     */
     Collection<VariableModel> variables;
+
+    /**
+     * block requires sources
+     */
     Collection<SourceSignalModel> sources;
-    SignalModel executionSignal;
+
+    /**
+     * Starter signals
+     */
+    Collection<SignalModel> requestSignals;
+
+    /**
+     * AnswerSignal
+     */
+    SignalModel responseSignal;
 }

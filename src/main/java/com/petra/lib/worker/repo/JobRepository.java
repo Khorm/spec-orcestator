@@ -42,7 +42,7 @@ public class JobRepository {
     }
 
     public Collection<ProcessVariableDto> getVariables(UUID scenarioId, Long blockId) throws JsonProcessingException {
-        String SQL = "SELECT variables FROM JOB_HISTORY WHERE scenario_id = :scenarioId AND block_id = :blockId";
+        String SQL = "SELECT result_variables FROM JOB_HISTORY WHERE scenario_id = :scenarioId AND block_id = :blockId";
         SqlParameterSource namedParameters = new MapSqlParameterSource()
                 .addValue("scenarioId", scenarioId)
                 .addValue("blockId", blockId);

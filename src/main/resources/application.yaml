@@ -1,6 +1,6 @@
 petra:
   kafka:
-    servers: 'test'
+    servers: localhost:29092
   thread:
     count: 4
 

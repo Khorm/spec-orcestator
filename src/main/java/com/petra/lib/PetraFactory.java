@@ -1,7 +1,7 @@
 package com.petra.lib;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petra.lib.annotation.SourceHandler;
+import com.petra.lib.annotation.WorkflowHandler;
 import com.petra.lib.worker.handler.UserHandler;
 import com.petra.lib.manager.state.BlockFactory;
 import com.petra.lib.manager.thread.ThreadManager;
@@ -39,7 +39,7 @@ public final class PetraFactory implements ApplicationContextAware {
     final DataSource dataSource;
 //    final PlatformTransactionManager platformTransactionManager;
 
-    @Value("petra.kafka.servers")
+    @Value("${petra.kafka.servers}")
     String kafkaServers;
 
     @Value("${petra.thread.count}")
@@ -52,11 +52,11 @@ public final class PetraFactory implements ApplicationContextAware {
     @Override
     public synchronized void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         ThreadManager.setPoolSize(threadsCount);
-        Map<String, Object> sourceHandlersBeans = applicationContext.getBeansWithAnnotation(SourceHandler.class);
+        Map<String, Object> sourceHandlersBeans = applicationContext.getBeansWithAnnotation(WorkflowHandler.class);
 
-        Map<String, Object> sourceHandlers = sourceHandlersBeans.values().stream()
+        Map<String, Object> workflowHandlers = sourceHandlersBeans.values().stream()
                         .collect(Collectors.toMap( valForKey -> {
-                            return valForKey.getClass().getAnnotation(SourceHandler.class).name();
+                            return valForKey.getClass().getAnnotation(WorkflowHandler.class).name();
                         }, Function.identity()));
 //        sourceHandlers.forEach((key,value) ->{
 //            System.out.println(key);
@@ -77,16 +77,32 @@ public final class PetraFactory implements ApplicationContextAware {
             ObjectMapper objectMapper = new ObjectMapper();
             ConfigModel configModel = objectMapper.readValue(configJson, ConfigModel.class);
             BlockFactory blockFactory = new BlockFactory();
+
             Collection<JobStaticManager> sourceExecutors = configModel.getSources().stream()
-                    .map(actionModel -> blockFactory.createSource(actionModel,
-                            (UserHandler) sourceHandlers.get(actionModel.getName()),
+                    .map(sourceModel -> blockFactory.createSource(sourceModel,
+                            (UserHandler) workflowHandlers.get(sourceModel.getName()),
                             jobRepository,
                             jpaTransactionManager,
-                            actionModel.getExecutionSignal().getPath(),
+                            sourceModel.getExecutionSignal().getPath(),
                             context.getBeanFactory(),
                             entityManagerFactory
                             )).collect(Collectors.toList());
             sourceExecutors.forEach(JobStaticManager::start);
+
+            Collection<JobStaticManager> actionExecutors = configModel.getActions().stream()
+                    .map(actionModel -> {
+                        return blockFactory.createAction(
+                                actionModel,
+                                (UserHandler) workflowHandlers.get(actionModel.getName()),
+                                jobRepository,
+                                jpaTransactionManager,
+                                actionModel.getExecutionSignal().getPath(),
+                                context.getBeanFactory(),
+                                kafkaServers
+                        );
+                    }).collect(Collectors.toList());
+            actionExecutors.forEach(JobStaticManager::start);
+
 
         } catch (IOException e) {
             e.printStackTrace();

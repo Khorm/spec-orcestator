@@ -1,7 +1,7 @@
 package com.petra.lib.signal;
 
-import com.petra.lib.signal.model.SignalTransferModel;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 public interface SignalResponseListener {
-    void executeSignal(SignalTransferModel request);
+    void executeSignal(String message) throws JsonProcessingException, InterruptedException;
 }

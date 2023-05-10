@@ -19,6 +19,7 @@ class VariableMapCollection {
 
     VariableMapCollection(Collection<VariableModel> variableModels){
         for (VariableModel variableModel : variableModels){
+            if (variableModel.getVariableSources() == null) continue;
             for (Long sourceVariableId : variableModel.getVariableSources()){
                 producerConsumerMap.put(sourceVariableId, variableModel.getId());
             }
@@ -26,6 +27,6 @@ class VariableMapCollection {
     }
 
     Long findConsumerVariableByProducerVariable(Long producerVariableId) {
-        return Optional.ofNullable(producerConsumerMap.get(producerVariableId)).orElseThrow();
+        return producerConsumerMap.get(producerVariableId);
     }
 }

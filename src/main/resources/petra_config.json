@@ -29,15 +29,82 @@
             "name": "signal_var_1"
           }
         ],
-        "responseVariableCollection": [
-          {
-            "id": 4,
-            "name": "next_signal_var_1",
-            "variableSources": [3]
-          }
-        ],
+        "responseVariableCollection": [],
         "path": "petra_test"
       }
+    }
+  ],
+
+  "actions": [
+    {
+      "id": 2,
+      "name": "test_action_1",
+      "variables": [
+        {
+          "id": 5,
+          "name": "fst_variable_from_source",
+          "variableSources": [9]
+        },
+        {
+          "id": 6,
+          "name": "scd_variable_from_source",
+          "variableSources": [3]
+        }
+      ],
+      "executionSignal": {
+        "id": 2,
+        "version": {
+          "major": 1,
+          "minor": 0,
+          "patch": 0
+        },
+        "name": "action_one",
+        "requestVariableCollection": [
+          {
+            "id": 9,
+            "name": "answer_signal_var_1"
+          }
+        ],
+        "responseVariableCollection": [
+          {
+            "id": 7,
+            "name": "answer_signal_var_1",
+            "variableSources": [5]
+          },
+          {
+            "id": 8,
+            "name": "answer_signal_var_2",
+            "variableSources": [6]
+          }
+        ],
+        "path": "action_one"
+      },
+      "sources": [
+        {
+          "id": 1,
+          "version": {
+            "major": 1,
+            "minor": 0,
+            "patch": 0
+          },
+          "name": "signal_one",
+          "requestVariableCollection": [
+            {
+              "id": 2,
+              "name": "signal_var_1",
+              "variableSources": [5]
+            }
+          ],
+          "responseVariableCollection": [
+            {
+              "id": 3,
+              "name": "next_signal_var_1"
+            }
+          ],
+          "path": "petra_test",
+          "serviceName": "http://localhost:8080/"
+        }
+      ]
     }
   ]
 }

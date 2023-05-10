@@ -23,6 +23,7 @@ class VariablesMapperImpl implements VariableMapper{
         Collection<ProcessVariableDto> consumerVariables = new ArrayList<>();
         for (ProcessVariableDto producerVariable : producerVariableCollection) {
             ProcessVariableDto consumerProcessVariableDto = map(producerVariable);
+            if (consumerProcessVariableDto == null) continue;
             consumerVariables.add(consumerProcessVariableDto);
         }
         return consumerVariables;
@@ -31,7 +32,8 @@ class VariablesMapperImpl implements VariableMapper{
     @Override
     public ProcessVariableDto map(ProcessVariableDto producerVariable) {
         Long consumerVariableId = consumerVariableCollection.findConsumerVariableByProducerVariable(producerVariable.getId());
-        return new ProcessVariableDto(consumerVariableId, producerVariable.getValue()); // ProcessVariableDto.createProcessVariableWithJson(consumerVariableId, producerVariable.getValueJson());
+        if (consumerVariableId == null) return null;
+        return new ProcessVariableDto(consumerVariableId, producerVariable.getValue());
     }
 
 }

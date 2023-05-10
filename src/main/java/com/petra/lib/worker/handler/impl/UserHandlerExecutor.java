@@ -10,6 +10,7 @@ import com.petra.lib.worker.repo.JobRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.TransactionStatus;
@@ -21,6 +22,7 @@ import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
+@Log4j2
 public class UserHandlerExecutor implements JobStateManager {
 
     UserHandler userHandler;
@@ -29,9 +31,11 @@ public class UserHandlerExecutor implements JobStateManager {
     JobRepository jobRepository;
     Long blockId;
     VariableList variableList;
+    String blockName;
 
     @Override
     public void execute(JobContext jobContext) {
+        log.debug("Start UserHandlerExecutor {} {}", blockName, jobContext.toString());
         TransactionTemplate transactionTemplate = new TransactionTemplate(jpaTransactionManager);
         transactionTemplate.execute(new TransactionCallbackWithoutResult() {
             @Override
@@ -46,6 +50,7 @@ public class UserHandlerExecutor implements JobStateManager {
                     String variables = filledJobContext.getVariablesJson();
                     UUID scenarioId = jobContext.getScenarioId();
                     jobRepository.saveExecution(scenarioId, blockId, variables);
+                    log.debug("Executed UserHandlerExecutor {} {}", blockName, jobContext.toString());
                     jobStaticManager.executeState(jobContext, JobState.EXECUTION_RESPONSE);
                 } catch (Exception e) {
                     e.printStackTrace();

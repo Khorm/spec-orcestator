@@ -3,8 +3,7 @@ package com.petra.lib.manager.state;
 import com.petra.lib.manager.block.JobStaticManager;
 import com.petra.lib.manager.block.SourceSignalModel;
 import com.petra.lib.manager.models.BlockModel;
-import com.petra.lib.worker.repo.JobRepository;
-import com.petra.lib.worker.response.ResponseState;
+import com.petra.lib.queue.InputQueue;
 import com.petra.lib.signal.RequestSignal;
 import com.petra.lib.signal.ResponseSignal;
 import com.petra.lib.signal.SignalFactory;
@@ -16,6 +15,8 @@ import com.petra.lib.variable.mapper.VariableMapperFactory;
 import com.petra.lib.worker.handler.UserHandler;
 import com.petra.lib.worker.handler.impl.UserHandlerExecutor;
 import com.petra.lib.worker.initialize.Initializer;
+import com.petra.lib.worker.repo.JobRepository;
+import com.petra.lib.worker.response.ResponseState;
 import com.petra.lib.worker.source.SignalRequestListenerWrapper;
 import com.petra.lib.worker.source.SourceSignalRequestManager;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -25,8 +26,13 @@ import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class BlockFactory {
+    сделать для каждого сигнала разные маппинги
+    сделать для заполнения переменных хендлеры
+    попроавить json
+    попроавить сигналы чтобы они работали через имя сервиса
 
     public BlockFactory() {
     }
@@ -55,62 +61,80 @@ public final class BlockFactory {
 //        return executionManager;
 //    }
 
+    public JobStaticManager createAction(BlockModel blockModel,
+                                         UserHandler userHandler, JobRepository jobRepository,
+                                         JpaTransactionManager transactionManager,
+//                                         String path,
+//                                         ConfigurableListableBeanFactory beanFactory,
+//                                         String bootstrapSignal
+                                         InputQueue inputQueue
+    ) {
+
+        VariableList variableList = VariableFactory.createVariableList(blockModel.getVariables());
+        VariableMapper sourcesVariableMapper = VariableMapperFactory.createVariableMapper(blockModel.getVariables());
+
+        Collection<Long> subscibedSignals = blockModel.getRequestSignals().stream().map(SignalModel::getId).collect(Collectors.toSet());
+        JobStaticManager jobStaticManager = JobStaticManager.createJobStaticManager(blockModel.getId(), blockModel.getName(),subscibedSignals, sourcesVariableMapper);
+
+//        ResponseSignal responseSignal = SignalFactory.createAsyncResponseSignal(blockModel.getExecutionSignal(), bootstrapSignal, blockModel.getId());
+        Initializer initializer = new Initializer(
+                blockModel.getId(),
+                blockModel.getName(),
+                jobStaticManager,
+                jobRepository
+        );
+        jobStaticManager.putStateManager(initializer);
+
+        SourceSignalRequestManager sourceSignalRequestManager =
+                createSourceManagerState(jobStaticManager, blockModel.getSources(), blockModel.getId(), sourcesVariableMapper, blockModel.getName());
+        jobStaticManager.putStateManager(sourceSignalRequestManager);
+
+        UserHandlerExecutor userHandlerExecutor = new UserHandlerExecutor(userHandler,
+                jobStaticManager, transactionManager, jobRepository, blockModel.getId(), variableList, blockModel.getName());
+        jobStaticManager.putStateManager(userHandlerExecutor);
+
+        VariableMapper answerVariableMapper = VariableMapperFactory.createVariableMapper(blockModel.getResponseSignal().getVariableCollection());
+        ResponseState responseState = new ResponseState(inputQueue,answerVariableMapper, blockModel.getName());
+        jobStaticManager.putStateManager(responseState);
+
+        return jobStaticManager;
+    }
 
     public JobStaticManager createSource(BlockModel blockModel,
                                          UserHandler userHandler, JobRepository jobRepository,
                                          JpaTransactionManager transactionManager,
-                                         String sourceUrl, ConfigurableListableBeanFactory beanFactory,
-                                         EntityManagerFactory entityManagerFactory) {
-        VariableList variableList = VariableFactory.createVariableList(blockModel.getVariables());
-        VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(blockModel.getVariables());
-        JobStaticManager jobStaticManager = JobStaticManager.createJobStaticManager();
+//                                         ConfigurableListableBeanFactory beanFactory,
+                                         InputQueue inputQueue) {
 
-        ResponseSignal responseSignal = SignalFactory.createSyncResponseSignal(blockModel.getExecutionSignal(),
-                blockModel.getId(), beanFactory);
+        VariableList variableList = VariableFactory.createVariableList(blockModel.getVariables());
+        VariableMapper inputSourcesVariableMapper = VariableMapperFactory.createVariableMapper(blockModel.getVariables());
+
+        Collection<Long> subscibedSignals = blockModel.getRequestSignals().stream().map(SignalModel::getId).collect(Collectors.toSet());
+        JobStaticManager jobStaticManager = JobStaticManager.createJobStaticManager(blockModel.getId(), blockModel.getName(),subscibedSignals, inputSourcesVariableMapper);
+
+//        ResponseSignal responseSignal = SignalFactory.createSyncResponseSignal(blockModel.getExecutionSignal(),
+//                blockModel.getId(), beanFactory);
+
 
         Initializer initializer = new Initializer(
                 blockModel.getId(),
                 blockModel.getName(),
                 jobStaticManager,
-                jobRepository,
-                responseSignal,
-                variableMapper
+                jobRepository
         );
-        responseSignal.setListener(initializer);
-        jobStaticManager.setStateManager(initializer);
+        jobStaticManager.putStateManager(initializer);
 
         SourceSignalRequestManager sourceSignalRequestManager =
-                createSourceManagerState(jobStaticManager, blockModel.getSources(), blockModel.getId());
-        jobStaticManager.setStateManager(sourceSignalRequestManager);
+                createSourceManagerState(jobStaticManager, blockModel.getSources(), blockModel.getId(), VariableMapperFactory.createDummyMapper(), blockModel.getName());
+        jobStaticManager.putStateManager(sourceSignalRequestManager);
 
 
-//        UserHandlerExecutor userHandlerExecutor = createUserHandlerState(userHandler, jobStaticManager, entityManagerFactory,
-//                transactionManager, jobRepository, responseSignal.getId());
         UserHandlerExecutor userHandlerExecutor = new UserHandlerExecutor(userHandler,
-                jobStaticManager,  transactionManager, jobRepository, blockModel.getId(), variableList);
-        jobStaticManager.setStateManager(userHandlerExecutor);
+                jobStaticManager, transactionManager, jobRepository, blockModel.getId(), variableList, blockModel.getName());
+        jobStaticManager.putStateManager(userHandlerExecutor);
 
-        ResponseState responseState = new ResponseState(responseSignal, VariableMapperFactory.createDummyMapper());
-        jobStaticManager.setStateManager(responseState);
-
-//        RegistrationState registrationState = createRegistrationState(responseSignal.getId(), transactionManager, jobRepository, jobStaticManager);
-//        jobStaticManager.setStateManager(registrationState);
-
-
-//
-//
-//
-//
-//
-//        JobStaticManagerImpl jobStaticManagerImpl = new JobStaticManagerImpl(variableList, variableMapper,
-//                stateController, transactionManager);
-//
-//
-//
-//        initDataRequestState(jobStaticManagerImpl, actionModel.getSources(), stateController, actionModel.getId());
-//        initExecutingState(userHandler, jobStaticManagerImpl, stateController);
-//        initRegistrationState(actionModel.getId(), transactionManager, jobRepository, jobStaticManagerImpl, stateController);
-//        initResponseState(jobStaticManagerImpl, stateController, blockResponseSignal);
+        ResponseState responseState = new ResponseState(inputQueue, VariableMapperFactory.createDummyMapper(), blockModel.getName());
+        jobStaticManager.putStateManager(responseState);
 
         return jobStaticManager;
     }
@@ -141,20 +165,24 @@ public final class BlockFactory {
 
     private SourceSignalRequestManager createSourceManagerState(JobStaticManager jobStaticManager,
                                                                 Collection<SourceSignalModel> sources,
-                                                                Long blockId) {
+                                                                Long blockId, VariableMapper variableMapper,
+                                                                String blockName) {
         SignalRequestListenerWrapper signalObserverWrapper = new SignalRequestListenerWrapper();
         List<RequestSignal> sourceSignals = new ArrayList<>();
         if (sources != null) {
             for (SignalModel signalModel : sources) {
-                sourceSignals.add(SignalFactory.createSyncRequestSignal(
+                RequestSignal requestSignal = SignalFactory.createSyncRequestSignal(
                         signalModel,
                         blockId
-                ));
+                );
+                requestSignal.setObserver(signalObserverWrapper);
+                sourceSignals.add(requestSignal);
             }
         }
         SourceSignalRequestManager sourceSignalRequestManager = new SourceSignalRequestManager(sources, sourceSignals,
-                jobStaticManager);
+                jobStaticManager, variableMapper, blockName);
         signalObserverWrapper.setListener(sourceSignalRequestManager);
+
         return sourceSignalRequestManager;
     }
 

@@ -14,6 +14,8 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
+import org.apache.kafka.common.serialization.UUIDDeserializer;
+import org.apache.kafka.common.serialization.UUIDSerializer;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -27,7 +29,7 @@ public final class SignalFactory {
 
     public static RequestSignal createSyncRequestSignal(SignalModel signal, Long blockId) {
         VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(signal.getRequestVariableCollection());
-        return new SyncRequest(signal.getPath(),  variableMapper, blockId,
+        return new SyncRequest(signal.getServiceName() + signal.getPath(),  variableMapper, blockId,
                 signal.getVersion(), signal.getId());
     }
 
@@ -50,10 +52,9 @@ public final class SignalFactory {
 
     public static ResponseSignal createAsyncResponseSignal(SignalModel signal, String bootstrapServers, Long blockId) {
         Producer<UUID, String> kafkaProducer = createProducer(getProducerProps(bootstrapServers));
-        Consumer<UUID, String> kafkaConsumer = createConsumer(getConsumerProps(bootstrapServers, "test"));
-//        VariableMapper variableMapper = VariableMapperFactory.createVariableMapper(responseSignalVariables);
+        Consumer<UUID, String> kafkaConsumer = createConsumer(getConsumerProps(bootstrapServers));
 
-        return new KafkaResponse(kafkaConsumer, kafkaProducer, blockId, signal.getVersion(), signal.getId());
+        return new KafkaResponse(kafkaConsumer, kafkaProducer, blockId, signal.getVersion(), signal.getId(), signal.getPath());
     }
 
     private static Consumer<UUID, String> createConsumer(Map<String, Object> props) {
@@ -66,11 +67,11 @@ public final class SignalFactory {
         return kafkaProducerFactory.createProducer();
     }
 
-    private static Map<String, Object> getConsumerProps(String bootstrapServers, String group) {
+    private static Map<String, Object> getConsumerProps(String bootstrapServers) {
         Map<String, Object> props = new HashMap<>();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        props.put(ConsumerConfig.GROUP_ID_CONFIG, "group");
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "petra");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, UUIDDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, 1);
@@ -80,9 +81,9 @@ public final class SignalFactory {
 
     private static Map<String, Object> getProducerProps(String bootstrapServers) {
         Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.LINGER_MS_CONFIG, 10);
-        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, UUIDSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         return props;
     }

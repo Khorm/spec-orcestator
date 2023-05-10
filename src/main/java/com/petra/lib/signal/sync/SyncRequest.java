@@ -20,13 +20,13 @@ import java.util.concurrent.Executors;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SyncRequest implements RequestSignal {
 
-    SourceClient sourceClient;
+    final SourceClient sourceClient;
     SignalRequestListener observer;
-    VariableMapper signalMapper;
-    Version version;
-    Long signalId;
-    Long blockId;
-    static Executor requestExecutor = Executors.newCachedThreadPool();
+    final VariableMapper signalMapper;
+    final Version version;
+    final Long signalId;
+    final Long blockId;
+    final static Executor bulkhead = Executors.newCachedThreadPool();
 
     public SyncRequest(String URL, VariableMapper signalMapper,
                        Long blockId, Version version, Long signalId) {
@@ -54,12 +54,13 @@ public class SyncRequest implements RequestSignal {
     public void send(Collection<ProcessVariableDto> senderVariables, UUID scenarioId) {
         Collection<ProcessVariableDto> signalVariables = signalMapper.map(senderVariables);
         SignalTransferModel request = new SignalTransferModel(scenarioId, signalId, version, blockId, SignalType.REQUEST, signalVariables);
-        requestExecutor.execute(() -> {
+        bulkhead.execute(() -> {
             SignalTransferModel result;
             try {
                 result = sourceClient.getSource(request);
                 ThreadManager.execute(() -> observer.executed(result));
             } catch (Exception e) {
+                e.printStackTrace();
                 ThreadManager.execute(() -> observer.error(e, request));
                 return;
             }

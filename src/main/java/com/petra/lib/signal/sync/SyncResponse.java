@@ -113,12 +113,14 @@ public class SyncResponse implements ResponseSignal {
                 contextVariables
         );
         answersMap.putOnlyIfExists(signalTransferModel);
+        answersMap.releaseAnswer(scenarioId);
     }
 
     @Override
     public void setError(UUID scenarioId) {
         SignalTransferModel errorTransferModel = createErrorModel(scenarioId);
         answersMap.putOnlyIfExists(errorTransferModel);
+        answersMap.releaseAnswer(scenarioId);
     }
 
     @Override

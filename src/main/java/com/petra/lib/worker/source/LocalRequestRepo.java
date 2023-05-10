@@ -8,35 +8,36 @@ import java.util.Set;
 import java.util.UUID;
 
 class LocalRequestRepo implements RequestRepo {
+    //TODO ОБЯЗАТЕЛЬНО ПЕРЕПИСАТЬ НА scenarioId + blockId
     private final Map<UUID, ContextModel> uuidRequestDataMap = new HashMap<>();
 
-    public void addNewRequestData(JobContext context) {
+    public synchronized void addNewRequestData(JobContext context) {
         if (uuidRequestDataMap.containsKey(context.getScenarioId())) return;
         ContextModel contextData = new ContextModel(context);
         uuidRequestDataMap.put(context.getScenarioId(), contextData);
     }
 
-    public void addExecutedSourceId(UUID scenarioId, Long signal) {
+    public synchronized void addExecutedSourceId(UUID scenarioId, Long signal) {
         uuidRequestDataMap.get(scenarioId).setExecutedSourceSignal(signal);
     }
 
-    public Set<Long> getExecutedSignals(UUID scenarioId) {
+    public synchronized Set<Long> getExecutedSignals(UUID scenarioId) {
         return uuidRequestDataMap.get(scenarioId).getExecutedSourceSignalIds();
     }
 
-    public JobContext getExecutionContext(UUID scenarioId) {
+    public synchronized JobContext getExecutionContext(UUID scenarioId) {
         return uuidRequestDataMap.get(scenarioId).getContext();
     }
 
-    public ContextModel clear(UUID scenarioId) {
+    public synchronized ContextModel clear(UUID scenarioId) {
         return uuidRequestDataMap.remove(scenarioId);
     }
 
-    public boolean checkIsScenarioContains(UUID scenarioId) {
+    public synchronized boolean checkIsScenarioContains(UUID scenarioId) {
         return uuidRequestDataMap.containsKey(scenarioId);
     }
 
-    public int getReceivedSignalsSize(UUID scenarioId) {
+    public synchronized int getReceivedSignalsSize(UUID scenarioId) {
         return uuidRequestDataMap.get(scenarioId).executedSourceSignalsSize();
     }
 }
