@@ -1,8 +1,11 @@
 package com.petra.lib.manager.models;
 
-import com.petra.lib.manager.block.SourceSignalModel;
-import com.petra.lib.signal.SignalModel;
-import com.petra.lib.variable.factory.VariableModel;
+import com.petra.lib.manager.block.BlockId;
+import com.petra.lib.signal.SignalId;
+import com.petra.lib.signal.model.Version;
+import com.petra.lib.variable.base.Variable;
+import com.petra.lib.variable.mapper.MapperVariableModel;
+import com.petra.lib.worker.variable.model.VariableGroupModel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;
@@ -19,28 +22,48 @@ public class BlockModel {
      */
     Long id;
 
+    Version version;
+
+    BlockType blockType;
+
     /**
      * Block name
      */
     String name;
 
+    Collection<SignalId> initSignals;
+
     /**
      * Block execution variables
      */
-    Collection<VariableModel> variables;
+    Collection<Variable> variables;
 
     /**
-     * block requires sources
+     * Groups for load variables variables
      */
-    Collection<SourceSignalModel> sources;
+    Collection<VariableGroupModel> variableGroups;
 
     /**
-     * Starter signals
+     * Mappers for response signals
      */
-    Collection<SignalModel> requestSignals;
+    Collection<MapperVariableModel> mappedVariablesToResponseSignals;
 
-    /**
-     * AnswerSignal
-     */
-    SignalModel responseSignal;
+    public BlockId getBlockId() {
+        return new BlockId(id, version);
+    }
+
+//    /**
+//     * block requires sources
+//     */
+//    Collection<SourceSignalModel> sources;
+//
+//    /**
+//     * Starter signals
+//     */
+//    Collection<SignalModel> requestSignals;
+//
+//    /**
+//     * AnswerSignal
+//     */
+//    SignalModel responseSignal;
 }

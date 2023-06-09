@@ -7,9 +7,9 @@ public enum JobState {
     INITIALIZING,
 
     /**
-     * Request source data
+     * Fill values of variable from sources, user handlers and mapping
      */
-    REQUEST_SOURCE_DATA,
+    FILL_CONTEXT_VARIABLES,
 
     /**
      * Execute block

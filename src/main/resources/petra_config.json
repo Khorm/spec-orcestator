@@ -1,4 +1,18 @@
 {
+  "signals": [
+    {
+      "signalId": 1,
+      "version": {
+        "major": 1,
+        "minor": 0,
+        "patch": 0
+      },
+      "signalName": "signal_one",
+      "serviceName": "testService",
+      "signalType": "HTTP",
+      "messageType": "RESPONSE"
+    }
+  ],
   "sources": [
     {
       "id": 1,

@@ -18,11 +18,4 @@ public class ProcessVariableDto {
         this.id = id;
         this.value = json;
     }
-
-//    public Object getValue(Class<?> clazz) throws JsonProcessingException {
-//        if (value == null) return null;
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        Object parserValue = objectMapper.readValue(value, clazz);
-//        return parserValue;
-//    }
 }

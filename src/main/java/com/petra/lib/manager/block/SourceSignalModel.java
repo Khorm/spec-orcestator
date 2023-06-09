@@ -13,6 +13,7 @@ import java.util.Collection;
 @Getter
 @ToString
 public class SourceSignalModel extends SignalModel {
+    Collection<Long> requestSignalIds;
     Collection<Long> parentIds = new ArrayList<>();
     Collection<Long> childIds = new ArrayList<>();
 }

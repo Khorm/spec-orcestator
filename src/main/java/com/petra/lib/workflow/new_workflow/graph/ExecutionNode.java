@@ -1,6 +1,6 @@
 package com.petra.lib.workflow.new_workflow.graph;
 
-import com.petra.lib.signal.RequestSignal;
+import com.petra.lib.signal.request.RequestSignal;
 import com.petra.lib.manager.block.ProcessVariableDto;
 import lombok.AccessLevel;
 import lombok.Getter;

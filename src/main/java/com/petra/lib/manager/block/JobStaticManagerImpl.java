@@ -1,9 +1,11 @@
 package com.petra.lib.manager.block;
 
+import com.petra.lib.manager.models.BlockModel;
 import com.petra.lib.manager.state.JobState;
 import com.petra.lib.manager.state.JobStateManager;
-import com.petra.lib.signal.model.RequestDto;
-import com.petra.lib.variable.mapper.VariableMapper;
+import com.petra.lib.signal.SignalId;
+import com.petra.lib.signal.dto.RequestDto;
+import com.petra.lib.variable.base.VariableList;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -12,6 +14,7 @@ import lombok.extern.log4j.Log4j2;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -22,22 +25,21 @@ import java.util.Map;
 class JobStaticManagerImpl implements JobStaticManager, Block {
 
     Map<JobState, JobStateManager> jobStateJobStateManagerMap = new HashMap<>();
-    Long id;
+    BlockId id;
     String blockName;
 
     @Getter
-    Collection<Long> listeningSignalIds;
+    Collection<SignalId> listeningSignalIds;
 
-    /**
-     * Request signal variable mapper
-     */
-    VariableMapper inputMapper;
+    VariableList variableList;
 
-    JobStaticManagerImpl(Long id, String blockName, Collection<Long> listeningSignalIds, VariableMapper inputMapper) {
-        this.id = id;
-        this.blockName = blockName;
-        this.listeningSignalIds = listeningSignalIds;
-        this.inputMapper = inputMapper;
+
+    JobStaticManagerImpl(BlockModel blockModel) {
+        this.id = new BlockId(blockModel.getId(), blockModel.getVersion());
+        this.blockName = blockModel.getName();
+        this.listeningSignalIds = blockModel.getListeningSignals().stream()
+                .map(id -> new SignalId(id.getId(),id.getMajorVersion())).collect(Collectors.toList());
+        this.variableList = new VariableList(blockModel.getVariables());
     }
 
     @Override
@@ -67,15 +69,15 @@ class JobStaticManagerImpl implements JobStaticManager, Block {
     }
 
     @Override
-    public Long getId() {
+    public BlockId getId() {
         return id;
     }
 
     @Override
-    public void execute(RequestDto requestDto) {
-        Collection<ProcessVariableDto> processVariableDtos = inputMapper.map(requestDto.getSignalVariables());
-        JobContext jobContext = new JobContext(requestDto.getScenarioId(), processVariableDtos, requestDto.getSignalId());
+    public void execute(RequestDto requestDto, Long signalId) {
+        JobContext jobContext = new JobContext(requestDto, signalId, variableList, id);
         log.info("Start execution {} with params {}", blockName, requestDto.toString());
         executeState(jobContext, JobState.INITIALIZING);
     }
+
 }

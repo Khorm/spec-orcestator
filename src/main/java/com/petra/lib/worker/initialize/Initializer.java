@@ -1,12 +1,10 @@
 package com.petra.lib.worker.initialize;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.petra.lib.manager.block.JobContext;
-import com.petra.lib.manager.block.JobStaticManager;
-import com.petra.lib.manager.block.ProcessVariableDto;
+import com.petra.lib.manager.block.*;
+import com.petra.lib.manager.models.BlockModel;
 import com.petra.lib.manager.state.JobState;
 import com.petra.lib.manager.state.JobStateManager;
-import com.petra.lib.signal.ResponseSignal;
 import com.petra.lib.worker.repo.JobRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,16 +18,22 @@ import java.util.Collection;
  */
 @Log4j2
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor
 public class Initializer implements JobStateManager {
 
     /**
-     * Block id, which initializer belongs.
+     * Block id
      */
-    Long blockId;
+    BlockId blockId;
     String blockName;
     JobStaticManager jobStaticManager;
     JobRepository jobRepository;
+
+    public Initializer(BlockModel blockModel, JobStaticManager jobStaticManager, JobRepository jobRepository){
+        this.blockId = new BlockId(blockModel.getId(), blockModel.getVersion());
+        this.blockName = blockModel.getName();
+        this.jobStaticManager = jobStaticManager;
+        this.jobRepository = jobRepository;
+    }
 
 
     @Override
@@ -38,13 +42,12 @@ public class Initializer implements JobStateManager {
 
         if (isExecutedBefore) {
             log.debug("Job already executed {} {}", blockName, jobContext.toString());
-            Collection<ProcessVariableDto> savedVariables = jobRepository.getVariables(jobContext.getScenarioId(), blockId);
-            savedVariables.forEach(jobContext::setVariable);
+            jobContext.setAlreadyDone();
             jobStaticManager.executeState(jobContext, JobState.EXECUTION_RESPONSE);
             return;
         }
         log.debug("Job starts executed {} {}", blockName, jobContext.toString());
-        jobStaticManager.executeState(jobContext, JobState.REQUEST_SOURCE_DATA);
+        jobStaticManager.executeState(jobContext, JobState.FILL_CONTEXT_VARIABLES);
     }
 
     @Override

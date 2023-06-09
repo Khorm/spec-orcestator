@@ -8,20 +8,18 @@ import com.petra.lib.manager.block.ProcessVariableDto;
 import com.petra.lib.variable.base.Variable;
 import com.petra.lib.variable.base.VariableList;
 import com.petra.lib.worker.handler.UserContext;
+import com.petra.lib.worker.variable.group.handler.VariableContext;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
-class UserContextImpl implements UserContext {
+public class UserContextImpl implements UserContext, VariableContext {
 
     JobContext context;
     EntityManager entityManager;
@@ -55,7 +53,7 @@ class UserContextImpl implements UserContext {
         return entityManager;
     }
 
-    JobContext fillContext(){
+    public JobContext fillContext(){
         valuesCache.forEach((key, value) -> {
             Variable variable = variableList.getVariableByName(key);
             try {

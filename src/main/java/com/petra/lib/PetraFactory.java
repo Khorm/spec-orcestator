@@ -1,13 +1,6 @@
 package com.petra.lib;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petra.lib.annotation.WorkflowHandler;
-import com.petra.lib.worker.handler.UserHandler;
-import com.petra.lib.manager.state.BlockFactory;
-import com.petra.lib.manager.thread.ThreadManager;
-import com.petra.lib.manager.block.JobStaticManager;
-import com.petra.lib.manager.models.ConfigModel;
-import com.petra.lib.worker.repo.JobRepository;
+import com.petra.lib.worker.handler.impl.UserHandlerExecutor;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,20 +10,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.io.Resource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.util.Collection;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
-@Component
+//@Component
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 @Slf4j
@@ -51,62 +37,55 @@ public final class PetraFactory implements ApplicationContextAware {
 
     @Override
     public synchronized void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        ThreadManager.setPoolSize(threadsCount);
-        Map<String, Object> sourceHandlersBeans = applicationContext.getBeansWithAnnotation(WorkflowHandler.class);
 
-        Map<String, Object> workflowHandlers = sourceHandlersBeans.values().stream()
-                        .collect(Collectors.toMap( valForKey -> {
-                            return valForKey.getClass().getAnnotation(WorkflowHandler.class).name();
-                        }, Function.identity()));
-//        sourceHandlers.forEach((key,value) ->{
-//            System.out.println(key);
-//            System.out.println(value);
+        UserHandlerExecutor userHandlerExecutor = new UserHandlerExecutor()
+
+//        ThreadManager.setPoolSize(threadsCount);
+//        Map<String, Object> sourceHandlersBeans = applicationContext.getBeansWithAnnotation(WorkflowHandler.class);
 //
-//            System.out.println(value.getClass().getAnnotation(SourceHandler.class).name());
-//        });
-
-//        JpaTransactionManager jpaTransactionManager = new JpaTransactionManager();
-//        jpaTransactionManager.setDataSource(dataSource);
-//        jpaTransactionManager.setEntityManagerFactory(entityManagerFactory);
-
-
-        JobRepository jobRepository = new JobRepository(jpaTransactionManager);
-        try {
-            Resource config = applicationContext.getResource("classpath:petra_config.json");
-            String configJson = new String(Files.readAllBytes(config.getFile().toPath()));
-            ObjectMapper objectMapper = new ObjectMapper();
-            ConfigModel configModel = objectMapper.readValue(configJson, ConfigModel.class);
-            BlockFactory blockFactory = new BlockFactory();
-
-            Collection<JobStaticManager> sourceExecutors = configModel.getSources().stream()
-                    .map(sourceModel -> blockFactory.createSource(sourceModel,
-                            (UserHandler) workflowHandlers.get(sourceModel.getName()),
-                            jobRepository,
-                            jpaTransactionManager,
-                            sourceModel.getExecutionSignal().getPath(),
-                            context.getBeanFactory(),
-                            entityManagerFactory
-                            )).collect(Collectors.toList());
-            sourceExecutors.forEach(JobStaticManager::start);
-
-            Collection<JobStaticManager> actionExecutors = configModel.getActions().stream()
-                    .map(actionModel -> {
-                        return blockFactory.createAction(
-                                actionModel,
-                                (UserHandler) workflowHandlers.get(actionModel.getName()),
-                                jobRepository,
-                                jpaTransactionManager,
-                                actionModel.getExecutionSignal().getPath(),
-                                context.getBeanFactory(),
-                                kafkaServers
-                        );
-                    }).collect(Collectors.toList());
-            actionExecutors.forEach(JobStaticManager::start);
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        Map<String, Object> workflowHandlers = sourceHandlersBeans.values().stream()
+//                        .collect(Collectors.toMap( valForKey -> {
+//                            return valForKey.getClass().getAnnotation(WorkflowHandler.class).name();
+//                        }, Function.identity()));
+//
+//
+//        JobRepository jobRepository = new JobRepository(jpaTransactionManager);
+//        try {
+//            Resource config = applicationContext.getResource("classpath:petra_config.json");
+//            String configJson = new String(Files.readAllBytes(config.getFile().toPath()));
+//            ObjectMapper objectMapper = new ObjectMapper();
+//            ConfigModel configModel = objectMapper.readValue(configJson, ConfigModel.class);
+//            BlockFactory blockFactory = new BlockFactory();
+//
+//            Collection<JobStaticManager> sourceExecutors = configModel.getSources().stream()
+//                    .map(sourceModel -> blockFactory.createSource(sourceModel,
+//                            (UserHandler) workflowHandlers.get(sourceModel.getName()),
+//                            jobRepository,
+//                            jpaTransactionManager,
+//                            sourceModel.getExecutionSignal().getPath(),
+//                            context.getBeanFactory(),
+//                            entityManagerFactory
+//                            )).collect(Collectors.toList());
+//            sourceExecutors.forEach(JobStaticManager::start);
+//
+//            Collection<JobStaticManager> actionExecutors = configModel.getActions().stream()
+//                    .map(actionModel -> {
+//                        return blockFactory.createAction(
+//                                actionModel,
+//                                (UserHandler) workflowHandlers.get(actionModel.getName()),
+//                                jobRepository,
+//                                jpaTransactionManager,
+//                                actionModel.getExecutionSignal().getPath(),
+//                                context.getBeanFactory(),
+//                                kafkaServers
+//                        );
+//                    }).collect(Collectors.toList());
+//            actionExecutors.forEach(JobStaticManager::start);
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
     }
 }

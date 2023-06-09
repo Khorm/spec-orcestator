@@ -13,6 +13,7 @@ import java.util.Collection;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @ToString
+@Deprecated
 public class SignalModel {
     Long id;
     Version version;

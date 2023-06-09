@@ -10,6 +10,7 @@ import java.util.Collection;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Getter
 @ToString
+@Deprecated
 public class VariableModel {
     Long id;
     String name;
