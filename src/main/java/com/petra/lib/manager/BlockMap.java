@@ -1,6 +1,6 @@
 package com.petra.lib.manager;
 
-import com.petra.lib.manager.block.Block;
+import com.petra.lib.block.Block;
 import com.petra.lib.signal.SignalId;
 
 import java.util.Collection;

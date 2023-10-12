@@ -1,9 +1,9 @@
 package com.petra.lib.signal.response.controller;
 
 import com.petra.lib.manager.BlockMap;
-import com.petra.lib.manager.block.BlockId;
-import com.petra.lib.manager.block.ProcessVariableDto;
-import com.petra.lib.queue.TaskQueueManager;
+import com.petra.lib.block.BlockId;
+import com.petra.lib.block.ProcessValue;
+import com.petra.lib.signal.queue.TaskQueueManager;
 import com.petra.lib.signal.SignalId;
 import com.petra.lib.signal.SignalMap;
 import com.petra.lib.signal.dto.RequestDto;
@@ -34,7 +34,7 @@ public class SignalResponseHandlerImpl implements SignalResponseHandler, Respons
 
 
     @Override
-    public void answerToRequest(Collection<ProcessVariableDto> signalAnswerVariables, SignalId signalId, BlockId requestBlockId, UUID scenarioId, BlockId responseId) {
+    public void answerToRequest(Collection<ProcessValue> signalAnswerVariables, SignalId signalId, BlockId requestBlockId, UUID scenarioId, BlockId responseId) {
         ResponseEndTask responseEndTask = new ResponseEndTask(
                 signalAnswerVariables,
                 requestBlockId,

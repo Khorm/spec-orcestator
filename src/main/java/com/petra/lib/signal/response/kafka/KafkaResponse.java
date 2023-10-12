@@ -3,8 +3,8 @@ package com.petra.lib.signal.response.kafka;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petra.lib.PetraProps;
-import com.petra.lib.manager.block.BlockId;
-import com.petra.lib.manager.block.ProcessVariableDto;
+import com.petra.lib.block.BlockId;
+import com.petra.lib.block.ProcessValue;
 import com.petra.lib.signal.model.Version;
 import com.petra.lib.signal.response.controller.SignalResponseHandler;
 import com.petra.lib.signal.SignalId;
@@ -119,7 +119,7 @@ public class KafkaResponse implements ResponseSignal {
     }
 
     @Override
-    public void setAnswer(Collection<ProcessVariableDto> signalAnswerVariables, BlockId requestBlockId, UUID scenarioId, BlockId responseBlockId) {
+    public void setAnswer(Collection<ProcessValue> signalAnswerVariables, BlockId requestBlockId, UUID scenarioId, BlockId responseBlockId) {
         kafkaConsumer.commitSync();
         ProducerRecord<UUID, String> record;
         try {

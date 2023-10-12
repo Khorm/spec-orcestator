@@ -7,4 +7,5 @@ import com.petra.lib.signal.dto.ResponseDto;
  */
 public interface AnswerListener {
     void answer(ResponseDto responseDto);
+
 }

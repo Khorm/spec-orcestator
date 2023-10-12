@@ -3,7 +3,7 @@ package com.petra.lib.signal.request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petra.lib.PetraProps;
-import com.petra.lib.manager.block.ProcessVariableDto;
+import com.petra.lib.block.ProcessValue;
 import com.petra.lib.signal.SignalId;
 import com.petra.lib.signal.dto.RequestDto;
 import com.petra.lib.signal.dto.ResponseDto;
@@ -88,7 +88,7 @@ public class KafkaRequest implements RequestSignal {
     }
 
     @Override
-    public void request(Collection<ProcessVariableDto> signalVariables, UUID scenarioId, Long requestBlockId, Version blockVersion) {
+    public void request(Collection<ProcessValue> signalVariables, UUID scenarioId, Long requestBlockId, Version blockVersion) {
         ProducerRecord<UUID, String> record;
         RequestDto requestDto = new RequestDto(
                 scenarioId,

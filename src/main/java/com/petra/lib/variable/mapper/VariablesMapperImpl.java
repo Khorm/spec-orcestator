@@ -1,6 +1,6 @@
 package com.petra.lib.variable.mapper;
 
-import com.petra.lib.manager.block.ProcessVariableDto;
+import com.petra.lib.block.ProcessValue;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -19,21 +19,21 @@ class VariablesMapperImpl implements VariableMapper{
     private final VariableMapCollection consumerVariableCollection;
 
     @Override
-    public Collection<ProcessVariableDto> map(Collection<ProcessVariableDto> producerVariableCollection) {
-        Collection<ProcessVariableDto> consumerVariables = new ArrayList<>();
-        for (ProcessVariableDto producerVariable : producerVariableCollection) {
-            ProcessVariableDto consumerProcessVariableDto = map(producerVariable);
-            if (consumerProcessVariableDto == null) continue;
-            consumerVariables.add(consumerProcessVariableDto);
+    public Collection<ProcessValue> map(Collection<ProcessValue> producerVariableCollection) {
+        Collection<ProcessValue> consumerVariables = new ArrayList<>();
+        for (ProcessValue producerVariable : producerVariableCollection) {
+            ProcessValue consumerProcessValue = map(producerVariable);
+            if (consumerProcessValue == null) continue;
+            consumerVariables.add(consumerProcessValue);
         }
         return consumerVariables;
     }
 
     @Override
-    public ProcessVariableDto map(ProcessVariableDto producerVariable) {
+    public ProcessValue map(ProcessValue producerVariable) {
         Long consumerVariableId = consumerVariableCollection.findConsumerVariableByProducerVariable(producerVariable.getId());
         if (consumerVariableId == null) return null;
-        return new ProcessVariableDto(consumerVariableId, producerVariable.getValue());
+        return new ProcessValue(consumerVariableId, producerVariable.getValue());
     }
 
 }

@@ -3,7 +3,7 @@ package com.petra.lib.workflow.new_workflow.repository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petra.lib.manager.block.ProcessVariableDto;
+import com.petra.lib.block.ProcessValue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -28,7 +28,7 @@ public class WorkflowRepoImpl implements WorkflowRepo {
     }
 
     @Override
-    public void setNodeExecuted(UUID scenarioId, Long workflowId, Long nodeId,  Collection<ProcessVariableDto> resultVariables) throws JsonProcessingException {
+    public void setNodeExecuted(UUID scenarioId, Long workflowId, Long nodeId,  Collection<ProcessValue> resultVariables) throws JsonProcessingException {
         String SQL = "INSERT INTO WORKFLOW_HISTORY VALUES(scenarioId, workflowId, nodeId, resultValues)";
         ObjectMapper objectMapper = new ObjectMapper();
         String values = objectMapper.writeValueAsString(resultVariables);
@@ -51,7 +51,7 @@ public class WorkflowRepoImpl implements WorkflowRepo {
     }
 
     @Override
-    public Collection<ProcessVariableDto> getNodeExecutionResults(UUID scenarioId, Long workflowId, Long nodeId) throws JsonProcessingException {
+    public Collection<ProcessValue> getNodeExecutionResults(UUID scenarioId, Long workflowId, Long nodeId) throws JsonProcessingException {
         String SQL = "SELECT result_values FROM WORKFLOW_HISTORY WHERE scenario_id = :scenarioId AND nodeId = :nodeId AND workflowId = :workflowId";
         SqlParameterSource namedParameters = new MapSqlParameterSource()
                 .addValue("scenarioID", scenarioId)
@@ -59,7 +59,7 @@ public class WorkflowRepoImpl implements WorkflowRepo {
                 .addValue("nodeId", nodeId);
         String values = jdbcTemplate.queryForObject(SQL, namedParameters, String.class);
         ObjectMapper om = new ObjectMapper();
-        return om.readValue(values, new TypeReference<Collection<ProcessVariableDto>>() {});
+        return om.readValue(values, new TypeReference<Collection<ProcessValue>>() {});
     }
 
 }

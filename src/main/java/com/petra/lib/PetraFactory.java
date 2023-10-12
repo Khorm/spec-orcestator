@@ -1,6 +1,6 @@
 package com.petra.lib;
 
-import com.petra.lib.worker.handler.impl.UserHandlerExecutor;
+import com.petra.lib.state.handler.impl.UserHandlerExecutor;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -11,7 +11,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;

@@ -1,13 +1,22 @@
 package com.petra.lib.signal.request.controller;
 
-import com.petra.lib.manager.block.BlockId;
-import com.petra.lib.manager.block.ProcessVariableDto;
+import com.petra.lib.block.BlockId;
+import com.petra.lib.block.ProcessValue;
 import com.petra.lib.signal.SignalId;
-import com.petra.lib.signal.model.Version;
 
 import java.util.Collection;
 import java.util.UUID;
 
 public interface SignalRequestManager {
-    void request(SignalId signalId, Collection<ProcessVariableDto> signalVariables, UUID scenarioId, BlockId blockId);
+
+    /**
+     *
+     * @param signalId - send signal id
+     * @param signalVariables - filled signal variables
+     * @param scenarioId - current scenario id
+     * @param blockId - current block id
+     * @param answerListener - callback
+     */
+    void request(SignalId signalId, Collection<ProcessValue> signalVariables,
+                 UUID scenarioId, BlockId blockId, AnswerListener answerListener);
 }

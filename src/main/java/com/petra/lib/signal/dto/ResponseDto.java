@@ -1,9 +1,8 @@
 package com.petra.lib.signal.dto;
 
-import com.petra.lib.manager.block.BlockId;
-import com.petra.lib.manager.block.ProcessVariableDto;
+import com.petra.lib.block.BlockId;
+import com.petra.lib.block.ProcessValue;
 import com.petra.lib.signal.SignalId;
-import com.petra.lib.signal.model.Version;
 import com.petra.lib.signal.response.ResponseType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -22,5 +21,5 @@ public class ResponseDto {
     BlockId requestBlockId;
     BlockId responseBlockId;
     ResponseType responseType;
-    Collection<ProcessVariableDto> signalVariables;
+    Collection<ProcessValue> signalVariables;
 }

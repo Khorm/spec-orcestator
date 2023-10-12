@@ -1,7 +1,7 @@
 package com.petra.lib.signal.response.http;
 
-import com.petra.lib.manager.block.BlockId;
-import com.petra.lib.manager.block.ProcessVariableDto;
+import com.petra.lib.block.BlockId;
+import com.petra.lib.block.ProcessValue;
 import com.petra.lib.signal.response.controller.SignalResponseHandler;
 import com.petra.lib.signal.SignalId;
 import com.petra.lib.signal.dto.RequestDto;
@@ -104,7 +104,7 @@ public class SyncResponse implements ResponseSignal {
     }
 
     @Override
-    public void setAnswer(Collection<ProcessVariableDto> signalAnswerVariables, BlockId requestBlockId, UUID scenarioId, BlockId responseBlockId) {
+    public void setAnswer(Collection<ProcessValue> signalAnswerVariables, BlockId requestBlockId, UUID scenarioId, BlockId responseBlockId) {
         ResponseDto responseDto = new ResponseDto(
                 scenarioId,
                 signalId,

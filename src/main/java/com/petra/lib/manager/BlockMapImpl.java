@@ -1,6 +1,6 @@
 package com.petra.lib.manager;
 
-import com.petra.lib.manager.block.Block;
+import com.petra.lib.block.Block;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -10,6 +10,7 @@ import java.util.Map;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
+@Deprecated
 public class BlockMapImpl implements BlockMap {
     Map<Long, Block> blocksBydId;
     Map<Long, Collection<Block>> blocksByListeningSignalId;

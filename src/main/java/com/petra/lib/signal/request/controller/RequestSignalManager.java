@@ -1,7 +1,7 @@
 package com.petra.lib.signal.request.controller;
 
-import com.petra.lib.manager.block.ProcessVariableDto;
-import com.petra.lib.queue.TaskQueueManager;
+import com.petra.lib.block.ProcessValue;
+import com.petra.lib.signal.queue.TaskQueueManager;
 import com.petra.lib.signal.dto.RequestDto;
 import com.petra.lib.signal.dto.ResponseDto;
 import com.petra.lib.signal.model.SignalModel;
@@ -68,7 +68,7 @@ public class RequestSignalManager implements SignalRequestManager, SignalRequest
     }
 
     @Override
-    public void request(Long signalId, Collection<ProcessVariableDto> signalVariables, UUID scenarioId, Long blockId, Version blockVersion) {
+    public void request(Long signalId, Collection<ProcessValue> signalVariables, UUID scenarioId, Long blockId, Version blockVersion) {
         requestSignalMap.get(signalId).request(signalVariables, scenarioId, blockId, blockVersion);
     }
 

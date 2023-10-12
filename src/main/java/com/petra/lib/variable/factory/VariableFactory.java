@@ -1,8 +1,7 @@
 package com.petra.lib.variable.factory;
 
-import com.petra.lib.variable.base.Variable;
-import com.petra.lib.variable.base.VariableList;
-import com.petra.lib.variable.mapper.VariableMapper;
+import com.petra.lib.variable.base.StatelessVariable;
+import com.petra.lib.variable.base.StatelessVariableList;
 
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -11,11 +10,11 @@ public final class VariableFactory {
 
     private VariableFactory(){}
 
-    public static VariableList createVariableList(Collection<VariableModel> variableModels){
-        Collection<Variable> variables = variableModels.stream()
-                .map(variableModel -> new Variable(variableModel.getId(), variableModel.getName()))
+    public static StatelessVariableList createVariableList(Collection<VariableModel> variableModels){
+        Collection<StatelessVariable> statelessVariables = variableModels.stream()
+                .map(variableModel -> new StatelessVariable(variableModel.getId(), variableModel.getName()))
                 .collect(Collectors.toList());
-        VariableList variableList = new VariableList(variables);
-        return variableList;
+        StatelessVariableList statelessVariableList = new StatelessVariableList(statelessVariables);
+        return statelessVariableList;
     }
 }
