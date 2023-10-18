@@ -1,6 +1,6 @@
 package com.petra.lib.workflow.model;
 
-import com.petra.lib.signal.model.Version;
+import com.petra.lib.XXXXXXsignal.model.Version;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

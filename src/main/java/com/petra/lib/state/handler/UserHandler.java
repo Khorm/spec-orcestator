@@ -1,6 +1,6 @@
 package com.petra.lib.state.handler;
 
-import com.petra.lib.context.UserContext;
+import com.petra.lib.XXXXXcontext.user.UserContext;
 
 public interface UserHandler {
 

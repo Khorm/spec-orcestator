@@ -11,5 +11,4 @@ import lombok.experimental.FieldDefaults;
 public class StatelessVariable {
     Long id;
     String name;
-
 }

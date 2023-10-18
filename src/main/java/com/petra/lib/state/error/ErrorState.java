@@ -1,10 +1,10 @@
 package com.petra.lib.state.error;
 
 import com.petra.lib.block.BlockId;
-import com.petra.lib.context.ActionContext;
-import com.petra.lib.manager.state.JobStateManager;
-import com.petra.lib.signal.SignalId;
-import com.petra.lib.signal.response.controller.ResponseReadyListener;
+import com.petra.lib.XXXXXcontext.ActionContext;
+import com.petra.lib.XXXXXmanager.state.JobStateManager;
+import com.petra.lib.XXXXXXsignal.SignalId;
+import com.petra.lib.XXXXXXsignal.response.controller.ResponseReadyListener;
 import com.petra.lib.state.StateHandler;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

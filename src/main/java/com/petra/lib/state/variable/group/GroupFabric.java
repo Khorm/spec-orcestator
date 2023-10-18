@@ -3,7 +3,7 @@ package com.petra.lib.state.variable.group;
 import com.petra.lib.annotation.MappingHandler;
 import com.petra.lib.state.variable.group.loaders.VariableFabric;
 import com.petra.lib.block.BlockId;
-import com.petra.lib.signal.request.controller.SignalRequestManager;
+import com.petra.lib.XXXXXXsignal.request.controller.SignalRequestManager;
 import com.petra.lib.state.variable.group.handler.VariableHandler;
 import com.petra.lib.state.variable.group.loaders.VariableLoader;
 import com.petra.lib.state.variable.group.repo.ContextRepo;

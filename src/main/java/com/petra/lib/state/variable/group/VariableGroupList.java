@@ -1,12 +1,12 @@
 package com.petra.lib.state.variable.group;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.petra.lib.context.ExecutionContext;
+import com.petra.lib.XXXXXcontext.DirtyContext;
 import com.petra.lib.state.variable.group.handler.VariableHandler;
 import com.petra.lib.state.variable.group.repo.ContextRepo;
 import com.petra.lib.state.variable.model.VariableGroupModel;
 import com.petra.lib.block.models.BlockModel;
-import com.petra.lib.signal.request.controller.SignalRequestManager;
+import com.petra.lib.XXXXXXsignal.request.controller.SignalRequestManager;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
@@ -42,13 +42,13 @@ public class VariableGroupList {
     /**
      * callbacks
      */
-    Consumer<ExecutionContext> afterFillingHandler;
-    Consumer<ExecutionContext> afterErrorHandler;
+    Consumer<DirtyContext> afterFillingHandler;
+    Consumer<DirtyContext> afterErrorHandler;
 
 
     public VariableGroupList(ContextRepo contextRepo, BlockModel blockModel, List<VariableGroupModel> variableGroupModels,
                              Collection<VariableHandler> handlers, SignalRequestManager signalRequestManager,
-                             Consumer<ExecutionContext> afterFillingHandler, Consumer<ExecutionContext> afterErrorHandler) {
+                             Consumer<DirtyContext> afterFillingHandler, Consumer<DirtyContext> afterErrorHandler) {
         this.contextRepo = contextRepo;
         this.afterFillingHandler = afterFillingHandler;
         this.afterErrorHandler = afterErrorHandler;
@@ -73,7 +73,7 @@ public class VariableGroupList {
      * @param actionContext
      * @throws JsonProcessingException
      */
-    public void fillVariables(ExecutionContext actionContext) throws JsonProcessingException {
+    public void fillVariables(DirtyContext actionContext) throws JsonProcessingException {
         //reqister new context for async value loads
         contextRepo.addNewRequestData(actionContext);
 
@@ -86,7 +86,7 @@ public class VariableGroupList {
      * @param executedGroupId
      * @param context
      */
-    private void executeNext(Long executedGroupId, ExecutionContext context) {
+    private void executeNext(Long executedGroupId, DirtyContext context) {
         try {
             Set<Long> executedGroups = contextRepo.setFilledGroup(executedGroupId, context.getScenarioId());
 
@@ -121,7 +121,7 @@ public class VariableGroupList {
      *
      * @param context
      */
-    private void fillingError(ExecutionContext context) {
+    private void fillingError(DirtyContext context) {
         contextRepo.clear(context.getScenarioId());
         afterErrorHandler.accept(context);
     }

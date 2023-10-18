@@ -24,7 +24,7 @@ public enum State {
     /**
      * Response after execution
      */
-    AFTER_EXECUTION,
+    END,
 
     /**
      * Execution error

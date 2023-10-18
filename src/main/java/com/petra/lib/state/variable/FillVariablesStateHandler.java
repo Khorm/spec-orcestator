@@ -1,16 +1,15 @@
 package com.petra.lib.state.variable;
 
-import com.petra.lib.context.ExecutionContext;
+import com.petra.lib.XXXXXcontext.DirtyContext;
 import com.petra.lib.state.State;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.state.variable.group.VariableGroupList;
 import com.petra.lib.state.variable.group.handler.VariableHandler;
 import com.petra.lib.state.variable.group.repo.ContextRepo;
 import com.petra.lib.state.variable.model.VariableGroupModel;
-import com.petra.lib.state.StateManager;
 import com.petra.lib.block.models.BlockModel;
-import com.petra.lib.signal.SignalId;
-import com.petra.lib.signal.request.controller.SignalRequestManager;
+import com.petra.lib.XXXXXXsignal.SignalId;
+import com.petra.lib.XXXXXXsignal.request.controller.SignalRequestManager;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.*;
@@ -58,7 +57,7 @@ public class FillVariablesStateHandler implements StateHandler {
     }
 
     @Override
-    public void execute(ExecutionContext actionContext) throws Exception {
+    public void execute(DirtyContext actionContext) throws Exception {
         variableGroupControllerMap.get(actionContext.getRequestSignalId()).fillVariables(actionContext);
     }
 
@@ -77,7 +76,7 @@ public class FillVariablesStateHandler implements StateHandler {
      *
      * @param actionContext filled context
      */
-    private void fillingIsDone(ExecutionContext actionContext) {
+    private void fillingIsDone(DirtyContext actionContext) {
         stateManager.executeState(actionContext, State.EXECUTING);
     }
 
@@ -86,7 +85,7 @@ public class FillVariablesStateHandler implements StateHandler {
      *
      * @param actionContext - context
      */
-    private void fillingError(ExecutionContext actionContext) {
+    private void fillingError(DirtyContext actionContext) {
         stateManager.executeState(actionContext, State.ERROR);
     }
 }

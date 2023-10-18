@@ -1,7 +1,7 @@
 package com.petra.lib.state.variable.group.repo;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.petra.lib.context.ExecutionContext;
+import com.petra.lib.XXXXXcontext.DirtyContext;
 
 import java.util.Collection;
 import java.util.Set;
@@ -15,7 +15,7 @@ public interface ContextRepo {
      * @param context
      * @throws JsonProcessingException
      */
-    void addNewRequestData(ExecutionContext context) throws JsonProcessingException;
+    void addNewRequestData(DirtyContext context) throws JsonProcessingException;
 
     /**
      * Clear context
@@ -34,7 +34,7 @@ public interface ContextRepo {
      */
     Set<Long> setFilledVariables(Collection<Long> filledVariableId, UUID scenarioId);
 
-    ExecutionContext getExecutionContext(UUID scenarioId);
+    DirtyContext getExecutionContext(UUID scenarioId);
 
     /**
      * Save already filled group id

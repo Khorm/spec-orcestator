@@ -1,6 +1,6 @@
 package com.petra.lib.state.variable.model;
 
-import com.petra.lib.signal.SignalId;
+import com.petra.lib.XXXXXXsignal.SignalId;
 import com.petra.lib.variable.mapper.MapperVariableModel;
 import lombok.AccessLevel;
 import lombok.Getter;

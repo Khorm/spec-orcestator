@@ -1,6 +1,6 @@
 package com.petra.lib.state.variable.group.loaders;
 
-import com.petra.lib.context.ExecutionContext;
+import com.petra.lib.XXXXXcontext.DirtyContext;
 import com.petra.lib.block.ProcessValue;
 import com.petra.lib.variable.mapper.VariableMapper;
 import lombok.AccessLevel;
@@ -17,12 +17,12 @@ class RequestVariableLoader implements VariableLoader {
 
     final VariableMapper fromRequestToContextMapper;
     final Collection<Long> filingProcessVariableIds;
-    BiConsumer<Collection<Long>, ExecutionContext> filledHandler;
-    Consumer<ExecutionContext> errorHandler;
+    BiConsumer<Collection<Long>, DirtyContext> filledHandler;
+    Consumer<DirtyContext> errorHandler;
 
 
     @Override
-    public void load(ExecutionContext actionContext) {
+    public void load(DirtyContext actionContext) {
         try {
             Collection<ProcessValue> mappedValues = fromRequestToContextMapper.map(actionContext.getRequestValues());
             actionContext.setValues(mappedValues);
@@ -38,12 +38,12 @@ class RequestVariableLoader implements VariableLoader {
     }
 
     @Override
-    public void setFillHandler(BiConsumer<Collection<Long>, ExecutionContext> fillHandler) {
+    public void setFillHandler(BiConsumer<Collection<Long>, DirtyContext> fillHandler) {
         this.filledHandler = fillHandler;
     }
 
     @Override
-    public void setErrorHandler(Consumer<ExecutionContext> errorHandler) {
+    public void setErrorHandler(Consumer<DirtyContext> errorHandler) {
         this.errorHandler = errorHandler;
     }
 }

@@ -1,6 +1,6 @@
 package com.petra.lib.block;
 
-import com.petra.lib.signal.SignalModel;
+import com.petra.lib.XXXXXXsignal.SignalModel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;

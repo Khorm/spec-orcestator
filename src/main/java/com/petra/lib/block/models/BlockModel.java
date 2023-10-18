@@ -1,8 +1,8 @@
 package com.petra.lib.block.models;
 
 import com.petra.lib.block.BlockId;
-import com.petra.lib.signal.SignalId;
-import com.petra.lib.signal.model.Version;
+import com.petra.lib.XXXXXXsignal.SignalId;
+import com.petra.lib.XXXXXXsignal.model.Version;
 import com.petra.lib.variable.base.StatelessVariable;
 import com.petra.lib.variable.mapper.MapperVariableModel;
 import com.petra.lib.state.variable.model.VariableGroupModel;

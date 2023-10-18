@@ -1,7 +1,7 @@
 package com.petra.lib.state.variable.group.loaders;
 
 import com.petra.lib.state.variable.model.SourceLoaderModel;
-import com.petra.lib.signal.request.controller.SignalRequestManager;
+import com.petra.lib.XXXXXXsignal.request.controller.SignalRequestManager;
 import com.petra.lib.variable.mapper.VariableMapper;
 import com.petra.lib.variable.mapper.VariableMapperFactory;
 

@@ -1,10 +1,8 @@
 package com.petra.lib.state.queue;
 
-import com.petra.lib.context.StateError;
+import com.petra.lib.XXXXXcontext.StateError;
 import com.petra.lib.state.State;
 import com.petra.lib.state.StateHandler;
-import com.petra.lib.state.StateManager;
-import org.apache.kafka.common.metrics.Stat;
 
 import java.util.Optional;
 

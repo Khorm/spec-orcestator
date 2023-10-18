@@ -2,8 +2,8 @@ package com.petra.lib.state.variable.group.loaders;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petra.lib.context.ContextFabric;
-import com.petra.lib.context.ExecutionContext;
+import com.petra.lib.XXXXXcontext.ContextFabric;
+import com.petra.lib.XXXXXcontext.DirtyContext;
 import com.petra.lib.state.variable.group.handler.VariableContext;
 import com.petra.lib.state.variable.group.handler.VariableHandler;
 import com.petra.lib.block.ProcessValue;
@@ -24,8 +24,8 @@ class HandlerVariableLoader implements VariableLoader {
     final ObjectMapper objectMapper = new ObjectMapper();
     final Collection<Long> filingProcessVariableIds;
     final List<VariableHandlerKeeper> variableHandlers;
-    BiConsumer<Collection<Long>, ExecutionContext> filledHandler;
-    Consumer<ExecutionContext> errorHandler;
+    BiConsumer<Collection<Long>, DirtyContext> filledHandler;
+    Consumer<DirtyContext> errorHandler;
 
 
     @RequiredArgsConstructor
@@ -36,7 +36,7 @@ class HandlerVariableLoader implements VariableLoader {
 
 
     @Override
-    public void load(ExecutionContext actionContext) {
+    public void load(DirtyContext actionContext) {
         VariableContext variableContext = ContextFabric.createUserContext(actionContext);
         try {
             for (VariableHandlerKeeper variableHandlerKeeper : variableHandlers) {
@@ -56,12 +56,12 @@ class HandlerVariableLoader implements VariableLoader {
     }
 
     @Override
-    public void setFillHandler(BiConsumer<Collection<Long>, ExecutionContext> fillHandler) {
+    public void setFillHandler(BiConsumer<Collection<Long>, DirtyContext> fillHandler) {
         this.filledHandler = fillHandler;
     }
 
     @Override
-    public void setErrorHandler(Consumer<ExecutionContext> errorHandler) {
+    public void setErrorHandler(Consumer<DirtyContext> errorHandler) {
         this.errorHandler = errorHandler;
     }
 }

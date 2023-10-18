@@ -2,14 +2,14 @@ package com.petra.lib.state.variable.group;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petra.lib.PetraException;
-import com.petra.lib.context.ExecutionContext;
+import com.petra.lib.XXXXXcontext.DirtyContext;
 import com.petra.lib.block.BlockId;
 import com.petra.lib.block.ProcessValue;
-import com.petra.lib.signal.request.controller.AnswerListener;
-import com.petra.lib.signal.request.controller.SignalRequestManager;
-import com.petra.lib.signal.SignalId;
-import com.petra.lib.signal.dto.ResponseDto;
-import com.petra.lib.signal.response.ResponseType;
+import com.petra.lib.XXXXXXsignal.request.controller.AnswerListener;
+import com.petra.lib.XXXXXXsignal.request.controller.SignalRequestManager;
+import com.petra.lib.XXXXXXsignal.SignalId;
+import com.petra.lib.XXXXXXsignal.dto.ResponseDto;
+import com.petra.lib.XXXXXXsignal.response.ResponseType;
 import com.petra.lib.variable.mapper.VariableMapper;
 import com.petra.lib.state.variable.group.repo.ContextRepo;
 import lombok.AccessLevel;
@@ -27,10 +27,10 @@ import java.util.function.BiConsumer;
 public class SourceRequestManager implements AnswerListener {
 
     @Setter
-    BiConsumer<Collection<ProcessValue>, ExecutionContext> loadHandler;
+    BiConsumer<Collection<ProcessValue>, DirtyContext> loadHandler;
 
     @Setter
-    BiConsumer<Exception, ExecutionContext> errorHandler;
+    BiConsumer<Exception, DirtyContext> errorHandler;
 
     final SignalRequestManager signalRequestManager;
     final VariableMapper toSourceVariableMapper;
@@ -50,7 +50,7 @@ public class SourceRequestManager implements AnswerListener {
         this.requestSignalId = requestSignalId;
     }
 
-    void load(ExecutionContext context) {
+    void load(DirtyContext context) {
         try {
             contextRepo.addNewRequestData(context);
         } catch (JsonProcessingException e) {
@@ -62,13 +62,13 @@ public class SourceRequestManager implements AnswerListener {
 
 
     private void executed(ResponseDto signalTransferModel) {
-        ExecutionContext actionContext = contextRepo.getExecutionContext(signalTransferModel.getScenarioId(), blockId);
+        DirtyContext actionContext = contextRepo.getExecutionContext(signalTransferModel.getScenarioId(), blockId);
         loadHandler.accept(signalTransferModel.getSignalVariables(), actionContext);
     }
 
 
     private void error(Exception e, ResponseDto signalTransferModel) {
-        ExecutionContext actionContext = contextRepo.getExecutionContext(signalTransferModel.getScenarioId(), blockId);
+        DirtyContext actionContext = contextRepo.getExecutionContext(signalTransferModel.getScenarioId(), blockId);
         errorHandler.accept(e, actionContext);
     }
 

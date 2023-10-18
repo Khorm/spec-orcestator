@@ -1,12 +1,11 @@
 package com.petra.lib.state.handler.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.petra.lib.context.UserContextImpl;
+import com.petra.lib.XXXXXcontext.user.UserContextImpl;
 import com.petra.lib.block.BlockId;
-import com.petra.lib.context.ActionContext;
-import com.petra.lib.state.StateManager;
-import com.petra.lib.manager.state.JobStateManager;
-import com.petra.lib.variable.base.StatelessVariableList;
+import com.petra.lib.XXXXXcontext.ActionContext;
+import com.petra.lib.XXXXXmanager.state.JobStateManager;
+import com.petra.lib.variable.base.PureVariableList;
 import com.petra.lib.state.handler.UserHandler;
 import com.petra.lib.state.repo.JobRepository;
 import lombok.AccessLevel;
@@ -31,7 +30,7 @@ public class UserHandlerExecutor implements JobStateManager {
     JpaTransactionManager jpaTransactionManager;
     JobRepository jobRepository;
     BlockId blockId;
-    StatelessVariableList statelessVariableList;
+    PureVariableList pureVariableList;
     String blockName;
 
     @Override
@@ -43,7 +42,7 @@ public class UserHandlerExecutor implements JobStateManager {
 
         try {
             EntityManager entityManager = EntityManagerFactoryUtils.getTransactionalEntityManager(jpaTransactionManager.getEntityManagerFactory());
-            UserContextImpl userContext = new UserContextImpl(actionContext, entityManager, statelessVariableList);
+            UserContextImpl userContext = new UserContextImpl(actionContext, entityManager, pureVariableList);
             userHandler.execute(userContext);
 
             ActionContext filledActionContext = userContext.fillContext();

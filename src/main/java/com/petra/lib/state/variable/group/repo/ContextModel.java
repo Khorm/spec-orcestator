@@ -1,6 +1,6 @@
 package com.petra.lib.state.variable.group.repo;
 
-import com.petra.lib.context.ExecutionContext;
+import com.petra.lib.XXXXXcontext.DirtyContext;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import java.util.Set;
 class ContextModel {
 
     @Getter
-    ExecutionContext context;
+    DirtyContext context;
     Set<Long> filledVariables = new HashSet<>();
 
     Set<Long> getExecutedSourceSignalIds(){

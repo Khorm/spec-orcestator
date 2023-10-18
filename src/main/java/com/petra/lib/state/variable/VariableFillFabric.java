@@ -5,10 +5,9 @@ import com.petra.lib.state.variable.group.VariableGroupList;
 import com.petra.lib.state.variable.group.handler.VariableHandler;
 import com.petra.lib.state.variable.group.repo.ContextRepo;
 import com.petra.lib.state.variable.model.VariableGroupModel;
-import com.petra.lib.state.StateManager;
 import com.petra.lib.block.models.BlockModel;
-import com.petra.lib.signal.SignalId;
-import com.petra.lib.signal.request.controller.SignalRequestManager;
+import com.petra.lib.XXXXXXsignal.SignalId;
+import com.petra.lib.XXXXXXsignal.request.controller.SignalRequestManager;
 
 import java.util.*;
 

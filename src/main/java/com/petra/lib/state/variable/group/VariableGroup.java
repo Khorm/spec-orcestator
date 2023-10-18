@@ -1,6 +1,6 @@
 package com.petra.lib.state.variable.group;
 
-import com.petra.lib.context.ExecutionContext;
+import com.petra.lib.XXXXXcontext.DirtyContext;
 import com.petra.lib.state.variable.group.loaders.VariableLoader;
 import com.petra.lib.state.variable.group.repo.ContextRepo;
 import lombok.AccessLevel;
@@ -58,13 +58,13 @@ class VariableGroup {
      * Callback after loaders execute.
      */
     @Setter
-    BiConsumer<Long, ExecutionContext> loadHandler;
+    BiConsumer<Long, DirtyContext> loadHandler;
 
     /**
      * Callback for any error
      */
     @Setter
-    Consumer<ExecutionContext> errorHandler;
+    Consumer<DirtyContext> errorHandler;
 
     VariableGroup(Set<Long> parentGroups, Long groupId, Set<Long> childGroups,
                   ContextRepo contextRepo, Collection<VariableLoader> variableLoaders) {
@@ -88,7 +88,7 @@ class VariableGroup {
      *
      * @param actionContext - process context
      */
-    void fillGroup(ExecutionContext actionContext) {
+    void fillGroup(DirtyContext actionContext) {
         variableLoaders.forEach(variableLoader -> variableLoader.load(actionContext));
     }
 
@@ -98,14 +98,14 @@ class VariableGroup {
      * @param filledContextVariableId - id of filled context variable
      * @param context                 - process context
      */
-    private void variablesLoad(Collection<Long> filledContextVariableId, ExecutionContext context) {
+    private void variablesLoad(Collection<Long> filledContextVariableId, DirtyContext context) {
         Set<Long> allFilledVariables = contextRepo.setFilledVariables(filledContextVariableId, context.getScenarioId());
         if (fillingVariableIds.containsAll(allFilledVariables)) {
             loadHandler.accept(groupId, context);
         }
     }
 
-    private void errorLoadHandler(ExecutionContext actionContext) {
+    private void errorLoadHandler(DirtyContext actionContext) {
         errorHandler.accept(actionContext);
     }
 

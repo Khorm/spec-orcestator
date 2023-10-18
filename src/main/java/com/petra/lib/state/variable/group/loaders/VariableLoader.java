@@ -1,14 +1,14 @@
 package com.petra.lib.state.variable.group.loaders;
 
-import com.petra.lib.context.ExecutionContext;
+import com.petra.lib.XXXXXcontext.DirtyContext;
 
 import java.util.Collection;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public interface VariableLoader {
-    void load(ExecutionContext actionContext);
+    void load(DirtyContext actionContext);
     Collection<Long> getFilingProcessVariableIds();
-    void setFillHandler(BiConsumer<Collection<Long>, ExecutionContext> fillHandler);
-    void setErrorHandler(Consumer<ExecutionContext> errorHandler);
+    void setFillHandler(BiConsumer<Collection<Long>, DirtyContext> fillHandler);
+    void setErrorHandler(Consumer<DirtyContext> errorHandler);
 }
