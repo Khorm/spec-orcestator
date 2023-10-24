@@ -1,7 +1,5 @@
 package com.petra.lib.variable.mapper;
 
-import com.petra.lib.variable.factory.VariableModel;
-
 import java.util.Collection;
 
 public final class VariableMapperFactory {

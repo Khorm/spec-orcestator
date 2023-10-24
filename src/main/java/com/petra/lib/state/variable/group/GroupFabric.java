@@ -4,7 +4,7 @@ import com.petra.lib.annotation.MappingHandler;
 import com.petra.lib.state.variable.group.loaders.VariableFabric;
 import com.petra.lib.block.BlockId;
 import com.petra.lib.XXXXXXsignal.request.controller.SignalRequestManager;
-import com.petra.lib.state.variable.group.handler.VariableHandler;
+import com.petra.lib.state.variable.neww.loaders.UserVariableHandler;
 import com.petra.lib.state.variable.group.loaders.VariableLoader;
 import com.petra.lib.state.variable.group.repo.ContextRepo;
 import com.petra.lib.state.variable.model.VariableGroupModel;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 class GroupFabric {
 
-    static VariableGroup createGroup(SignalRequestManager signalRequestManager, VariableGroupModel variableGroupModel, Collection<VariableHandler> handlers,
+    static VariableGroup createGroup(SignalRequestManager signalRequestManager, VariableGroupModel variableGroupModel, Collection<UserVariableHandler> handlers,
                                      ContextRepo contextRepo, BlockId blockId, String blockName) {
 
 //        SourceRequestManager sourceRequestManager = createSourceLoader(signalRequestManager, variableGroupModel, contextRepo, blockId);
@@ -35,7 +35,7 @@ class GroupFabric {
 //        return new SourceRequestManager(signalRequestManager, variableMapper, contextRepo, blockId, variableGroupModel.getSourceSignal().getSourceSignalId());
 //    }
 
-    private static Collection<VariableLoader> createVariableLoader(VariableGroupModel variableGroupModel, Collection<VariableHandler> handlers,
+    private static Collection<VariableLoader> createVariableLoader(VariableGroupModel variableGroupModel, Collection<UserVariableHandler> handlers,
                                                                    String blockName) {
         return variableGroupModel.getGroupVariables().stream()
                 .map(groupVariable -> {
@@ -45,7 +45,7 @@ class GroupFabric {
                         case INIT:
                             return VariableLoader.getInitVariableLoader(groupVariable.getVariableId(), groupVariable.getProducerVariableId());
                         case HANDLER:
-                            for (VariableHandler variableHandler : handlers) {
+                            for (UserVariableHandler variableHandler : handlers) {
                                 String blockNameHandler = variableHandler.getClass().getAnnotation(MappingHandler.class).blockName();
                                 String varNameHandler = variableHandler.getClass().getAnnotation(MappingHandler.class).variableName();
                                 if (groupVariable.getVariableName().equals(varNameHandler) &&

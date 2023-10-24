@@ -1,7 +1,7 @@
 package com.petra.lib.XXXXXXsignal;
 
 import com.petra.lib.XXXXXXsignal.model.Version;
-import com.petra.lib.variable.factory.VariableModel;
+import com.petra.lib.variable.XXXXXfactory.VariableModel;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.ToString;

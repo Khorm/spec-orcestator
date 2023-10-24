@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petra.lib.PetraException;
 import com.petra.lib.XXXXXcontext.DirtyContext;
 import com.petra.lib.block.BlockId;
-import com.petra.lib.block.ProcessValue;
+import com.petra.lib.environment.context.ProcessValue;
 import com.petra.lib.XXXXXXsignal.request.controller.AnswerListener;
 import com.petra.lib.XXXXXXsignal.request.controller.SignalRequestManager;
 import com.petra.lib.XXXXXXsignal.SignalId;

@@ -1,12 +1,13 @@
 package com.petra.lib.XXXXXcontext;
 
-import com.petra.lib.block.ProcessValue;
+import com.petra.lib.environment.context.ProcessValue;
+import com.petra.lib.environment.context.variables.VariablesContext;
 
 import java.util.Collection;
 import java.util.UUID;
 
 @Deprecated
-public interface DirtyContext {
+interface DirtyContext {
 
     /**
      * @return current scenario id
@@ -17,6 +18,6 @@ public interface DirtyContext {
      */
     void setValues(Collection<ProcessValue> values);
     void setValue(ProcessValue value);
-    DirtyVariablesList getDirtyVariablesList();
+    VariablesContext getDirtyVariablesList();
 
 }

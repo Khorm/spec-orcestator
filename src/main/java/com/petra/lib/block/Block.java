@@ -1,15 +1,14 @@
 package com.petra.lib.block;
 
-import com.petra.lib.environment.dto.Signal;
-import com.petra.lib.environment.model.ScenarioContext;
-import com.petra.lib.variable.base.PureVariableList;
+import com.petra.lib.environment.context.ActivityContext;
 
 
 public interface Block {
     BlockId getId();
     String getName();
 
-    void execute(ScenarioContext scenarioContext);
+    void execute(ActivityContext activityContext);
 
     boolean isSequentially();
+    void error();
 }

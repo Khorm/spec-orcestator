@@ -1,20 +1,17 @@
 package com.petra.lib.state.initialize;
 
-import com.petra.lib.XXXXXcontext.DirtyVariablesList;
+import com.petra.lib.environment.context.variables.VariablesContext;
 import com.petra.lib.block.Block;
-import com.petra.lib.block.BlockId;
-import com.petra.lib.environment.model.ScenarioContext;
+import com.petra.lib.environment.context.ActivityContext;
 import com.petra.lib.environment.repo.ActionRepo;
-import com.petra.lib.state.State;
+import com.petra.lib.state.ActionState;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.transaction.TransactionManager;
-import com.petra.lib.transaction.TransactionRunnable;
 import com.petra.lib.variable.mapper.VariableMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.orm.jpa.JpaTransactionManager;
 
 /**
  * «аполн€ет переменные из вход€щего сигнала.
@@ -34,67 +31,24 @@ public class Initializer implements StateHandler {
      */
     TransactionManager transactionManager;
     ActionRepo actionRepo;
-
-//    public Initializer(BlockModel blockModel, StateManager stateManager, JobRepository jobRepository, VariableMapper signalToActionVariableMapper) {
-//        this.blockId = new BlockId(blockModel.getId(), blockModel.getVersion());
-//        this.blockName = blockModel.getName();
-//        this.stateManager = stateManager;
-//        this.jobRepository = jobRepository;
-//        this.signalToActionVariableMapper = signalToActionVariableMapper;
-//    }
-
-//    @Override
-//    public void execute(DirtyContext context) throws JsonProcessingException {
-//        //проверить была ли раьше вызвана данна€ обработка
-//        Optional<ExecutionStatus> prevStatus = jobRepository.isExecutedBefore(context.getScenarioId(), blockId);
-//
-//        if (prevStatus.isPresent()) {
-//            ExecutionStatus curStatus = prevStatus.get();
-//
-//            switch (curStatus) {
-//                //стандартное прожолжение исплнени€  активности
-//                case STARTED:
-//                    jobRepository.setExecutingStatus(ExecutionStatus.EXECUTING);
-//                    log.debug("Job starts executed {} {}", blockName, context.toString());
-//                    stateManager.executedState(context, State.INITIALIZING);
-//                    break;
-//
-//                //активность либо была исполнена ранее либо исполн€етс€ сейчас.
-//                //закончить выполнение активности путем высавление ошибки
-//                case EXECUTED:
-//                case EXECUTING:
-//                    log.debug("Job already executed {} {}", blockName, context.toString());
-//                    stateManager.executedState(context, State.INITIALIZING, StateError.ALREADY_EXECUTING);
-//                    break;
-//
-//                case ERROR:
-//                    String error = jobRepository.getErrorMessage(context.getScenarioId(), blockId);
-//                    log.debug("Job already end with error {} {} : {}", blockName, context.toString(), error);
-//                    stateManager.executedState(context, State.INITIALIZING, StateError.INNER_ERROR);
-//                    break;
-//            }
-//        }
-//        throw new IllegalStateException("Execution status not found");
-//    }
-
     @Override
-    public State getState() {
-        return State.INITIALIZING;
+    public ActionState getState() {
+        return ActionState.INITIALIZING;
     }
 
     @Override
-    public void execute(ScenarioContext context) throws Exception {
-        log.debug("Start initialization {}", context.getBlockId());
+    public void execute(ActivityContext context) throws Exception {
+        log.debug("Start initialization {}", context.getCurrentBlockId());
 
         //обновить переменные из вход€щего сигнала
-        DirtyVariablesList variablesFrommSignal
-                = signalToActionVariableMapper.map(context.getSignal().getDirtyVariablesList());
+        VariablesContext variablesFrommSignal
+                = signalToActionVariableMapper.map(context.getInitializingSignal().getVariablesContext());
         context.syncCurrentInputVariableList(variablesFrommSignal);
 
         //записать измененеие стейта и обновление переменных в базу.
         transactionManager.executeInTransaction(jpaTransactionManager -> {
-            actionRepo.updateActionState(context, State.INITIALIZING);
-            actionRepo.updateVariables(context, context.getDirtyVariablesList());
+            actionRepo.updateActionState(context, ActionState.INITIALIZING);
+            actionRepo.updateVariables(context, context.getVariablesContext());
         });
         blockManager.execute(context);
     }

@@ -1,7 +1,7 @@
 package com.petra.lib.XXXXXXsignal.request.controller;
 
 import com.petra.lib.block.BlockId;
-import com.petra.lib.block.ProcessValue;
+import com.petra.lib.environment.context.ProcessValue;
 import com.petra.lib.XXXXXXsignal.SignalId;
 
 import java.util.Collection;

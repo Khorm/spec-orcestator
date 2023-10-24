@@ -1,8 +1,10 @@
 package com.petra.lib.environment.dto;
 
-import com.petra.lib.XXXXXcontext.DirtyVariablesList;
+import com.petra.lib.XXXXXXsignal.response.ResponseType;
+import com.petra.lib.environment.context.variables.VariablesContext;
 import com.petra.lib.block.BlockId;
 import com.petra.lib.XXXXXXsignal.SignalId;
+import com.petra.lib.environment.output.enums.AnswerType;
 import com.petra.lib.environment.output.enums.RequestType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -24,7 +26,7 @@ public class Signal {
     /**
      * переменные JSON передаваемые в сигнале
      */
-    DirtyVariablesList dirtyVariablesList;
+    VariablesContext variablesContext;
 
     /**
      * айди сигнала
@@ -32,7 +34,7 @@ public class Signal {
     SignalId signalId;
 
     /**
-     * имя чигнала
+     * имя сигнала
      */
     String signalName;
 
@@ -60,4 +62,5 @@ public class Signal {
      * тип сигнала
      */
     RequestType requestType;
+    AnswerType answerType;
 }

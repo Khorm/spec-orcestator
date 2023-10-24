@@ -4,8 +4,8 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-class TransactionManagerImpl implements TransactionManager{
-    JpaTransactionManager jpaTransactionManager;
+class TransactionManagerImpl implements TransactionManager {
+    private static JpaTransactionManager jpaTransactionManager;
 
     @Override
     public void executeInTransaction(TransactionRunnable task) {

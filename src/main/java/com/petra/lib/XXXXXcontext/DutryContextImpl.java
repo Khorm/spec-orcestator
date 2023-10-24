@@ -1,7 +1,8 @@
 package com.petra.lib.XXXXXcontext;
 
-import com.petra.lib.block.ProcessValue;
-import com.petra.lib.variable.base.PureVariableList;
+import com.petra.lib.environment.context.ProcessValue;
+import com.petra.lib.environment.context.variables.VariablesContext;
+import com.petra.lib.variable.pure.PureVariableList;
 import lombok.AccessLevel;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
@@ -18,7 +19,7 @@ import java.util.UUID;
 class DutryContextImpl implements DirtyContext {
 
     //набор переменных контектста
-    final DirtyVariablesList dirtyVariablesList = new DirtyVariablesList();
+    final VariablesContext variablesContext = new VariablesContext(variablesSynchRepo);
     //чистый набор переменных
     final PureVariableList pureVariableList;
     UUID scenarioId;
@@ -46,11 +47,10 @@ class DutryContextImpl implements DirtyContext {
 
     @Override
     public void setValue(ProcessValue value) {
-        dirtyVariablesList.setVariableList(value);
+        variablesContext.setVariableList(value);
     }
 
-    @Override
-    public DirtyVariablesList getDirtyVariablesList() {
+    public VariablesContext getVariablesContext() {
         return ;
     }
 

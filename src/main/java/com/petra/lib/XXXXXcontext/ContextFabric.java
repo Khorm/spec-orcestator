@@ -1,10 +1,10 @@
 package com.petra.lib.XXXXXcontext;
 
-import com.petra.lib.XXXXXcontext.user.UserContext;
-import com.petra.lib.XXXXXcontext.user.UserContextImpl;
+import com.petra.lib.state.variable.neww.loaders.user.UserContext;
+import com.petra.lib.state.variable.neww.loaders.user.ImplUserContext;
 import com.petra.lib.block.BlockId;
 import com.petra.lib.environment.dto.Signal;
-import com.petra.lib.variable.base.PureVariableList;
+import com.petra.lib.variable.pure.PureVariableList;
 import lombok.Setter;
 
 import javax.persistence.EntityManager;
@@ -18,7 +18,7 @@ public class ContextFabric {
     }
 
     public static UserContext createUserContext(DirtyContext dirtyContext){
-        new UserContextImpl(dirtyContext, entityManager, statelessVariableList);
+        new ImplUserContext(dirtyContext, entityManager, statelessVariableList);
     }
 
 

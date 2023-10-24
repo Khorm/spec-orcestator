@@ -1,7 +1,7 @@
 package com.petra.lib.workflow.new_workflow.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.petra.lib.block.ProcessValue;
+import com.petra.lib.environment.context.ProcessValue;
 
 import java.util.Collection;
 import java.util.UUID;

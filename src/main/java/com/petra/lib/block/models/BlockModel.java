@@ -3,7 +3,7 @@ package com.petra.lib.block.models;
 import com.petra.lib.block.BlockId;
 import com.petra.lib.XXXXXXsignal.SignalId;
 import com.petra.lib.XXXXXXsignal.model.Version;
-import com.petra.lib.variable.base.StatelessVariable;
+import com.petra.lib.variable.pure.PureVariable;
 import com.petra.lib.variable.mapper.MapperVariableModel;
 import com.petra.lib.state.variable.model.VariableGroupModel;
 import lombok.AccessLevel;
@@ -36,7 +36,7 @@ public class BlockModel {
     /**
      * Block execution variables
      */
-    Collection<StatelessVariable> statelessVariables;
+    Collection<PureVariable> pureVariables;
 
     /**
      * Groups for load variables variables

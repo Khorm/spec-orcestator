@@ -2,7 +2,7 @@ package com.petra.lib.state.variable.group;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petra.lib.XXXXXcontext.DirtyContext;
-import com.petra.lib.state.variable.group.handler.VariableHandler;
+import com.petra.lib.state.variable.neww.loaders.UserVariableHandler;
 import com.petra.lib.state.variable.group.repo.ContextRepo;
 import com.petra.lib.state.variable.model.VariableGroupModel;
 import com.petra.lib.block.models.BlockModel;
@@ -47,7 +47,7 @@ public class VariableGroupList {
 
 
     public VariableGroupList(ContextRepo contextRepo, BlockModel blockModel, List<VariableGroupModel> variableGroupModels,
-                             Collection<VariableHandler> handlers, SignalRequestManager signalRequestManager,
+                             Collection<UserVariableHandler> handlers, SignalRequestManager signalRequestManager,
                              Consumer<DirtyContext> afterFillingHandler, Consumer<DirtyContext> afterErrorHandler) {
         this.contextRepo = contextRepo;
         this.afterFillingHandler = afterFillingHandler;

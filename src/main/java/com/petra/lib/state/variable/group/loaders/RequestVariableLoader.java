@@ -1,7 +1,7 @@
 package com.petra.lib.state.variable.group.loaders;
 
 import com.petra.lib.XXXXXcontext.DirtyContext;
-import com.petra.lib.block.ProcessValue;
+import com.petra.lib.environment.context.ProcessValue;
 import com.petra.lib.variable.mapper.VariableMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

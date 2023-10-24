@@ -1,8 +1,8 @@
 package com.petra.lib.block.gearbox;
 
-import com.petra.lib.environment.model.ScenarioContext;
-import com.petra.lib.state.State;
+import com.petra.lib.environment.context.ActivityContext;
+import com.petra.lib.state.ActionState;
 
 public interface Gearbox {
-    State getNextHandler(ScenarioContext scenarioContext);
+    ActionState getNextHandler(ActivityContext activityContext);
 }

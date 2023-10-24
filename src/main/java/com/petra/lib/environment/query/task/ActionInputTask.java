@@ -1,10 +1,9 @@
 package com.petra.lib.environment.query.task;
 
-import com.petra.lib.XXXXXcontext.DirtyVariablesList;
+import com.petra.lib.environment.context.variables.VariablesContext;
 import com.petra.lib.block.Block;
 import com.petra.lib.block.BlockId;
-import com.petra.lib.environment.model.ScenarioContext;
-import com.petra.lib.variable.mapper.VariableMapper;
+import com.petra.lib.environment.context.ActivityContext;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,16 +16,16 @@ import lombok.experimental.FieldDefaults;
 public class ActionInputTask implements InputTask {
 
     Block actionBlock;
-    ScenarioContext scenarioContext;
-    DirtyVariablesList signalVariableList;
+    ActivityContext activityContext;
+    VariablesContext signalVariableList;
 
     @Override
     public void run() {
         //добавить переменные из сигнала
-        DirtyVariablesList dirtyVariablesList = signalToActionVariableMapper.map(signalVariableList);
-        scenarioContext.syncCurrentInputVariableList(dirtyVariablesList);
+        VariablesContext variablesContext = signalToActionVariableMapper.map(signalVariableList);
+        activityContext.syncCurrentInputVariableList(variablesContext);
 
-        actionBlock.execute(scenarioContext);
+        actionBlock.execute(activityContext);
     }
 
 

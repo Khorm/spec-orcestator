@@ -1,26 +1,26 @@
 package com.petra.lib.block.gearbox;
 
-import com.petra.lib.environment.model.ScenarioContext;
-import com.petra.lib.state.State;
+import com.petra.lib.environment.context.ActivityContext;
+import com.petra.lib.state.ActionState;
 
 import java.util.Iterator;
 import java.util.List;
 
 abstract class AbsGearbox implements Gearbox {
-    final List<State> usedStates;
+    final List<ActionState> usedActionStates;
 
     /**
-     * @param usedStates - список используемых а активности обработчиков
+     * @param usedActionStates - список используемых а активности обработчиков
      */
-    AbsGearbox(List<State> usedStates) {
-        this.usedStates = usedStates;
+    AbsGearbox(List<ActionState> usedActionStates) {
+        this.usedActionStates = usedActionStates;
     }
 
     @Override
-    public State getNextHandler(ScenarioContext scenarioContext) {
-        Iterator<State> iter = usedStates.listIterator();
+    public ActionState getNextHandler(ActivityContext activityContext) {
+        Iterator<ActionState> iter = usedActionStates.listIterator();
         while (iter.hasNext()) {
-            if (iter.next() == scenarioContext.getCurrentState()) {
+            if (iter.next() == activityContext.getCurrentState()) {
                 return iter.next();
             }
         }

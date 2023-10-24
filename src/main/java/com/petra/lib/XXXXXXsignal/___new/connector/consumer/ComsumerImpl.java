@@ -1,7 +1,7 @@
 package com.petra.lib.XXXXXXsignal.___new.connector.consumer;
 
 import com.petra.lib.block.BlockId;
-import com.petra.lib.XXXXXcontext.DirtyVariablesList;
+import com.petra.lib.environment.context.variables.VariablesContext;
 import com.petra.lib.XXXXXXsignal.___new.connector.producer.bridge.ConsumerEntryPoint;
 import com.petra.lib.environment.dto.AnswerDto;
 import com.petra.lib.environment.output.enums.SignalResult;
@@ -33,7 +33,7 @@ public class ComsumerImpl implements Consumer {
 
 
     @Override
-    public void send(DirtyVariablesList sendingVariables, UUID businessId, ProducerHandler producerHandler) {
+    public void send(VariablesContext sendingVariables, UUID businessId, ProducerHandler producerHandler) {
         ProducerSignalDto producerSignalDto = new ProducerSignalDto(
                 businessId,
                 sendingVariables.getJSONVariablesList(),
@@ -57,7 +57,7 @@ public class ComsumerImpl implements Consumer {
     }
 
     private RequestType getRequestType() {
-        return RequestType.REQUEST_SOURCE;
+        return RequestType.SOURCE_REQUEST;
     }
 }
 

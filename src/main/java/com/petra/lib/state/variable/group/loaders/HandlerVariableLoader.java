@@ -4,9 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petra.lib.XXXXXcontext.ContextFabric;
 import com.petra.lib.XXXXXcontext.DirtyContext;
-import com.petra.lib.state.variable.group.handler.VariableContext;
-import com.petra.lib.state.variable.group.handler.VariableHandler;
-import com.petra.lib.block.ProcessValue;
+import com.petra.lib.state.variable.neww.loaders.UserVariableHandler;
+import com.petra.lib.environment.context.ProcessValue;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,6 +15,9 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
+/**
+ * Доастает переменную при помощи хендлера
+ */
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
 class HandlerVariableLoader implements VariableLoader {
@@ -31,17 +33,17 @@ class HandlerVariableLoader implements VariableLoader {
     @RequiredArgsConstructor
     public static class VariableHandlerKeeper {
         private final Long processVariableId;
-        private final VariableHandler variableHandler;
+        private final UserVariableHandler variableHandler;
     }
 
 
     @Override
     public void load(DirtyContext actionContext) {
-        VariableContext variableContext = ContextFabric.createUserContext(actionContext);
+        UserVariableContext userVariableContext = ContextFabric.createUserContext(actionContext);
         try {
             for (VariableHandlerKeeper variableHandlerKeeper : variableHandlers) {
-                Object result = variableHandlerKeeper.variableHandler.map(variableContext);
-                ProcessValue processValue = new ProcessValue(variableHandlerKeeper.processVariableId, objectMapper.writeValueAsString(result));
+                Object result = variableHandlerKeeper.variableHandler.map(userVariableContext);
+                ProcessValue processValue = new ProcessValue(variableHandlerKeeper.processVariableId, objectMapper.writeValueAsString(result), name, loaded);
                 actionContext.setValue(processValue);
             }
         } catch (JsonProcessingException e) {

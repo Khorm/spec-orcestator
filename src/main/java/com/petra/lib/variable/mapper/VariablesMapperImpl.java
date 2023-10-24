@@ -1,6 +1,6 @@
 package com.petra.lib.variable.mapper;
 
-import com.petra.lib.block.ProcessValue;
+import com.petra.lib.environment.context.ProcessValue;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ class VariablesMapperImpl implements VariableMapper{
     public ProcessValue map(ProcessValue producerVariable) {
         Long consumerVariableId = consumerVariableCollection.findConsumerVariableByProducerVariable(producerVariable.getId());
         if (consumerVariableId == null) return null;
-        return new ProcessValue(consumerVariableId, producerVariable.getValue());
+        return new ProcessValue(consumerVariableId, producerVariable.getValue(), name, loaded);
     }
 
 }

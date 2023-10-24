@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petra.lib.PetraProps;
 import com.petra.lib.block.BlockId;
-import com.petra.lib.block.ProcessValue;
+import com.petra.lib.environment.context.ProcessValue;
 import com.petra.lib.XXXXXXsignal.model.Version;
 import com.petra.lib.XXXXXXsignal.response.controller.SignalResponseHandler;
 import com.petra.lib.XXXXXXsignal.SignalId;

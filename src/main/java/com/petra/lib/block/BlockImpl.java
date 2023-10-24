@@ -2,12 +2,11 @@ package com.petra.lib.block;
 
 import com.petra.lib.block.gearbox.Gearbox;
 import com.petra.lib.block.models.BlockModel;
-import com.petra.lib.environment.model.ScenarioContext;
+import com.petra.lib.environment.context.ActivityContext;
 import com.petra.lib.environment.repo.ActionRepo;
-import com.petra.lib.state.State;
+import com.petra.lib.state.ActionState;
 import com.petra.lib.state.StateHandler;
-import com.petra.lib.state.queue.StateQueue;
-import com.petra.lib.variable.base.PureVariableList;
+import com.petra.lib.variable.pure.PureVariableList;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -23,8 +22,6 @@ import java.util.EnumMap;
 @Log4j2
 class BlockImpl implements Block {
 
-//    StateQueue stateQueue;
-
     @Getter
     BlockId id;
     String blockName;
@@ -32,7 +29,12 @@ class BlockImpl implements Block {
     Gearbox gearbox;
     ActionRepo actionRepo;
 
-    EnumMap<State, StateHandler> stateHandlerMap;
+    /**
+     * Менеджер переключения стейтов
+     */
+    Gearbox gearbox;
+
+    EnumMap<ActionState, StateHandler> stateHandlerMap;
 
     /**
      * Станрадтный список переменных для активности, которые не заполнены.
@@ -44,7 +46,7 @@ class BlockImpl implements Block {
 //        this.stateQueue = stateQueue;
         this.id = new BlockId(blockModel.getId(), blockModel.getVersion());
         this.blockName = blockModel.getName();
-        this.pureVariableList = new PureVariableList(blockModel.getStatelessVariables());
+        this.pureVariableList = new PureVariableList(blockModel.getPureVariables());
         this.isSequentially = isSequentially;
     }
 
@@ -97,18 +99,18 @@ class BlockImpl implements Block {
     }
 
     @Override
-    public void execute(ScenarioContext scenarioContext) {
-        State state = gearbox.getNextHandler(scenarioContext);
-        log.debug("Start to execute new state {} in {}", state, blockName);
-        StateHandler handler = stateHandlerMap.get(state);
-        actionRepo.updateActionState(scenarioContext.getBusinessId(), id, state);
+    public void execute(ActivityContext activityContext) {
+        ActionState actionState = gearbox.getNextHandler(activityContext);
+        log.debug("Start to execute new state {} in {}", actionState, blockName);
+        StateHandler handler = stateHandlerMap.get(actionState);
+        actionRepo.updateActionState(activityContext.getBusinessId(), id, actionState);
         try {
-            handler.execute(scenarioContext);
+            handler.execute(activityContext);
         } catch (Exception e) {
             log.error("Error in stateHandler {} : {}", blockName, e.toString());
             e.printStackTrace();
-            scenarioContext.setCurrentState(State.ERROR);
-            execute(scenarioContext);
+            activityContext.setCurrentState(ActionState.ERROR);
+            execute(activityContext);
         }
     }
 
