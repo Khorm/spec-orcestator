@@ -1,6 +1,6 @@
 package com.petra.lib.XXXXXXsignal.request;
 
-import com.petra.lib.environment.context.ProcessValue;
+import com.petra.lib.state.variable.neww.ProcessValue;
 import com.petra.lib.XXXXXXsignal.Signal;
 import com.petra.lib.XXXXXXsignal.model.Version;
 

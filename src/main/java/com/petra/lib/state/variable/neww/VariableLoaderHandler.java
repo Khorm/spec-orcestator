@@ -2,7 +2,7 @@ package com.petra.lib.state.variable.neww;
 
 import com.petra.lib.XXXXXXsignal.SignalId;
 import com.petra.lib.block.Block;
-import com.petra.lib.environment.context.ActivityContext;
+import com.petra.lib.context.ActivityContext;
 import com.petra.lib.environment.output.enums.RequestType;
 import com.petra.lib.state.ActionState;
 import com.petra.lib.state.StateHandler;

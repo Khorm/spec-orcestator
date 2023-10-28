@@ -1,6 +1,6 @@
 package com.petra.lib.block.models;
 
-import com.petra.lib.block.BlockId;
+import com.petra.lib.block.VersionBlockId;
 import com.petra.lib.XXXXXXsignal.SignalId;
 import com.petra.lib.XXXXXXsignal.model.Version;
 import com.petra.lib.variable.pure.PureVariable;
@@ -48,8 +48,8 @@ public class BlockModel {
      */
     Collection<MapperVariableModel> mappedVariablesToResponseSignals;
 
-    public BlockId getBlockId() {
-        return new BlockId(id, version);
+    public VersionBlockId getBlockId() {
+        return new VersionBlockId(id, version);
     }
 
 //    /**

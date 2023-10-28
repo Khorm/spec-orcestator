@@ -1,9 +1,9 @@
 package com.petra.lib.state.initialize;
 
-import com.petra.lib.environment.context.variables.VariablesContext;
+import com.petra.lib.context.variables.VariablesContext;
 import com.petra.lib.block.Block;
-import com.petra.lib.environment.context.ActivityContext;
-import com.petra.lib.environment.repo.ActionRepo;
+import com.petra.lib.context.ActivityContext;
+import com.petra.lib.context.repo.ActionRepo;
 import com.petra.lib.state.ActionState;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.transaction.TransactionManager;
@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
+
 
 /**
  * «аполн€ет переменные из вход€щего сигнала.
@@ -42,11 +43,12 @@ public class Initializer implements StateHandler {
 
         //обновить переменные из вход€щего сигнала
         VariablesContext variablesFrommSignal
-                = signalToActionVariableMapper.map(context.getInitializingSignal().getVariablesContext());
-        context.syncCurrentInputVariableList(variablesFrommSignal);
+                = signalToActionVariableMapper.map(context.getSignalVariablesContext());
+
 
         //записать измененеие стейта и обновление переменных в базу.
         transactionManager.executeInTransaction(jpaTransactionManager -> {
+            context.syncCurrentInputVariableList(variablesFrommSignal);
             actionRepo.updateActionState(context, ActionState.INITIALIZING);
             actionRepo.updateVariables(context, context.getVariablesContext());
         });

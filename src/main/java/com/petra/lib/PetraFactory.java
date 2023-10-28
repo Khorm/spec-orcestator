@@ -15,6 +15,9 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+/**
+ * Компонент соединяющий петру и спринг
+ */
 //@Component
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @RequiredArgsConstructor
@@ -36,6 +39,7 @@ public final class PetraFactory implements ApplicationContextAware {
 
     @Override
     public synchronized void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        dsasd
 
         UserHandlerExecutor userHandlerExecutor = new UserHandlerExecutor()
 

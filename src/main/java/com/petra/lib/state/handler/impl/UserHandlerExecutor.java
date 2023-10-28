@@ -1,9 +1,9 @@
 package com.petra.lib.state.handler.impl;
 
 import com.petra.lib.block.Block;
-import com.petra.lib.block.BlockId;
-import com.petra.lib.environment.context.ActivityContext;
-import com.petra.lib.environment.repo.ActionRepo;
+import com.petra.lib.block.VersionBlockId;
+import com.petra.lib.context.ActivityContext;
+import com.petra.lib.context.repo.ActionRepo;
 import com.petra.lib.state.ActionState;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.state.StateManager;
@@ -34,7 +34,7 @@ public class UserHandlerExecutor implements StateHandler {
     StateManager stateManager;
     JpaTransactionManager jpaTransactionManager;
     JobRepository jobRepository;
-    BlockId blockId;
+    VersionBlockId blockId;
     PureVariableList pureVariableList;
     String blockName;
 

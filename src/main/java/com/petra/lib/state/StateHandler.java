@@ -1,6 +1,6 @@
 package com.petra.lib.state;
 
-import com.petra.lib.environment.context.ActivityContext;
+import com.petra.lib.context.ActivityContext;
 
 /**
  * Standart interface for all states of block.

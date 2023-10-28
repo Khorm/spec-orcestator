@@ -1,6 +1,6 @@
 package com.petra.lib.state.variable.neww.loaders;
 
-import com.petra.lib.environment.context.ActivityContext;
+import com.petra.lib.context.ActivityContext;
 import com.petra.lib.state.variable.neww.loaders.user.UserContext;
 import com.petra.lib.state.variable.neww.loaders.user.UserContextImpl;
 import lombok.AccessLevel;

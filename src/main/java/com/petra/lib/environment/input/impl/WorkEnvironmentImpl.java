@@ -1,16 +1,15 @@
 package com.petra.lib.environment.input.impl;
 
 import com.petra.lib.block.Block;
-import com.petra.lib.block.BlockId;
-import com.petra.lib.environment.context.ActivityContext;
+import com.petra.lib.block.VersionBlockId;
+import com.petra.lib.context.ActivityContext;
 import com.petra.lib.environment.dto.AnswerDto;
 import com.petra.lib.environment.dto.Signal;
 import com.petra.lib.environment.input.WorkEnvironment;
 import com.petra.lib.environment.output.enums.SignalResult;
 import com.petra.lib.environment.query.ThreadQuery;
 import com.petra.lib.environment.query.task.ActionInputTask;
-import com.petra.lib.environment.repo.ActionRepo;
-import com.petra.lib.state.ActionState;
+import com.petra.lib.context.repo.ActionRepo;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,13 +17,29 @@ import lombok.experimental.FieldDefaults;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Обработчик сигналов. ПОдгатавливает сигнал к выполнению в блоке.
+ */
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 class WorkEnvironmentImpl implements WorkEnvironment {
 
+
     ActionRepo actionRepo;
-    Map<BlockId, Block> blocks;
+
+    /**
+     * Список всех блоков
+     */
+    Map<VersionBlockId, Block> blocks;
+
+    /**
+     * Очередь потоков для блоков
+     */
     ThreadQuery threadQuery;
+
+    /**
+     * Имя сервиса
+     */
     String serviceName;
 
 
@@ -34,7 +49,7 @@ class WorkEnvironmentImpl implements WorkEnvironment {
             //блок которому пришел сигнал
             Block blockForAction = blocks.get(inputSignal.getConsumerBlockId());
             Optional<ActivityContext> actionOpt =
-                    actionRepo.getCurrentScenarioAction(inputSignal.getScenarioId(), inputSignal.getConsumerBlockId());
+                    actionRepo.getActionContext(inputSignal.getScenarioId(), inputSignal.getConsumerBlockId());
 
             //если сигнал раньше не приходил и происходит ининциализация
             if (actionOpt.isEmpty()) {
@@ -48,13 +63,11 @@ class WorkEnvironmentImpl implements WorkEnvironment {
         }
     }
 
-    private void createInitTask(Block blockForAction, Signal inputSignal) {
-        if (blockForAction == null) throw new IllegalArgumentException("Block not found");
-        ActivityContext newActivityContext = actionRepo.createScenarioModel(inputSignal.getScenarioId(),
-                blockForAction.getId(), serviceName);
-        newActivityContext.setCurrentState(ActionState.INITIALIZING);
+    private void createInitTask(Block actionBlock, Signal inputSignal) {
+        if (actionBlock == null) throw new IllegalArgumentException("Block not found");
+        ActivityContext newActivityContext = actionRepo.createNewActionContext(inputSignal);
 
-        ActionInputTask initTask = new ActionInputTask(blockForAction,
+        ActionInputTask initTask = new ActionInputTask(actionBlock,
                 newActivityContext,
                 inputSignal.getVariablesContext());
         threadQuery.pop(initTask);

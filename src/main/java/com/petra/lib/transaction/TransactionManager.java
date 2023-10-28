@@ -1,5 +1,9 @@
 package com.petra.lib.transaction;
 
+
+import org.springframework.orm.jpa.JpaTransactionManager;
+
 public interface TransactionManager {
-    void executeInTransaction(TransactionRunnable task);
+    <T> T executeInTransaction(TransactionRunnable<T> task, int transactionDefinition);
+    JpaTransactionManager getJpaTransactionManager();
 }

@@ -1,8 +1,8 @@
 package com.petra.lib.state.variable.neww.loaders.source;
 
 import com.petra.lib.XXXXXXsignal.SignalId;
-import com.petra.lib.environment.context.variables.VariablesContext;
-import com.petra.lib.environment.context.ActivityContext;
+import com.petra.lib.context.variables.VariablesContext;
+import com.petra.lib.context.ActivityContext;
 import com.petra.lib.environment.output.OutputSocket;
 import com.petra.lib.environment.output.enums.RequestType;
 import com.petra.lib.state.variable.neww.loaders.VariableLoader;

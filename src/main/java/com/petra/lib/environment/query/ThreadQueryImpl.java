@@ -1,6 +1,6 @@
 package com.petra.lib.environment.query;
 
-import com.petra.lib.block.BlockId;
+import com.petra.lib.block.VersionBlockId;
 import com.petra.lib.environment.query.task.InputTask;
 import lombok.extern.log4j.Log4j2;
 
@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 @Log4j2
 class ThreadQueryImpl implements ThreadQuery {
 
-    private final Set<BlockId> currentExecutedSets = Collections.synchronizedSet(new HashSet<>());
+    private final Set<VersionBlockId> currentExecutedSets = Collections.synchronizedSet(new HashSet<>());
 
     /**
      * ќчередность выстраиваетс€ только по блокам

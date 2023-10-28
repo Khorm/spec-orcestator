@@ -2,8 +2,8 @@ package com.petra.lib.block;
 
 import com.petra.lib.block.gearbox.Gearbox;
 import com.petra.lib.block.models.BlockModel;
-import com.petra.lib.environment.context.ActivityContext;
-import com.petra.lib.environment.repo.ActionRepo;
+import com.petra.lib.context.ActivityContext;
+import com.petra.lib.context.repo.ActionRepo;
 import com.petra.lib.state.ActionState;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.variable.pure.PureVariableList;
@@ -23,7 +23,7 @@ import java.util.EnumMap;
 class BlockImpl implements Block {
 
     @Getter
-    BlockId id;
+    VersionBlockId id;
     String blockName;
     boolean isSequentially;
     Gearbox gearbox;
@@ -44,7 +44,7 @@ class BlockImpl implements Block {
 
     private BlockImpl(BlockModel blockModel, boolean isSequentially) {
 //        this.stateQueue = stateQueue;
-        this.id = new BlockId(blockModel.getId(), blockModel.getVersion());
+        this.id = new VersionBlockId(blockModel.getId(), blockModel.getVersion());
         this.blockName = blockModel.getName();
         this.pureVariableList = new PureVariableList(blockModel.getPureVariables());
         this.isSequentially = isSequentially;

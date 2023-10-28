@@ -1,7 +1,7 @@
 package com.petra.lib.XXXXXXsignal.response.controller;
 
-import com.petra.lib.block.BlockId;
-import com.petra.lib.environment.context.ProcessValue;
+import com.petra.lib.block.VersionBlockId;
+import com.petra.lib.state.variable.neww.ProcessValue;
 import com.petra.lib.XXXXXXsignal.response.ResponseSignal;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +15,9 @@ import java.util.UUID;
 public class ResponseEndTask implements Runnable{
 
     Collection<ProcessValue> signalAnswerVariables;
-    BlockId requestBlockId;
+    VersionBlockId requestBlockId;
     UUID scenarioId;
-    BlockId responseBlockId;
+    VersionBlockId responseBlockId;
     ResponseSignal responseSignal;
     boolean execWithoutErrors;
 

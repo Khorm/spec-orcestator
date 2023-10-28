@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petra.lib.XXXXXcontext.ContextFabric;
 import com.petra.lib.XXXXXcontext.DirtyContext;
 import com.petra.lib.state.variable.neww.loaders.UserVariableHandler;
-import com.petra.lib.environment.context.ProcessValue;
+import com.petra.lib.state.variable.neww.ProcessValue;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

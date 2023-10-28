@@ -1,8 +1,8 @@
 package com.petra.lib.state.error;
 
-import com.petra.lib.environment.context.ActivityContext;
+import com.petra.lib.context.ActivityContext;
 import com.petra.lib.environment.output.OutputSocket;
-import com.petra.lib.environment.repo.ActionRepo;
+import com.petra.lib.context.repo.ActionRepo;
 import com.petra.lib.state.ActionState;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.transaction.TransactionManager;

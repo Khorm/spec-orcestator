@@ -3,7 +3,7 @@ package com.petra.lib.XXXXXXsignal.request;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petra.lib.PetraProps;
-import com.petra.lib.environment.context.ProcessValue;
+import com.petra.lib.state.variable.neww.ProcessValue;
 import com.petra.lib.XXXXXXsignal.SignalId;
 import com.petra.lib.XXXXXXsignal.dto.RequestDto;
 import com.petra.lib.XXXXXXsignal.dto.ResponseDto;

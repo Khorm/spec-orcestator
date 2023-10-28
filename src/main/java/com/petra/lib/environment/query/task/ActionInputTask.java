@@ -1,9 +1,9 @@
 package com.petra.lib.environment.query.task;
 
-import com.petra.lib.environment.context.variables.VariablesContext;
+import com.petra.lib.context.variables.VariablesContext;
 import com.petra.lib.block.Block;
-import com.petra.lib.block.BlockId;
-import com.petra.lib.environment.context.ActivityContext;
+import com.petra.lib.block.VersionBlockId;
+import com.petra.lib.context.ActivityContext;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -30,7 +30,7 @@ public class ActionInputTask implements InputTask {
 
 
     @Override
-    public BlockId getBlockId() {
+    public VersionBlockId getBlockId() {
         return actionBlock.getId();
     }
 

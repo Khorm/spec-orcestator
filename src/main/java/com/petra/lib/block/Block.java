@@ -1,10 +1,10 @@
 package com.petra.lib.block;
 
-import com.petra.lib.environment.context.ActivityContext;
+import com.petra.lib.context.ActivityContext;
 
 
 public interface Block {
-    BlockId getId();
+    VersionBlockId getId();
     String getName();
 
     void execute(ActivityContext activityContext);

@@ -9,7 +9,7 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class BlockId {
+public class VersionBlockId {
     Long blockId;
     Version version;
 }

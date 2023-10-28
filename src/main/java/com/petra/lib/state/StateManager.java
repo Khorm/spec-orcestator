@@ -2,11 +2,12 @@ package com.petra.lib.state;
 
 import java.util.Map;
 
-public class StateManager {
+@Deprecated
+ class StateManager {
 
-    private final Map<ActionState, StateHandler> stateStateHandlerMap;
+//    private final Map<ActionState, StateHandler> stateStateHandlerMap;
 
-    public StateHandler getStateHandler(ActionState actionState){
-        return stateStateHandlerMap.get(actionState);
-    }
+//    public StateHandler getStateHandler(ActionState actionState){
+//        return stateStateHandlerMap.get(actionState);
+//    }
 }

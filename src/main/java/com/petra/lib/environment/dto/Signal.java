@@ -1,8 +1,7 @@
 package com.petra.lib.environment.dto;
 
-import com.petra.lib.XXXXXXsignal.response.ResponseType;
-import com.petra.lib.environment.context.variables.VariablesContext;
-import com.petra.lib.block.BlockId;
+import com.petra.lib.context.variables.VariablesContext;
+import com.petra.lib.block.VersionBlockId;
 import com.petra.lib.XXXXXXsignal.SignalId;
 import com.petra.lib.environment.output.enums.AnswerType;
 import com.petra.lib.environment.output.enums.RequestType;
@@ -13,6 +12,9 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.UUID;
 
+/**
+ * объект передающийс€ между блоками в качестве сигнала.
+ */
 @Getter
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -46,12 +48,12 @@ public class Signal {
     /**
      * айди активности что отправл€ет сигнал
      */
-    BlockId producerActionId;
+    VersionBlockId producerActionId;
 
     /**
      * јйди активностей что принимает сигнал
      */
-    BlockId consumerBlockId;
+    VersionBlockId consumerBlockId;
 
     /**
      * им€ сервиса принимающего сигнала

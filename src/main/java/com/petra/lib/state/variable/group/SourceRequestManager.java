@@ -3,8 +3,8 @@ package com.petra.lib.state.variable.group;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petra.lib.PetraException;
 import com.petra.lib.XXXXXcontext.DirtyContext;
-import com.petra.lib.block.BlockId;
-import com.petra.lib.environment.context.ProcessValue;
+import com.petra.lib.block.VersionBlockId;
+import com.petra.lib.state.variable.neww.ProcessValue;
 import com.petra.lib.XXXXXXsignal.request.controller.AnswerListener;
 import com.petra.lib.XXXXXXsignal.request.controller.SignalRequestManager;
 import com.petra.lib.XXXXXXsignal.SignalId;
@@ -35,13 +35,13 @@ public class SourceRequestManager implements AnswerListener {
     final SignalRequestManager signalRequestManager;
     final VariableMapper toSourceVariableMapper;
     final ContextRepo contextRepo;
-    final BlockId blockId;
+    final VersionBlockId blockId;
     final SignalId requestSignalId;
 
     SourceRequestManager(SignalRequestManager signalRequestManager,
                          VariableMapper toSourceVariableMapper,
                          ContextRepo contextRepo,
-                         BlockId blockId,
+                         VersionBlockId blockId,
                          SignalId requestSignalId) {
         this.signalRequestManager = signalRequestManager;
         this.toSourceVariableMapper = toSourceVariableMapper;

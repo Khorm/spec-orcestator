@@ -1,7 +1,7 @@
 package com.petra.lib.state.variable.group.loaders;
 
 import com.petra.lib.XXXXXcontext.DirtyContext;
-import com.petra.lib.environment.context.ProcessValue;
+import com.petra.lib.state.variable.neww.ProcessValue;
 import com.petra.lib.XXXXXXsignal.SignalId;
 import com.petra.lib.XXXXXXsignal.request.controller.SignalRequestManager;
 import com.petra.lib.XXXXXXsignal.response.ResponseType;

@@ -2,8 +2,8 @@ package com.petra.lib.state.variable.neww.loaders.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petra.lib.environment.context.ActivityContext;
-import com.petra.lib.environment.context.ProcessValue;
+import com.petra.lib.context.ActivityContext;
+import com.petra.lib.state.variable.neww.ProcessValue;
 import com.petra.lib.variable.pure.PureVariableList;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

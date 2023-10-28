@@ -17,11 +17,6 @@ public enum ActionState {
     EXECUTING,
 
     /**
-     * Save execution result
-     */
-//    EXECUTION_REGISTRATION,
-
-    /**
      * Response after execution
      */
     END,

@@ -1,8 +1,8 @@
 package com.petra.lib.environment.output;
 
-import com.petra.lib.block.BlockId;
-import com.petra.lib.environment.context.variables.VariablesContext;
-import com.petra.lib.environment.context.ActivityContext;
+import com.petra.lib.block.VersionBlockId;
+import com.petra.lib.context.variables.VariablesContext;
+import com.petra.lib.context.ActivityContext;
 import com.petra.lib.environment.dto.AnswerDto;
 import com.petra.lib.environment.dto.Signal;
 import com.petra.lib.environment.input.WorkEnvironment;
@@ -37,7 +37,7 @@ class HttpOutputSocket implements OutputSocket {
     /**
      * јйди блока получател€
      */
-    BlockId consumerActionId;
+    VersionBlockId consumerActionId;
 
     /**
      * им€ сервиса получател€

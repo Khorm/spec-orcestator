@@ -1,7 +1,7 @@
 package com.petra.lib.XXXXXcontext;
 
-import com.petra.lib.environment.context.ProcessValue;
-import com.petra.lib.environment.context.variables.VariablesContext;
+import com.petra.lib.state.variable.neww.ProcessValue;
+import com.petra.lib.context.variables.VariablesContext;
 import com.petra.lib.variable.pure.PureVariableList;
 import lombok.AccessLevel;
 import lombok.ToString;

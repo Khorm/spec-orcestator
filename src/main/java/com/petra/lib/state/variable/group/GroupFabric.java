@@ -2,7 +2,7 @@ package com.petra.lib.state.variable.group;
 
 import com.petra.lib.annotation.MappingHandler;
 import com.petra.lib.state.variable.group.loaders.VariableFabric;
-import com.petra.lib.block.BlockId;
+import com.petra.lib.block.VersionBlockId;
 import com.petra.lib.XXXXXXsignal.request.controller.SignalRequestManager;
 import com.petra.lib.state.variable.neww.loaders.UserVariableHandler;
 import com.petra.lib.state.variable.group.loaders.VariableLoader;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 class GroupFabric {
 
     static VariableGroup createGroup(SignalRequestManager signalRequestManager, VariableGroupModel variableGroupModel, Collection<UserVariableHandler> handlers,
-                                     ContextRepo contextRepo, BlockId blockId, String blockName) {
+                                     ContextRepo contextRepo, VersionBlockId blockId, String blockName) {
 
 //        SourceRequestManager sourceRequestManager = createSourceLoader(signalRequestManager, variableGroupModel, contextRepo, blockId);
         Collection<VariableLoader> variableLoaders = createVariableLoader(variableGroupModel, handlers, blockName);

@@ -1,9 +1,9 @@
 package com.petra.lib.environment.query.task;
 
-import com.petra.lib.block.BlockId;
+import com.petra.lib.block.VersionBlockId;
 
 public interface InputTask extends Runnable{
 
-    BlockId getBlockId();
+    VersionBlockId getBlockId();
     boolean isSequentially();
 }

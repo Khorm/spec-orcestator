@@ -1,7 +1,7 @@
 package com.petra.lib.XXXXXXsignal.dto;
 
-import com.petra.lib.block.BlockId;
-import com.petra.lib.environment.context.ProcessValue;
+import com.petra.lib.block.VersionBlockId;
+import com.petra.lib.state.variable.neww.ProcessValue;
 import com.petra.lib.XXXXXXsignal.SignalId;
 import com.petra.lib.XXXXXXsignal.response.ResponseType;
 import lombok.*;
@@ -18,8 +18,8 @@ import java.util.UUID;
 public class ResponseDto {
     UUID scenarioId;
     SignalId signalId;
-    BlockId requestBlockId;
-    BlockId responseBlockId;
+    VersionBlockId requestBlockId;
+    VersionBlockId responseBlockId;
     ResponseType responseType;
     Collection<ProcessValue> signalVariables;
 }

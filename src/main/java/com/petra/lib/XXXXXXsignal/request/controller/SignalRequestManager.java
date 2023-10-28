@@ -1,7 +1,7 @@
 package com.petra.lib.XXXXXXsignal.request.controller;
 
-import com.petra.lib.block.BlockId;
-import com.petra.lib.environment.context.ProcessValue;
+import com.petra.lib.block.VersionBlockId;
+import com.petra.lib.state.variable.neww.ProcessValue;
 import com.petra.lib.XXXXXXsignal.SignalId;
 
 import java.util.Collection;
@@ -18,5 +18,5 @@ public interface SignalRequestManager {
      * @param answerListener - callback
      */
     void request(SignalId signalId, Collection<ProcessValue> signalVariables,
-                 UUID scenarioId, BlockId blockId, AnswerListener answerListener);
+                 UUID scenarioId, VersionBlockId blockId, AnswerListener answerListener);
 }

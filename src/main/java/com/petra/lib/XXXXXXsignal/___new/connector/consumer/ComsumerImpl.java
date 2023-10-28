@@ -1,7 +1,7 @@
 package com.petra.lib.XXXXXXsignal.___new.connector.consumer;
 
-import com.petra.lib.block.BlockId;
-import com.petra.lib.environment.context.variables.VariablesContext;
+import com.petra.lib.block.VersionBlockId;
+import com.petra.lib.context.variables.VariablesContext;
 import com.petra.lib.XXXXXXsignal.___new.connector.producer.bridge.ConsumerEntryPoint;
 import com.petra.lib.environment.dto.AnswerDto;
 import com.petra.lib.environment.output.enums.SignalResult;
@@ -21,12 +21,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ComsumerImpl implements Consumer {
-    BlockId blockId;
+    VersionBlockId blockId;
     Long signalId;
     String signalName;
     Version signalVersion;
     String producerServiceName;
-    BlockId consumerActionId;
+    VersionBlockId consumerActionId;
     Long consumerServiceId;
     String consumerServiceName;
     ConsumerEntryPoint consumerEntryPoint;

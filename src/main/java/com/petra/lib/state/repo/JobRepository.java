@@ -1,34 +1,24 @@
 package com.petra.lib.state.repo;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.petra.lib.block.BlockId;
-import com.petra.lib.environment.context.ProcessValue;
-import com.petra.lib.XXXXXmanager.ExecutionStatus;
+import com.petra.lib.workflow.model.ExecutionStatus;
 import lombok.AccessLevel;
-import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import java.util.Collection;
 import java.util.Optional;
-import java.util.UUID;
 
 @Deprecated
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JobRepository {
 //    NamedParameterJdbcTemplate jdbcTemplate;
-//    JpaTransactionManager jpaTransactionManager;
-//
-//    public JobRepository(JpaTransactionManager jpaTransactionManager) {
-//        this.jpaTransactionManager = jpaTransactionManager;
-//    }
+    JpaTransactionManager jpaTransactionManager;
+
+    public JobRepository(JpaTransactionManager jpaTransactionManager) {
+        this.jpaTransactionManager = jpaTransactionManager;
+    }
 //
 //    /**
 //     * ѕровер€ет, был ли блок выполнен раньше
@@ -37,20 +27,23 @@ public class JobRepository {
 //     * @param blockId    - айди блока
 //     * @return
 //     */
-//    public Optional<ExecutionStatus> isExecutedBefore(UUID scenarioId, BlockId blockId) {
-//        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-//        def.setIsolationLevel(TransactionDefinition.ISOLATION_SERIALIZABLE);
-//        NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(jpaTransactionManager.getDataSource());
-//
-//        SqlParameterSource namedParameters = new MapSqlParameterSource()
-//                .addValue("scenarioId", scenarioId)
-//                .addValue("blockId", blockId.getBlockId())
-//                .addValue("blockVersion", blockId.getVersion().toString());
-//
-//        String status = jdbcTemplate.queryForObject("SELECT execution_status FROM EXECUTION_HISTORY WHERE SCENARIO_ID " +
-//                " = :scenarioId AND BLOCK_ID = :blockId AND BLOCK_VERSION = :blockVersion ", namedParameters, String.class);
-//        return Optional.ofNullable(ExecutionStatus.valueOf(status));
-//    }
+    public Optional<ExecutionStatus> isExecutedBefore(UUID scenarioId, BlockId blockId) {
+
+
+
+        DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+        def.setIsolationLevel(TransactionDefinition.ISOLATION_SERIALIZABLE);
+        NamedParameterJdbcTemplate jdbcTemplate = new NamedParameterJdbcTemplate(jpaTransactionManager.getDataSource());
+
+        SqlParameterSource namedParameters = new MapSqlParameterSource()
+                .addValue("scenarioId", scenarioId)
+                .addValue("blockId", blockId.getBlockId())
+                .addValue("blockVersion", blockId.getVersion().toString());
+
+        String status = jdbcTemplate.queryForObject("SELECT execution_status FROM EXECUTION_HISTORY WHERE SCENARIO_ID " +
+                " = :scenarioId AND BLOCK_ID = :blockId AND BLOCK_VERSION = :blockVersion ", namedParameters, String.class);
+        return Optional.ofNullable(ExecutionStatus.valueOf(status));
+    }
 //
 //    public void setExecutingStatus(ExecutionStatus executionStatus) {
 //
