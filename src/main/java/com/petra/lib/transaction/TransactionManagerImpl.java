@@ -26,6 +26,11 @@ public class TransactionManagerImpl implements TransactionManager {
         }
     }
 
+    @Override
+    public <T> T executeInTransaction(TransactionRunnable<T> task) {
+        return executeInTransaction(task, TransactionDefinition.ISOLATION_READ_COMMITTED);
+    }
+
     public  JpaTransactionManager getJpaTransactionManager(){
         return jpaTransactionManager;
     }

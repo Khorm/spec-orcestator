@@ -17,6 +17,6 @@ public class Version {
     Integer patch;
 
     public String getVersionName(){
-        return major.toString();
+        return major.toString() + "." + minor.toString() + "." + patch.toString();
     }
 }

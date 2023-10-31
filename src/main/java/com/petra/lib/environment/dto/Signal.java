@@ -33,13 +33,17 @@ public class Signal {
     /**
      * айди сигнала
      */
-    SignalId signalId;
+    VersionBlockId signalId;
 
     /**
      * имя сигнала
      */
     String signalName;
 
+    /**
+     * id продюсера сервиса
+     */
+    Long producerServiceId;
     /**
      * имя сервиса продюсера сигнала
      */
@@ -48,12 +52,17 @@ public class Signal {
     /**
      * айди активности что отправляет сигнал
      */
-    VersionBlockId producerActionId;
+    VersionBlockId producerBlockId;
 
     /**
      * Айди активностей что принимает сигнал
      */
     VersionBlockId consumerBlockId;
+
+    /**
+     * АЙДИ входящего сервиса
+     */
+    Long consumerServiceId;
 
     /**
      * имя сервиса принимающего сигнала

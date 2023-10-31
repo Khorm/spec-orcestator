@@ -30,7 +30,12 @@ public class ActivityContext {
     /**
      * Айди блока, который его сейчас исполняет
      */
-    Long currentBlockId;
+    VersionBlockId currentBlockId;
+
+    /**
+     * Текущая транзакция
+     */
+    Long currentTransactionId;
 
     /**
      * Имя сервиса в котором исполняетя бизнес процесс
@@ -82,6 +87,8 @@ public class ActivityContext {
 //        this.variablesContext = variablesContext;
 //        this.pureVariableList = pureVariableList;
 //    }
+
+
 
 
     public void syncCurrentInputVariableList(VariablesContext inputVariablesContext){

@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * Обработчик сигналов. ПОдгатавливает сигнал к выполнению в блоке.
+ * Обработчик сигналов. Подгатавливает сигнал к выполнению в блоке.
  */
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -36,11 +36,6 @@ class WorkEnvironmentImpl implements WorkEnvironment {
      * Очередь потоков для блоков
      */
     ThreadQuery threadQuery;
-
-    /**
-     * Имя сервиса
-     */
-    String serviceName;
 
 
     @Override
@@ -63,8 +58,14 @@ class WorkEnvironmentImpl implements WorkEnvironment {
         }
     }
 
+    /**
+     * Запустить блок на исполнение
+     * @param actionBlock
+     * @param inputSignal
+     */
     private void createInitTask(Block actionBlock, Signal inputSignal) {
         if (actionBlock == null) throw new IllegalArgumentException("Block not found");
+
         ActivityContext newActivityContext = actionRepo.createNewActionContext(inputSignal);
 
         ActionInputTask initTask = new ActionInputTask(actionBlock,
