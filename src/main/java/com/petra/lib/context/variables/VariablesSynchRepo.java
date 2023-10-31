@@ -3,10 +3,9 @@ package com.petra.lib.context.variables;
 import com.petra.lib.state.variable.neww.ProcessValue;
 
 import java.util.Map;
+import java.util.UUID;
 
-class VariablesSynchRepo {
-    void commit(Map<Long, ProcessValue> processValueMap){
-
-    }
+public interface VariablesSynchRepo {
+    void commitValues(Map<Long, ProcessValue> processValueMap, UUID actionId);
 
 }

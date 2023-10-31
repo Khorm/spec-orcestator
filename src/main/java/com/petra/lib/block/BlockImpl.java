@@ -3,7 +3,7 @@ package com.petra.lib.block;
 import com.petra.lib.block.gearbox.Gearbox;
 import com.petra.lib.block.models.BlockModel;
 import com.petra.lib.context.ActivityContext;
-import com.petra.lib.context.repo.ActionRepo;
+import com.petra.lib.environment.repo.ActionRepo;
 import com.petra.lib.state.ActionState;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.variable.pure.PureVariableList;

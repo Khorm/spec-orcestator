@@ -6,6 +6,7 @@ import com.petra.lib.environment.dto.Signal;
 import com.petra.lib.state.ActionState;
 import com.petra.lib.variable.pure.PureVariableList;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Getter
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Builder
 public class ActivityContext {
 
     UUID actionId;
@@ -43,9 +45,9 @@ public class ActivityContext {
     String currentServiceName;
 
     /**
-     * јйди транзакции блока
+     * јйди сервиса в котором исполн€ет€ бизнес процесс
      */
-    Long currentTransactionId;
+    Long currentServiceId;
 
     /**
      * —игнал, ининциализировавший активность в этом блоке

@@ -37,6 +37,9 @@ class WorkEnvironmentImpl implements WorkEnvironment {
      */
     ThreadQuery threadQuery;
 
+    String currentServiceName;
+    Long currentServiceId;
+
 
     @Override
     public AnswerDto consume(Signal inputSignal) {
@@ -66,7 +69,7 @@ class WorkEnvironmentImpl implements WorkEnvironment {
     private void createInitTask(Block actionBlock, Signal inputSignal) {
         if (actionBlock == null) throw new IllegalArgumentException("Block not found");
 
-        ActivityContext newActivityContext = actionRepo.createNewActionContext(inputSignal);
+        ActivityContext newActivityContext = actionRepo.createNewActionContext(inputSignal, actionBlock, currentServiceName, currentServiceId);
 
         ActionInputTask initTask = new ActionInputTask(actionBlock,
                 newActivityContext,
