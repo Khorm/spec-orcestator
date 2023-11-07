@@ -1,6 +1,6 @@
 package com.petra.lib.state.XXXXqueue;
 
-import com.petra.lib.state.ActionState;
+import com.petra.lib.context.state.ActionState;
 import com.petra.lib.state.StateHandler;
 
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ class WorkflowQueue extends StateQueueImpl{
         actionStates.add(ActionState.INITIALIZING);
         actionStates.add(ActionState.FILL_CONTEXT_VARIABLES);
         actionStates.add(ActionState.EXECUTING);
-        actionStates.add(ActionState.END);
+        actionStates.add(ActionState.COMPLETION);
         return actionStates;
     }
 

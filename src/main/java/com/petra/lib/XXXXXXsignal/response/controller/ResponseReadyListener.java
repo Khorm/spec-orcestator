@@ -1,7 +1,7 @@
 package com.petra.lib.XXXXXXsignal.response.controller;
 
-import com.petra.lib.block.VersionBlockId;
-import com.petra.lib.state.variable.neww.ProcessValue;
+import com.petra.lib.block.VersionId;
+import com.petra.lib.context.variables.ProcessValue;
 import com.petra.lib.XXXXXXsignal.SignalId;
 
 import java.util.Collection;
@@ -10,18 +10,18 @@ import java.util.UUID;
 public interface ResponseReadyListener {
     void answerToRequest(Collection<ProcessValue> signalAnswerVariables,
                          SignalId signalId,
-                         VersionBlockId requestBlockId,
+                         VersionId requestBlockId,
                          UUID scenarioId,
-                         VersionBlockId responseBlockId);
+                         VersionId responseBlockId);
 
     void errorToRequest(SignalId signalId,
-                        VersionBlockId requestBlockId,
+                        VersionId requestBlockId,
                         UUID scenarioId,
-                        VersionBlockId responseBlockId);
+                        VersionId responseBlockId);
 
     void idempotencyErrorToRequest(Collection<ProcessValue> signalAnswerVariables,
                                   SignalId signalId,
-                                  VersionBlockId requestBlockId,
+                                  VersionId requestBlockId,
                                   UUID scenarioId,
-                                  VersionBlockId responseBlockId);
+                                  VersionId responseBlockId);
 }

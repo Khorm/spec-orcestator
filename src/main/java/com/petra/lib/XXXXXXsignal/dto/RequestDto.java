@@ -1,7 +1,7 @@
 package com.petra.lib.XXXXXXsignal.dto;
 
-import com.petra.lib.block.VersionBlockId;
-import com.petra.lib.state.variable.neww.ProcessValue;
+import com.petra.lib.block.VersionId;
+import com.petra.lib.context.variables.ProcessValue;
 import com.petra.lib.XXXXXXsignal.SignalId;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Deprecated
 public class RequestDto {
     UUID scenarioId;
-    VersionBlockId requestBlockId;
+    VersionId requestBlockId;
     SignalId signalId;
     Collection<ProcessValue> signalVariables;
 }

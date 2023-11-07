@@ -1,6 +1,6 @@
 package com.petra.lib;
 
-import com.petra.lib.state.handler.impl.UserHandlerExecutor;
+import com.petra.lib.state.handler.UserHandlerExecutor;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

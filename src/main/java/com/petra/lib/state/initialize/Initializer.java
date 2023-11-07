@@ -1,10 +1,9 @@
 package com.petra.lib.state.initialize;
 
-import com.petra.lib.context.variables.VariablesContext;
 import com.petra.lib.block.Block;
 import com.petra.lib.context.ActivityContext;
-import com.petra.lib.context.repo.ActionRepo;
-import com.petra.lib.state.ActionState;
+import com.petra.lib.context.state.ActionState;
+import com.petra.lib.context.variables.VariablesContainer;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.transaction.TransactionManager;
 import com.petra.lib.variable.mapper.VariableMapper;
@@ -24,14 +23,18 @@ public class Initializer implements StateHandler {
     /**
      * Маппер с сигнальных переменных на
      */
-    VariableMapper signalToActionVariableMapper;
+    VariableMapper initSignalToActionVariableMapper;
+
+    /**
+     * Блок управления активностью
+     */
     Block blockManager;
 
     /**
      * менеджер транзакций
      */
     TransactionManager transactionManager;
-    ActionRepo actionRepo;
+
     @Override
     public ActionState getState() {
         return ActionState.INITIALIZING;
@@ -39,18 +42,17 @@ public class Initializer implements StateHandler {
 
     @Override
     public void execute(ActivityContext context) throws Exception {
-        log.debug("Start initialization {}", context.getCurrentBlockId());
+        log.debug("Start initialization {}", blockManager.getName());
 
-        //обновить переменные из входящего сигнала
-        VariablesContext variablesFrommSignal
-                = signalToActionVariableMapper.map(context.getSignalVariablesContext());
+        //получить переменные из входящего сигнала
+        VariablesContainer variablesFromSignal
+                = initSignalToActionVariableMapper.map(context.getSignalVariables());
 
 
         //записать измененеие стейта и обновление переменных в базу.
-        transactionManager.executeInTransaction(jpaTransactionManager -> {
-            context.syncCurrentInputVariableList(variablesFrommSignal);
-            actionRepo.updateActionState(context, ActionState.INITIALIZING);
-            actionRepo.updateVariables(context, context.getVariablesContext());
+        transactionManager.commitInTransaction(jpaTransactionManager -> {
+            context.setNewState(ActionState.INITIALIZING);
+            context.addVariables(variablesFromSignal);
         });
         blockManager.execute(context);
     }

@@ -1,6 +1,6 @@
 package com.petra.lib.XXXXXXsignal.request.controller;
 
-import com.petra.lib.state.variable.neww.ProcessValue;
+import com.petra.lib.context.variables.ProcessValue;
 import com.petra.lib.XXXXXXsignal.queue.TaskQueueManager;
 import com.petra.lib.XXXXXXsignal.dto.RequestDto;
 import com.petra.lib.XXXXXXsignal.dto.ResponseDto;

@@ -1,38 +1,38 @@
 package com.petra.lib.context;
 
-import com.petra.lib.context.variables.VariablesContext;
-import com.petra.lib.block.VersionBlockId;
-import com.petra.lib.environment.dto.Signal;
-import com.petra.lib.state.ActionState;
+import com.petra.lib.block.VersionId;
+import com.petra.lib.context.state.ActionStateContext;
+import com.petra.lib.context.variables.ProcessValue;
+import com.petra.lib.context.variables.VariablesContainer;
+import com.petra.lib.context.state.ActionState;
+import com.petra.lib.remote.signal.SignalType;
 import com.petra.lib.variable.pure.PureVariableList;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Optional;
 import java.util.UUID;
 
 /**
  * Общий контекст исполнения в текущем блоке
  */
-@Getter
-@RequiredArgsConstructor
+
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Builder
 public class ActivityContext {
 
+    /**
+     * ID активности
+     */
     UUID actionId;
 
     /**
      * АЙДИ бизнеспроцесса
      */
-    UUID businessId;
-
-    /**
-     * Айди блока, который его сейчас исполняет
-     */
-    VersionBlockId currentBlockId;
+    @Getter
+    UUID scenarioId;
 
     /**
      * Текущая транзакция
@@ -40,32 +40,48 @@ public class ActivityContext {
     Long currentTransactionId;
 
     /**
-     * Имя сервиса в котором исполняетя бизнес процесс
-     */
-    String currentServiceName;
-
-    /**
-     * Айди сервиса в котором исполняетя бизнес процесс
-     */
-    Long currentServiceId;
-
-    /**
-     * Сигнал, ининциализировавший активность в этом блоке
-     */
-    Signal startSignal;
-
-    /**
      * Текущая стадия выполнения активности
      */
-    ActionState currentState;
-
+    ActionStateContext actionStateContext;
 
     /**
      * Текущие переменные активности
      */
-    VariablesContext variablesContext;
+    @Getter
+    VariablesContainer contextVariablesContainer;
 
-    PureVariableList pureVariableList;
+    /**
+     * Входной сигнал
+     */
+    RequestSignal requestSignal;
+
+    @Getter
+    PureVariableList activityVariables;
+
+
+    /**
+     * Исходник, откуда пришел сигнал на инициализацию
+     *
+     */
+    @Getter
+    VersionId requestBlockId;
+    @Getter
+    String requestServiceName;
+
+
+    /**
+     * Byajhvfwbz j ntreotv bcgjkytybb
+     *
+     */
+    @Getter
+    VersionId currentBlockId;
+    @Getter
+    String currentServiceName;
+
+
+
+
+
 
 //    /**
 //     * @param businessId           - ади текущего бизнес процесса
@@ -93,31 +109,53 @@ public class ActivityContext {
 
 
 
-    public void syncCurrentInputVariableList(VariablesContext inputVariablesContext){
-        variablesContext.syncVariables(inputVariablesContext);
+    public void addVariables(VariablesContainer inputVariablesContainer){
+        contextVariablesContainer.addVariables(inputVariablesContainer);
     }
 
-    public VariablesContext getSignalVariablesContext(){
-        return startSignal.getVariablesContext();
+    public VariablesContainer getSignalVariables(){
+        return requestSignal.getSignalContainer();
     }
 
+    public void setNewState(ActionState actionState){
+        actionStateContext.setCurrentState(actionState);
+    }
 
+//    public VariablesContainer getContextVariables(){
+//        return contextVariablesContainer;
+//    }
 
-//    public void setCurrentState(ActionState actionState){
-//        variablesContext.setCurrentActionState(actionState);
-//    }
-//
-//    public ActionState getCurrentState(){
-//        return variablesContext.getCurrentActionState();
-//    }
-//
-//    public RequestType getRequestType(){
-//        return startSignal.getRequestType();
-//    }
-//
-//    public SignalId getCurrentSignalId(){
-//        return currentSignal.getSignalId();
-//    }
+    public Optional<ProcessValue> getValueById(Long variableId){
+        return contextVariablesContainer.getValueById(variableId);
+    }
+
+    public ProcessValue getValueByVariableName(String variableName){
+        return contextVariablesContainer.getValueByName(variableName);
+    }
+
+    public ActionState getState(){
+        return actionStateContext.getState();
+    }
+
+    public SignalType getSignalType(){
+        return requestSignal.getSignalType();
+    }
+
+    public void setValue(ProcessValue value){
+        contextVariablesContainer.addVariable(value);
+    }
+
+    public VersionId getRequestSignalId(){
+        return requestSignal.getVersionId();
+    }
+
+    public String getRequestSignalName(){
+        return requestSignal.getSignalName();
+    }
+
+    public SignalType getRequestSignalType(){
+        return requestSignal.getSignalType();
+    }
 
 
 }

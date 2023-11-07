@@ -3,8 +3,8 @@ package com.petra.lib.XXXXXXsignal.response.kafka;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petra.lib.PetraProps;
-import com.petra.lib.block.VersionBlockId;
-import com.petra.lib.state.variable.neww.ProcessValue;
+import com.petra.lib.block.VersionId;
+import com.petra.lib.context.variables.ProcessValue;
 import com.petra.lib.XXXXXXsignal.model.Version;
 import com.petra.lib.XXXXXXsignal.response.controller.SignalResponseHandler;
 import com.petra.lib.XXXXXXsignal.SignalId;
@@ -119,7 +119,7 @@ public class KafkaResponse implements ResponseSignal {
     }
 
     @Override
-    public void setAnswer(Collection<ProcessValue> signalAnswerVariables, VersionBlockId requestBlockId, UUID scenarioId, VersionBlockId responseBlockId) {
+    public void setAnswer(Collection<ProcessValue> signalAnswerVariables, VersionId requestBlockId, UUID scenarioId, VersionId responseBlockId) {
         kafkaConsumer.commitSync();
         ProducerRecord<UUID, String> record;
         try {
@@ -148,7 +148,7 @@ public class KafkaResponse implements ResponseSignal {
     }
 
     @Override
-    public void setError(VersionBlockId requestBlockId, UUID scenarioId, VersionBlockId responseBlockId) {
+    public void setError(VersionId requestBlockId, UUID scenarioId, VersionId responseBlockId) {
         kafkaConsumer.commitSync();
 
         ProducerRecord<UUID, String> record = null;

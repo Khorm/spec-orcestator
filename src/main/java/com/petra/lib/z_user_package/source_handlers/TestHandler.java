@@ -1,7 +1,7 @@
 package com.petra.lib.z_user_package.source_handlers;
 
 import com.petra.lib.annotation.WorkflowHandler;
-import com.petra.lib.state.variable.neww.loaders.user.UserContext;
+import com.petra.lib.state.variable.loaders.handler.VariableUserContext;
 import com.petra.lib.state.handler.UserHandler;
 import org.springframework.stereotype.Service;
 
@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestHandler implements UserHandler {
     @Override
-    public void execute(UserContext userContext) {
-        String value = userContext.getExecutionVariable("fst_variable", String.class);
+    public void execute(VariableUserContext variableUserContext) {
+        String value = variableUserContext.getExecutionVariable("fst_variable", String.class);
         System.out.println("Hello world " + value);
         TestEntity testEntity = new TestEntity();
         testEntity.setMessage(value);
-        userContext.getEntityManager().persist(testEntity);
-        userContext.putExecutionVariable("scd_variable", "test");
+        variableUserContext.getEntityManager().persist(testEntity);
+        variableUserContext.putExecutionVariable("scd_variable", "test");
     }
 }

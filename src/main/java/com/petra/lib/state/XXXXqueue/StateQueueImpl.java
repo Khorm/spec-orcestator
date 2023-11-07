@@ -1,6 +1,6 @@
 package com.petra.lib.state.XXXXqueue;
 
-import com.petra.lib.state.ActionState;
+import com.petra.lib.context.state.ActionState;
 import com.petra.lib.state.StateHandler;
 
 import java.util.*;

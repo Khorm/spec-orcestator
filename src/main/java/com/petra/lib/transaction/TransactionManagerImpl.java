@@ -12,9 +12,10 @@ public class TransactionManagerImpl implements TransactionManager {
         this.jpaTransactionManager = jpaTransactionManager;
     }
 
-    public <T> T executeInTransaction(TransactionRunnable<T> task, int transactionDefinition) {
+    public <T> T commitInTransaction(TransactionCallable<T> task, int transactionDefinition) {
         DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
         definition.setIsolationLevel(transactionDefinition);
+        definition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
         TransactionStatus transactionStatus = jpaTransactionManager.getTransaction(definition);
         try {
             return task.run(jpaTransactionManager);
@@ -27,8 +28,8 @@ public class TransactionManagerImpl implements TransactionManager {
     }
 
     @Override
-    public <T> T executeInTransaction(TransactionRunnable<T> task) {
-        return executeInTransaction(task, TransactionDefinition.ISOLATION_READ_COMMITTED);
+    public <T> T commitInTransaction(TransactionCallable<T> task) {
+        return commitInTransaction(task, TransactionDefinition.ISOLATION_READ_COMMITTED);
     }
 
     public  JpaTransactionManager getJpaTransactionManager(){

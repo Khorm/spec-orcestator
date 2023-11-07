@@ -1,12 +1,12 @@
 package com.petra.lib.state.error;
 
 import com.petra.lib.context.ActivityContext;
-import com.petra.lib.environment.output.OutputSocket;
+import com.petra.lib.remote.output.OutputConsumeSocket;
 import com.petra.lib.context.repo.ActionRepo;
-import com.petra.lib.state.ActionState;
+import com.petra.lib.context.state.ActionState;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.transaction.TransactionManager;
-import com.petra.lib.transaction.TransactionRunnable;
+import com.petra.lib.transaction.TransactionCallable;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -18,13 +18,13 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 @RequiredArgsConstructor
 public class ErrorState implements StateHandler {
 
-    OutputSocket outputSocket;
+    OutputConsumeSocket outputSocket;
     TransactionManager transactionManager;
     ActionRepo actionRepo;
 
     @Override
     public void execute(ActivityContext context) throws Exception {
-        transactionManager.executeInTransaction(new TransactionRunnable() {
+        transactionManager.commitInTransaction(new TransactionCallable() {
             @Override
             public void run(JpaTransactionManager jpaTransactionManager) {
                 actionRepo.updateActionType(context.getBusinessId(), context.getCurrentBlockId(),

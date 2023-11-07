@@ -1,17 +1,17 @@
 package com.petra.lib.state.response;
 
 import com.petra.lib.context.ActivityContext;
-import com.petra.lib.environment.output.OutputSocket;
-import com.petra.lib.context.repo.ActionRepo;
-import com.petra.lib.state.ActionState;
+import com.petra.lib.context.state.ActionState;
+import com.petra.lib.context.variables.VariablesContainer;
+import com.petra.lib.remote.output.OutputAnswerSocket;
+import com.petra.lib.remote.signal.Signal;
+import com.petra.lib.remote.signal.SignalType;
 import com.petra.lib.state.StateHandler;
-import com.petra.lib.transaction.TransactionManager;
-import com.petra.lib.transaction.TransactionRunnable;
+import com.petra.lib.variable.mapper.VariableMapper;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.orm.jpa.JpaTransactionManager;
 
 /**
  *
@@ -27,9 +27,11 @@ public class ResponseState implements StateHandler {
 //    BlockId blockId;
 //    JobRepository jobRepository;
 
-    OutputSocket outputSocket;
-    TransactionManager transactionManager;
-    ActionRepo actionRepo;
+    OutputAnswerSocket outputSocket;
+    //    TransactionManager transactionManager;
+    VariableMapper contextToSourceMapper;
+
+//    ActionRepo actionRepo;
 
 //    @Override
 //    public void execute(ActionContext actionContext) throws Exception {
@@ -53,16 +55,34 @@ public class ResponseState implements StateHandler {
 
     @Override
     public void execute(ActivityContext context) throws Exception {
+        SignalType answerSignalType;
+        switch (context.getRequestSignalType()) {
+            case REQUEST_ACTIVITY_EXECUTION:
+                answerSignalType = SignalType.RESPONSE_ACTIVITY_EXECUTED;
+                break;
 
-        transactionManager.executeInTransaction(new TransactionRunnable() {
-            @Override
-            public void run(JpaTransactionManager jpaTransactionManager) {
-                actionRepo.updateActionType(context.getBusinessId(), context.getCurrentBlockId(),
-                        getState());
-            }
-        });
-        outputSocket.answer(context, context.getRequestType().getAnswerType());
+            case REQUEST_ROLLOUT:
+                answerSignalType = SignalType.RESPONSE_ROLLOUT;
+                break;
 
+            case REQUEST_SOURCE:
+                answerSignalType = SignalType.RESPONSE_SOURCE;
+                break;
+            default:
+                throw new IllegalStateException("Wrong state " + context.getState());
+        }
+
+        context.setNewState(getState());
+        VariablesContainer sendSignalVariables = contextToSourceMapper.map(context.getContextVariablesContainer());
+
+        Signal answerSignal = new Signal(
+                context.getScenarioId(),
+                sendSignalVariables, context.getRequestSignalName(), context.getRequestSignalId(),
+                context.getRequestServiceName(), context.getRequestBlockId(),
+                context.getCurrentServiceName(), context.getCurrentBlockId(),
+                answerSignalType
+        );
+        outputSocket.answer(answerSignal);
     }
 
     @Override
@@ -71,6 +91,6 @@ public class ResponseState implements StateHandler {
 
     @Override
     public ActionState getState() {
-        return ActionState.END;
+        return ActionState.COMPLETION;
     }
 }

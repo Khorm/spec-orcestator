@@ -1,7 +1,7 @@
 package com.petra.lib.XXXXXcontext;
 
-import com.petra.lib.state.variable.neww.ProcessValue;
-import com.petra.lib.context.variables.VariablesContext;
+import com.petra.lib.context.variables.ProcessValue;
+import com.petra.lib.context.variables.VariablesContainerImpl;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -18,6 +18,6 @@ interface DirtyContext {
      */
     void setValues(Collection<ProcessValue> values);
     void setValue(ProcessValue value);
-    VariablesContext getDirtyVariablesList();
+    VariablesContainerImpl getDirtyVariablesList();
 
 }

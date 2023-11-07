@@ -1,10 +1,10 @@
 package com.petra.lib.XXXXXXsignal.___new.connector.producer.bridge;
 
-import com.petra.lib.environment.dto.AnswerDto;
-import com.petra.lib.environment.dto.ProducerSignalDto;
-import com.petra.lib.environment.output.enums.SignalResult;
-import com.petra.lib.environment.output.http.AnswerDecoder;
-import com.petra.lib.environment.output.http.SignalEncoder;
+import com.petra.lib.remote.signal.AnswerDto;
+import com.petra.lib.remote.signal.ProducerSignalDto;
+import com.petra.lib.remote.input.SignalResult;
+import com.petra.lib.remote.output.http.AnswerDecoder;
+import com.petra.lib.remote.output.http.SignalEncoder;
 import feign.Feign;
 
 public class RecieverImpl implements Reciever {

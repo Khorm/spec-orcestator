@@ -1,7 +1,7 @@
 package com.petra.lib.XXXXXXsignal.response;
 
-import com.petra.lib.block.VersionBlockId;
-import com.petra.lib.state.variable.neww.ProcessValue;
+import com.petra.lib.block.VersionId;
+import com.petra.lib.context.variables.ProcessValue;
 import com.petra.lib.XXXXXXsignal.Signal;
 
 import java.util.Collection;
@@ -27,7 +27,7 @@ public interface ResponseSignal extends Signal {
      * Block id, who handles request signal and answers on it
      * @param responseBlockId
      */
-    void setAnswer(Collection<ProcessValue> signalAnswerVariables, VersionBlockId requestBlockId, UUID scenarioId, VersionBlockId responseBlockId);
+    void setAnswer(Collection<ProcessValue> signalAnswerVariables, VersionId requestBlockId, UUID scenarioId, VersionId responseBlockId);
 
     /**
      * Send error if exception appeared
@@ -42,6 +42,6 @@ public interface ResponseSignal extends Signal {
      * Block id, who handles request signal and answers on it
      * @param responseBlockId
      */
-    void setError(VersionBlockId requestBlockId, UUID scenarioId, VersionBlockId responseBlockId);
+    void setError(VersionId requestBlockId, UUID scenarioId, VersionId responseBlockId);
 
 }

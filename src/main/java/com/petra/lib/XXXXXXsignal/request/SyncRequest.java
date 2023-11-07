@@ -1,14 +1,14 @@
 package com.petra.lib.XXXXXXsignal.request;
 
-import com.petra.lib.state.variable.neww.ProcessValue;
+import com.petra.lib.context.variables.ProcessValue;
 import com.petra.lib.XXXXXXsignal.SignalId;
 import com.petra.lib.XXXXXXsignal.___new.connector.producer.bridge.ConsumerEntryPoint;
 import com.petra.lib.XXXXXXsignal.dto.RequestDto;
 import com.petra.lib.XXXXXXsignal.dto.ResponseDto;
 import com.petra.lib.XXXXXXsignal.model.SignalModel;
 import com.petra.lib.XXXXXXsignal.model.Version;
-import com.petra.lib.environment.output.http.AnswerDecoder;
-import com.petra.lib.environment.output.http.SignalEncoder;
+import com.petra.lib.remote.output.http.AnswerDecoder;
+import com.petra.lib.remote.output.http.SignalEncoder;
 import feign.Feign;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;

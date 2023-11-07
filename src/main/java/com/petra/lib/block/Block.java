@@ -5,13 +5,19 @@ import com.petra.lib.variable.pure.PureVariableList;
 
 
 public interface Block {
-    VersionBlockId getId();
+    VersionId getId();
+
     String getName();
 
     PureVariableList getPureVariableList();
 
     void execute(ActivityContext activityContext);
 
-    boolean isSequentially();
-    void error();
+//    boolean isSequentially();
+//
+//    void error();
+//
+//    VariableMapper getMapperForSignal(VersionId signalId);
+
+//    BlockInfo getBlockInfo();
 }

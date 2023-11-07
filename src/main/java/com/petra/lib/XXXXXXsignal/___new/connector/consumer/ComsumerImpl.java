@@ -1,12 +1,12 @@
 package com.petra.lib.XXXXXXsignal.___new.connector.consumer;
 
-import com.petra.lib.block.VersionBlockId;
-import com.petra.lib.context.variables.VariablesContext;
+import com.petra.lib.block.VersionId;
+import com.petra.lib.context.variables.VariablesContainerImpl;
 import com.petra.lib.XXXXXXsignal.___new.connector.producer.bridge.ConsumerEntryPoint;
-import com.petra.lib.environment.dto.AnswerDto;
-import com.petra.lib.environment.output.enums.SignalResult;
-import com.petra.lib.environment.dto.ProducerSignalDto;
-import com.petra.lib.environment.output.enums.RequestType;
+import com.petra.lib.remote.signal.AnswerDto;
+import com.petra.lib.remote.input.SignalResult;
+import com.petra.lib.remote.signal.ProducerSignalDto;
+import com.petra.lib.remote.signal.SignalType;
 import com.petra.lib.XXXXXXsignal.___new.connector.producer.bridge.ProducerHandler;
 import com.petra.lib.XXXXXXsignal.model.Version;
 import lombok.AccessLevel;
@@ -21,19 +21,19 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ComsumerImpl implements Consumer {
-    VersionBlockId blockId;
+    VersionId blockId;
     Long signalId;
     String signalName;
     Version signalVersion;
     String producerServiceName;
-    VersionBlockId consumerActionId;
+    VersionId consumerActionId;
     Long consumerServiceId;
     String consumerServiceName;
     ConsumerEntryPoint consumerEntryPoint;
 
 
     @Override
-    public void send(VariablesContext sendingVariables, UUID businessId, ProducerHandler producerHandler) {
+    public void send(VariablesContainerImpl sendingVariables, UUID businessId, ProducerHandler producerHandler) {
         ProducerSignalDto producerSignalDto = new ProducerSignalDto(
                 businessId,
                 sendingVariables.getJSONVariablesList(),
@@ -56,8 +56,8 @@ public class ComsumerImpl implements Consumer {
         }
     }
 
-    private RequestType getRequestType() {
-        return RequestType.SOURCE_REQUEST;
+    private SignalType getRequestType() {
+        return SignalType.SOURCE_REQUEST;
     }
 }
 
