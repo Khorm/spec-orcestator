@@ -32,6 +32,22 @@ public class TransactionManagerImpl implements TransactionManager {
         return commitInTransaction(task, TransactionDefinition.ISOLATION_READ_COMMITTED);
     }
 
+    @Override
+    public void commitInTransaction(TransactionRunnable task) {
+        DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
+        definition.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
+        definition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        TransactionStatus transactionStatus = jpaTransactionManager.getTransaction(definition);
+        try {
+            task.run(jpaTransactionManager);
+        }catch (Exception e){
+            jpaTransactionManager.rollback(transactionStatus);
+            throw e;
+        }finally {
+            jpaTransactionManager.commit(transactionStatus);
+        }
+    }
+
     public  JpaTransactionManager getJpaTransactionManager(){
         return jpaTransactionManager;
     }

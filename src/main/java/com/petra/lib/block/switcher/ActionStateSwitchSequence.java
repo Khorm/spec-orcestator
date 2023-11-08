@@ -1,6 +1,6 @@
 package com.petra.lib.block.switcher;
 
-import com.petra.lib.context.state.ActionState;
+import com.petra.lib.state.ActionState;
 
 import java.util.Arrays;
 

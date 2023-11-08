@@ -1,7 +1,7 @@
 package com.petra.lib.block.switcher;
 
 import com.petra.lib.context.ActivityContext;
-import com.petra.lib.context.state.ActionState;
+import com.petra.lib.state.ActionState;
 
 import java.util.Iterator;
 import java.util.List;

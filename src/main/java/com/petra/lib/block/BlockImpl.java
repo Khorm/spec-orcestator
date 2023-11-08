@@ -3,9 +3,9 @@ package com.petra.lib.block;
 import com.petra.lib.block.switcher.StateSwitchSequence;
 import com.petra.lib.block.models.BlockModel;
 import com.petra.lib.context.ActivityContext;
-import com.petra.lib.remote.repo.ActivityRepo;
-import com.petra.lib.context.state.ActionState;
+import com.petra.lib.state.ActionState;
 import com.petra.lib.state.StateHandler;
+import com.petra.lib.variable.pure.PureVariableList;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,11 +24,10 @@ import java.util.EnumMap;
 class BlockImpl implements Block {
 
     @Getter
-    VersionId id;
+    BlockVersionId id;
     String blockName;
 
-    StateSwitchSequence stateSwitchSequence;
-    ActivityRepo activityRepo;
+//    ActivityRepo activityRepo;
 
     /**
      * Менеджер переключения стейтов
@@ -37,21 +36,28 @@ class BlockImpl implements Block {
 
     EnumMap<ActionState, StateHandler> stateHandlerMap;
 
+    PureVariableList pureVariableList;
+
     /**
      * Станрадтный список переменных для активности, которые не заполнены.
      * У воркфлоу отсуствует
      */
 //    PureVariableList pureVariableList;
 
-    private BlockImpl(BlockModel blockModel) {
-//        this.stateQueue = stateQueue;
-        this.id = new VersionId(blockModel.getId(), blockModel.getVersion());
-        this.blockName = blockModel.getName();
-    }
+//    private BlockImpl(BlockModel blockModel) {
+////        this.stateQueue = stateQueue;
+//        this.id = new VersionId(blockModel.getId(), blockModel.getVersion());
+//        this.blockName = blockModel.getName();
+//    }
 
     @Override
     public String getName() {
         return blockName;
+    }
+
+    @Override
+    public PureVariableList getPureVariableList() {
+        return pureVariableList;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.petra.lib.remote.input.impl;
 
 import com.petra.lib.block.Block;
-import com.petra.lib.block.VersionId;
+import com.petra.lib.block.BlockVersionId;
 import com.petra.lib.context.ActivityContext;
 import com.petra.lib.remote.input.InputAnswerController;
 import com.petra.lib.remote.input.InputExecuteController;
@@ -32,7 +32,7 @@ class InputExecuteExecuteImpl implements InputExecuteController, InputAnswerCont
     /**
      * Список всех блоков
      */
-    Map<VersionId, Block> workingBlocks;
+    Map<BlockVersionId, Block> workingBlocks;
 
     /**
      * Очередь потоков для блоков

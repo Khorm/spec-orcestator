@@ -2,8 +2,8 @@ package com.petra.lib.state.initialize;
 
 import com.petra.lib.block.Block;
 import com.petra.lib.context.ActivityContext;
-import com.petra.lib.context.state.ActionState;
-import com.petra.lib.context.variables.VariablesContainer;
+import com.petra.lib.state.ActionState;
+import com.petra.lib.variable.container.VariablesContainer;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.transaction.TransactionManager;
 import com.petra.lib.variable.mapper.VariableMapper;

@@ -1,10 +1,10 @@
 package com.petra.lib.context;
 
-import com.petra.lib.block.VersionId;
-import com.petra.lib.context.state.ActionStateContext;
-import com.petra.lib.context.variables.ProcessValue;
-import com.petra.lib.context.variables.VariablesContainer;
-import com.petra.lib.context.state.ActionState;
+import com.petra.lib.block.BlockVersionId;
+import com.petra.lib.state.context.ActionStateContext;
+import com.petra.lib.variable.container.ProcessValue;
+import com.petra.lib.variable.container.VariablesContainer;
+import com.petra.lib.state.ActionState;
 import com.petra.lib.remote.signal.SignalType;
 import com.petra.lib.variable.pure.PureVariableList;
 import lombok.AccessLevel;
@@ -64,7 +64,7 @@ public class ActivityContext {
      *
      */
     @Getter
-    VersionId requestBlockId;
+    BlockVersionId requestBlockId;
     @Getter
     String requestServiceName;
 
@@ -74,7 +74,7 @@ public class ActivityContext {
      *
      */
     @Getter
-    VersionId currentBlockId;
+    BlockVersionId currentBlockId;
     @Getter
     String currentServiceName;
 
@@ -110,7 +110,7 @@ public class ActivityContext {
 
 
     public void addVariables(VariablesContainer inputVariablesContainer){
-        contextVariablesContainer.addVariables(inputVariablesContainer);
+        contextVariablesContainer.addVariables(inputVariablesContainer, actionId);
     }
 
     public VariablesContainer getSignalVariables(){
@@ -142,11 +142,11 @@ public class ActivityContext {
     }
 
     public void setValue(ProcessValue value){
-        contextVariablesContainer.addVariable(value);
+        contextVariablesContainer.addVariable(value, actionId);
     }
 
-    public VersionId getRequestSignalId(){
-        return requestSignal.getVersionId();
+    public BlockVersionId getRequestSignalId(){
+        return requestSignal.getBlockVersionId();
     }
 
     public String getRequestSignalName(){

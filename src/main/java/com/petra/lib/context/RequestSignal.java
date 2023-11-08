@@ -1,7 +1,7 @@
 package com.petra.lib.context;
 
-import com.petra.lib.block.VersionId;
-import com.petra.lib.context.variables.VariablesContainer;
+import com.petra.lib.block.BlockVersionId;
+import com.petra.lib.variable.container.VariablesContainer;
 import com.petra.lib.remote.signal.SignalType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
 class RequestSignal {
-    VersionId versionId;
+    BlockVersionId blockVersionId;
     String signalName;
     VariablesContainer signalContainer;
     SignalType signalType;

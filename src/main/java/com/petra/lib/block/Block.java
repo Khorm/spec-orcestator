@@ -5,7 +5,7 @@ import com.petra.lib.variable.pure.PureVariableList;
 
 
 public interface Block {
-    VersionId getId();
+    BlockVersionId getId();
 
     String getName();
 

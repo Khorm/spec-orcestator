@@ -2,7 +2,7 @@ package com.petra.lib.state.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petra.lib.context.ActivityContext;
-import com.petra.lib.context.variables.ProcessValue;
+import com.petra.lib.variable.container.ProcessValue;
 import com.petra.lib.variable.pure.PureVariable;
 import com.petra.lib.variable.pure.PureVariableList;
 import lombok.AccessLevel;

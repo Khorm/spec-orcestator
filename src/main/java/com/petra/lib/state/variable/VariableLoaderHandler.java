@@ -2,7 +2,7 @@ package com.petra.lib.state.variable;
 
 import com.petra.lib.block.Block;
 import com.petra.lib.context.ActivityContext;
-import com.petra.lib.context.state.ActionState;
+import com.petra.lib.state.ActionState;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.state.variable.group.VariableGroup;
 import lombok.AccessLevel;

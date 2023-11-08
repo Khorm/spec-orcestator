@@ -1,7 +1,7 @@
 package com.petra.lib.state.handler;
 
 import com.petra.lib.context.ActivityContext;
-import com.petra.lib.context.state.ActionState;
+import com.petra.lib.state.ActionState;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.transaction.TransactionManager;
 import lombok.AccessLevel;

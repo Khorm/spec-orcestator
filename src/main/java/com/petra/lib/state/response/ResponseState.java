@@ -1,8 +1,8 @@
 package com.petra.lib.state.response;
 
 import com.petra.lib.context.ActivityContext;
-import com.petra.lib.context.state.ActionState;
-import com.petra.lib.context.variables.VariablesContainer;
+import com.petra.lib.state.ActionState;
+import com.petra.lib.variable.container.VariablesContainer;
 import com.petra.lib.remote.output.OutputAnswerSocket;
 import com.petra.lib.remote.signal.Signal;
 import com.petra.lib.remote.signal.SignalType;

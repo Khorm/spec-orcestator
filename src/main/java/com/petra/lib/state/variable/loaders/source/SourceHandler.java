@@ -1,10 +1,8 @@
 package com.petra.lib.state.variable.loaders.source;
 
-import com.petra.lib.block.VersionId;
 import com.petra.lib.context.ActivityContext;
-import com.petra.lib.context.variables.VariablesContainer;
+import com.petra.lib.variable.container.VariablesContainer;
 import com.petra.lib.remote.output.OutputConsumeSocket;
-import com.petra.lib.remote.signal.SignalType;
 import com.petra.lib.state.variable.loaders.VariableLoader;
 import com.petra.lib.variable.mapper.VariableMapper;
 import lombok.AccessLevel;
@@ -16,10 +14,10 @@ import java.util.Collection;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 class SourceHandler implements VariableLoader {
-    VersionId signalId;
-    VersionId sourceId;
-    String sourceName;
-    String signalName;
+//    VersionId signalId;
+//    VersionId sourceId;
+//    String sourceName;
+//    String signalName;
 
     VariableMapper fromContextToSignalMapper;
     VariableMapper fromSignalToContextMapper;
@@ -62,7 +60,9 @@ class SourceHandler implements VariableLoader {
 
     private void requestData(ActivityContext activityContext){
         VariablesContainer signalVariables = fromContextToSignalMapper.map(activityContext.getSignalVariables());
-        outputSocket.consume(signalVariables, activityContext, SignalType.REQUEST_SOURCE);
+        //TODO: переделать на сигнал
+//        outputSocket.consume(signalVariables, activityContext, SignalType.REQUEST_SOURCE);
+        throw new NullPointerException("NOT WORKING YET");
     }
 
     private void setAnswer(ActivityContext activityContext){
