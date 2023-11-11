@@ -1,6 +1,6 @@
 package com.petra.lib.variable.mapper;
 
-import com.petra.lib.variable.container.ProcessValue;
+import com.petra.lib.context.value.ProcessValue;
 
 import java.util.Collection;
 

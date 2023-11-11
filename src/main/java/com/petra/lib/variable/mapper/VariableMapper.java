@@ -1,8 +1,8 @@
 package com.petra.lib.variable.mapper;
 
 
-import com.petra.lib.variable.container.VariablesContainer;
-import com.petra.lib.variable.container.ProcessValue;
+import com.petra.lib.context.value.VariablesContainer;
+import com.petra.lib.context.value.ProcessValue;
 
 /**
  * Парсит переменные из переменных продюсера в переменные консумера

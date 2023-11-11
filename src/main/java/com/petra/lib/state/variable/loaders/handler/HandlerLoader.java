@@ -3,7 +3,7 @@ package com.petra.lib.state.variable.loaders.handler;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.petra.lib.context.ActivityContext;
-import com.petra.lib.variable.container.ProcessValue;
+import com.petra.lib.context.value.ProcessValue;
 import com.petra.lib.state.variable.loaders.VariableLoader;
 import com.petra.lib.variable.pure.PureVariable;
 import lombok.AccessLevel;
@@ -19,7 +19,7 @@ public class HandlerLoader implements VariableLoader {
 
     UserVariableHandler userVariableHandler;
     PureVariable loadingVariable;
-    ObjectMapper objectMapper;
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void handle(ActivityContext activityContext) {

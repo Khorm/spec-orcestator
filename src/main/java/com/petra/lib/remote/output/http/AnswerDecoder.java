@@ -26,4 +26,7 @@ public class AnswerDecoder implements Decoder {
             return new Exception(e.getMessage());
         }
     }
+
+    public static class HttpOutputAnswerSocket {
+    }
 }

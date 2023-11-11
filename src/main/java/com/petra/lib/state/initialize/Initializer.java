@@ -3,12 +3,12 @@ package com.petra.lib.state.initialize;
 import com.petra.lib.block.Block;
 import com.petra.lib.context.ActivityContext;
 import com.petra.lib.state.ActionState;
-import com.petra.lib.variable.container.VariablesContainer;
+import com.petra.lib.context.value.VariablesContainer;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.transaction.TransactionManager;
 import com.petra.lib.variable.mapper.VariableMapper;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 
@@ -17,7 +17,7 @@ import lombok.extern.log4j.Log4j2;
  * «аполн€ет переменные из вход€щего сигнала.
  */
 @Log4j2
-@RequiredArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class Initializer implements StateHandler {
     /**
@@ -46,11 +46,11 @@ public class Initializer implements StateHandler {
 
         //получить переменные из вход€щего сигнала
         VariablesContainer variablesFromSignal
-                = initSignalToActionVariableMapper.map(context.getSignalVariables());
+                = initSignalToActionVariableMapper.map(context.getRequestSignalVariables());
 
 
         //записать измененеие стейта и обновление переменных в базу.
-        transactionManager.commitInTransaction(jpaTransactionManager -> {
+        transactionManager.executeInTransaction(jpaTransactionManager -> {
             context.setNewState(ActionState.INITIALIZING);
             context.addVariables(variablesFromSignal);
         });

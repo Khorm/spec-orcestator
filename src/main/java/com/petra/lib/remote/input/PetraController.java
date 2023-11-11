@@ -1,6 +1,6 @@
 package com.petra.lib.remote.input;
 
-import com.petra.lib.remote.signal.AnswerDto;
+import com.petra.lib.remote.dto.AnswerDto;
 import com.petra.lib.remote.signal.Signal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

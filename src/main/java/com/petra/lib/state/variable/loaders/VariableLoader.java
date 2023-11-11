@@ -13,4 +13,5 @@ public interface VariableLoader {
      */
     void handle(ActivityContext activityContext);
     boolean isReady(ActivityContext activityContext);
+
 }

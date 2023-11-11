@@ -1,11 +1,12 @@
 package com.petra.lib.context;
 
 import com.petra.lib.block.BlockVersionId;
-import com.petra.lib.state.context.ActionStateContext;
-import com.petra.lib.variable.container.ProcessValue;
-import com.petra.lib.variable.container.VariablesContainer;
+import com.petra.lib.context.state.ActionStateContext;
+import com.petra.lib.context.value.ProcessValue;
+import com.petra.lib.context.value.VariablesContainer;
 import com.petra.lib.state.ActionState;
 import com.petra.lib.remote.signal.SignalType;
+import com.petra.lib.variable.pure.PureVariable;
 import com.petra.lib.variable.pure.PureVariableList;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -70,13 +71,18 @@ public class ActivityContext {
 
 
     /**
-     * Byajhvfwbz j ntreotv bcgjkytybb
+     * куда отправиьт сигнал
      *
      */
     @Getter
     BlockVersionId currentBlockId;
     @Getter
     String currentServiceName;
+
+    @Getter
+    BlockVersionId currentActionBlock;
+
+
 
 
 
@@ -113,7 +119,7 @@ public class ActivityContext {
         contextVariablesContainer.addVariables(inputVariablesContainer, actionId);
     }
 
-    public VariablesContainer getSignalVariables(){
+    public VariablesContainer getRequestSignalVariables(){
         return requestSignal.getSignalContainer();
     }
 
@@ -155,6 +161,10 @@ public class ActivityContext {
 
     public SignalType getRequestSignalType(){
         return requestSignal.getSignalType();
+    }
+
+    public PureVariable getPureVariable(Long id){
+
     }
 
 

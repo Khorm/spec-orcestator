@@ -11,4 +11,5 @@ public interface VariableGroup {
      */
     boolean isReady(ActivityContext activityContext);
     void execute(ActivityContext activityContext);
+    int groupNumber();
 }

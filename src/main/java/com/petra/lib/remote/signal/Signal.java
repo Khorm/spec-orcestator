@@ -1,7 +1,7 @@
 package com.petra.lib.remote.signal;
 
 import com.petra.lib.block.BlockVersionId;
-import com.petra.lib.variable.container.VariablesContainer;
+import com.petra.lib.context.value.VariablesContainer;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,13 +31,6 @@ public class Signal {
      * айди сигнала
      */
     BlockVersionId signalId;
-
-    /**
-     * им€ сигнала
-     */
-    String signalName;
-
-    String consumerService;
     BlockVersionId consumerBlockId;
 
     String producerService;
@@ -50,21 +43,17 @@ public class Signal {
      * @param scenarioId - айди сценари€
      * @param signalVariables - переменные сигнала
      * @param signalId - айди сигнала
-     * @param signalName - им€ сигнала
-     * @param consumerService - им€ сервиса куда отправл€ть
      * @param consumerBlockId - им€ блока ку отправл€ть
      * @param signalType - тип сигнала
      */
     public Signal(UUID scenarioId,
-                  VariablesContainer signalVariables, String signalName, BlockVersionId signalId,
-                  String consumerService, BlockVersionId consumerBlockId,
+                  VariablesContainer signalVariables, BlockVersionId signalId,
+                  BlockVersionId consumerBlockId,
                   String producerService, BlockVersionId producerBlockId,
                   SignalType signalType) {
         this.scenarioId = scenarioId;
         this.signalVariables = signalVariables;
         this.signalId = signalId;
-        this.signalName = signalName;
-        this.consumerService = consumerService;
         this.consumerBlockId = consumerBlockId;
         this.producerService = producerService;
         this.producerBlockId = producerBlockId;

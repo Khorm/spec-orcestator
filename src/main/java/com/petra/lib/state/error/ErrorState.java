@@ -2,7 +2,7 @@ package com.petra.lib.state.error;
 
 import com.petra.lib.context.ActivityContext;
 import com.petra.lib.state.ActionState;
-import com.petra.lib.remote.output.OutputConsumeSocket;
+import com.petra.lib.remote.output.http.request.OutputConsumeSocket;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.transaction.TransactionManager;
 import lombok.AccessLevel;
