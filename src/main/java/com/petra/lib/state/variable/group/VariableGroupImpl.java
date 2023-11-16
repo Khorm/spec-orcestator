@@ -1,7 +1,7 @@
 package com.petra.lib.state.variable.group;
 
 import com.petra.lib.context.ActivityContext;
-import com.petra.lib.state.variable.loaders.VariableLoader;
+import com.petra.lib.state.variable.loader.VariableLoader;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;

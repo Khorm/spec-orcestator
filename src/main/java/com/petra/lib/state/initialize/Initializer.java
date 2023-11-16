@@ -19,7 +19,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class Initializer implements StateHandler {
+class Initializer implements StateHandler {
     /**
      * Маппер с сигнальных переменных на
      */

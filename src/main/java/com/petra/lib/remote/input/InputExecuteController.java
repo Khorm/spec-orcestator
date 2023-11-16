@@ -1,8 +1,8 @@
 package com.petra.lib.remote.input;
 
-import com.petra.lib.remote.signal.Signal;
+import com.petra.lib.remote.dto.AnswerDto;
+import com.petra.lib.remote.dto.SignalDTO;
 
 public interface InputExecuteController {
-
-    SignalResult execute(Signal signal);
+    AnswerDto execute(SignalDTO signal);
 }

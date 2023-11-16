@@ -13,11 +13,4 @@ public interface Block {
 
     void execute(ActivityContext activityContext);
 
-//    boolean isSequentially();
-//
-//    void error();
-//
-//    VariableMapper getMapperForSignal(VersionId signalId);
-
-//    BlockInfo getBlockInfo();
 }

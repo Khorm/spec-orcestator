@@ -5,9 +5,7 @@ import com.petra.lib.context.ActivityContext;
 import com.petra.lib.state.ActionState;
 import com.petra.lib.state.StateHandler;
 import com.petra.lib.state.variable.group.VariableGroup;
-import com.petra.lib.state.variable.loaders.VariableLoader;
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Collection;
@@ -19,8 +17,11 @@ import java.util.Comparator;
  */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 
-public class VariableLoaderHandler implements StateHandler {
+class VariableLoaderHandler implements StateHandler {
 
+    /**
+     * отсортированные по возрастанию группы
+     */
     Collection<VariableGroup> variableGroups;
     Block blockManager;
 

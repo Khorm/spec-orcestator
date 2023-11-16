@@ -1,4 +1,4 @@
-package com.petra.lib.state.error;
+package com.petra.lib.state.response;
 
 import com.petra.lib.context.ActivityContext;
 import com.petra.lib.remote.dto.SignalDTO;
@@ -7,19 +7,12 @@ import com.petra.lib.remote.output.http.AnswerDecoder;
 import com.petra.lib.remote.output.http.SignalEncoder;
 import com.petra.lib.remote.signal.SignalType;
 import com.petra.lib.state.ActionState;
-import com.petra.lib.remote.output.http.request.OutputConsumeSocket;
 import com.petra.lib.state.StateHandler;
-import com.petra.lib.transaction.TransactionManager;
 import feign.Feign;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.log4j.Log4j2;
 
-@Log4j2
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequiredArgsConstructor
-public class ErrorState implements StateHandler {
+import static com.petra.lib.state.ActionState.COMPLETION;
+
+class SourceResponseState implements StateHandler {
 
     @Override
     public void execute(ActivityContext context) throws Exception {
@@ -29,9 +22,10 @@ public class ErrorState implements StateHandler {
         executeController.execute(SignalDTO.builder()
                 .scenarioId(context.getScenarioId())
                 .consumerBlockId(context.getRequestBlockId())
+                .signalVariablesContainer(context.getContextVariablesContainer())
                 .producerServiceName(context.getCurrentServiceName())
                 .producerBlockId(context.getCurrentBlockId())
-                .signalType(SignalType.ERROR)
+                .signalType(SignalType.RESPONSE_SOURCE)
                 .build());
     }
 
@@ -42,7 +36,7 @@ public class ErrorState implements StateHandler {
 
     @Override
     public ActionState getState() {
-        return ActionState.ERROR;
+        return COMPLETION;
     }
 
     private InputExecuteController createController(String requestServiceName) {

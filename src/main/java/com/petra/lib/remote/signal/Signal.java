@@ -15,7 +15,8 @@ import java.util.UUID;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
-public class Signal {
+@Deprecated
+class Signal {
 
     /**
      * айди сценария

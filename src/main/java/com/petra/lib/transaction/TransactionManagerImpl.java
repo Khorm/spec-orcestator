@@ -5,7 +5,7 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-public class TransactionManagerImpl implements TransactionManager {
+class TransactionManagerImpl implements TransactionManager {
     private final JpaTransactionManager jpaTransactionManager;
 
     public TransactionManagerImpl(JpaTransactionManager jpaTransactionManager) {

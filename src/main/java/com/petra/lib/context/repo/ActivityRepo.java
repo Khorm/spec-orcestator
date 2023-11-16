@@ -4,7 +4,7 @@ import com.petra.lib.block.Block;
 import com.petra.lib.block.BlockVersionId;
 import com.petra.lib.context.ActivityContext;
 import com.petra.lib.context.variables.VariablesSynchRepo;
-import com.petra.lib.remote.signal.Signal;
+import com.petra.lib.remote.dto.SignalDTO;
 import com.petra.lib.state.ActionState;
 import com.petra.lib.context.value.ProcessValue;
 import com.petra.lib.transaction.TransactionManager;
@@ -54,7 +54,7 @@ public class ActivityRepo implements VariablesSynchRepo {
      * @param signal
      * @return
      */
-    public ActivityContext createNewActionContext(Signal signal, Block actionBlock, String currentServiceName,
+    public ActivityContext createNewActionContext(SignalDTO signal, Block actionBlock, String currentServiceName,
                                                   Long currentServiceId ) {
         throw new NullPointerException("NOT WORKING YET");
 

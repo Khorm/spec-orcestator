@@ -57,7 +57,7 @@ public class ActivityContext {
     RequestSignal requestSignal;
 
     @Getter
-    PureVariableList activityVariables;
+    PureVariableList blockVariables;
 
 
     /**
@@ -81,6 +81,7 @@ public class ActivityContext {
 
     @Getter
     BlockVersionId currentActionBlock;
+
 
 
 
@@ -116,7 +117,7 @@ public class ActivityContext {
 
 
     public void addVariables(VariablesContainer inputVariablesContainer){
-        contextVariablesContainer.addVariables(inputVariablesContainer, actionId);
+        contextVariablesContainer.addVariables(inputVariablesContainer);
     }
 
     public VariablesContainer getRequestSignalVariables(){
@@ -148,23 +149,27 @@ public class ActivityContext {
     }
 
     public void setValue(ProcessValue value){
-        contextVariablesContainer.addVariable(value, actionId);
+        contextVariablesContainer.addVariable(value);
     }
 
-    public BlockVersionId getRequestSignalId(){
-        return requestSignal.getBlockVersionId();
-    }
-
-    public String getRequestSignalName(){
-        return requestSignal.getSignalName();
-    }
-
-    public SignalType getRequestSignalType(){
-        return requestSignal.getSignalType();
-    }
+//    public BlockVersionId getRequestSignalId(){
+//        return requestSignal.getBlockVersionId();
+//    }
+//
+//    public String getRequestSignalName(){
+//        return requestSignal.getSignalName();
+//    }
+//
+//    public String getRequestSignalServiceName(){
+//        return requestServiceName;
+//    }
+//
+//    public SignalType getRequestSignalType(){
+//        return requestSignal.getSignalType();
+//    }
 
     public PureVariable getPureVariable(Long id){
-
+       return blockVariables.getVariableById(id);
     }
 
 

@@ -29,7 +29,7 @@ class UserActionContextImpl implements UserActionContext, UserSourceContext{
 
     @Override
     public void setValue(String variableName, Object value) {
-        PureVariableList pureVariableList = activityContext.getActivityVariables();
+        PureVariableList pureVariableList = activityContext.getBlockVariables();
         PureVariable pureVariable = pureVariableList.getVariableByName(variableName);
 
         try {
