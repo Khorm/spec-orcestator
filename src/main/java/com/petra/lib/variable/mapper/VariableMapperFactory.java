@@ -8,8 +8,7 @@ public final class VariableMapperFactory {
 
     public static VariableMapper createVariableMapper(Collection<MapperVariableModel> variableModels) {
         VariableMapCollection variableMapCollection = new VariableMapCollection(variableModels);
-        VariableMapper variableMapper = new VariablesMapperImpl(variableMapCollection);
-        return variableMapper;
+        return new VariablesMapperImpl(variableMapCollection);
     }
 
     public static VariableMapper createDummyMapper(){

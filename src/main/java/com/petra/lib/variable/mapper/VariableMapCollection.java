@@ -1,28 +1,29 @@
 package com.petra.lib.variable.mapper;
 
-import com.petra.lib.variable.XXXXXfactory.VariableModel;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Коллекция хранит значения маппинга переменных.
- * Возвращает переменную консумера по айди переменной продюсера
+ * Коллекция хранит значения маппинг переменных. Возвращает переменную консумент по айди переменной
+ * продюсера
  */
 class VariableMapCollection {
-    private final Map<Long, Long> producerConsumerMap = new HashMap<>();
 
-    VariableMapCollection(Collection<VariableModel> variableModels){
-        for (VariableModel variableModel : variableModels){
-            if (variableModel.getVariableSources() == null) continue;
-            for (Long sourceVariableId : variableModel.getVariableSources()){
-                producerConsumerMap.put(sourceVariableId, variableModel.getId());
-            }
-        }
-    }
+  private final Map<Long, MapperVariableModel> producerConsumerMap = new HashMap<>();
 
-    Long findConsumerVariableByProducerVariable(Long producerVariableId) {
-        return producerConsumerMap.get(producerVariableId);
+  VariableMapCollection(Collection<MapperVariableModel> variableModels) {
+    for (MapperVariableModel variableModel : variableModels) {
+      if (variableModel.getSourceVariables() == null) {
+        continue;
+      }
+      for (Long sourceVariableId : variableModel.getSourceVariables()) {
+        producerConsumerMap.put(sourceVariableId, variableModel);
+      }
     }
+  }
+
+  MapperVariableModel findConsumerVariableByProducerVariable(Long producerVariableId) {
+    return producerConsumerMap.get(producerVariableId);
+  }
 }
