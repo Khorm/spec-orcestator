@@ -1,8 +1,8 @@
 package com.petra.lib.z_user_package.source_handlers;
 
 import com.petra.lib.annotation.WorkflowHandler;
-import com.petra.lib.state.variable.loader.handler.VariableUserContext;
-import com.petra.lib.state.user.handler.UserActionHandler;
+import com.petra.lib.workflow.variable.loader.handler.VariableUserContext;
+import com.petra.lib.action.new_action.user.handler.UserActionHandler;
 import org.springframework.stereotype.Service;
 
 @WorkflowHandler(name = "test_action_1")

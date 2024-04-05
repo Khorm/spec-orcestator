@@ -1,6 +1,6 @@
 package com.petra.lib.variable.mapper;
 
-import com.petra.lib.context.value.ProcessValue;
+import com.petra.lib.variable.value.ProcessValue;
 import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;

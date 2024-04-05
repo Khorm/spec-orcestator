@@ -1,16 +1,15 @@
 package com.petra.lib.block;
 
-import com.petra.lib.context.ActivityContext;
-import com.petra.lib.variable.pure.PureVariableList;
+import com.petra.lib.remote.request.RequestDto;
+import com.petra.lib.remote.response.ResponseDto;
 
 
+@Deprecated
 public interface Block {
-    BlockVersionId getId();
+    BlockId getId();
 
     String getName();
 
-    PureVariableList getPureVariableList();
-
-    void execute(ActivityContext activityContext);
+    ResponseDto execute(RequestDto requestDto);
 
 }
