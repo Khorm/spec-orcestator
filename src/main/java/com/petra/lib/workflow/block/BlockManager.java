@@ -1,25 +1,30 @@
 package com.petra.lib.workflow.block;
 
+import com.petra.lib.remote.dto.BlockResponseDto;
 import com.petra.lib.workflow.context.WorkflowActionContext;
-import com.petra.lib.workflow.enums.WorkflowActionState;
 import com.petra.lib.workflow.context.WorkflowContext;
+import com.petra.lib.workflow.enums.WorkflowActionState;
 import com.petra.lib.workflow.repo.WorkflowActionRepo;
 import com.petra.lib.workflow.signal.Signal;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
- * Управляет запуском следующих блоков
+ * РЈРїСЂР°РІР»СЏРµС‚ Р·Р°РїСѓСЃРєРѕРј СЃР»РµРґСѓСЋС‰РёС… Р±Р»РѕРєРѕРІ
  */
 public class BlockManager {
 
     Map<Long, Collection<ExecutionBlock>> blocksBySignals = new HashMap<>();
     WorkflowActionRepo workflowActionRepo;
 
+    List<Long> allBlockIds;
+
     /**
-     * Обрабатывает входящий сигнал активностей
+     * РћР±СЂР°Р±Р°С‚С‹РІР°РµС‚ РІС…РѕРґСЏС‰РёР№ СЃРёРіРЅР°Р» Р°РєС‚РёРІРЅРѕСЃС‚РµР№
+     *
      * @param workflowContext
      * @param signal
      */
@@ -27,7 +32,7 @@ public class BlockManager {
         for (ExecutionBlock executionBlock : blocksBySignals.get(workflowContext.getSignalId())) {
             WorkflowActionContext workflowActionContext = new WorkflowActionContext(
                     workflowContext.getScenarioId(),
-                    workflowContext.getWorkflowId(),
+                    workflowContext.getConsumerId(),
                     executionBlock.getId(),
                     signal.getSignalId(),
                     signal.getSignalVariables()
@@ -36,9 +41,50 @@ public class BlockManager {
 
             boolean isContextSaved = workflowActionRepo.saveContext(workflowActionContext);
 
-            //Если контекст уже существует - пропустить задачку
+            //Р•СЃР»Рё РєРѕРЅС‚РµРєСЃС‚ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚ - РїСЂРѕРїСѓСЃС‚РёС‚СЊ Р·Р°РґР°С‡РєСѓ
             if (!isContextSaved) return;
             executionBlock.start(workflowActionContext);
         }
+    }
+
+    /**
+     *
+     * @param blockResponseDto
+     * @param workflowId
+     * @return
+     * true - РїСЂРѕРґРѕР»Р¶РёС‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ РёСЃРїРѕР»РЅРµРЅРёСЏ Р°РєС‚РёРІРЅРѕСЃС‚Рё
+     * false - РѕСЃС‚Р°РЅРѕРІРёС‚СЊ РѕР±СЂР°Р±РѕС‚РєСѓ Р°РєС‚РёРІРЅРѕСЃС‚Рё
+     */
+    public boolean blockExecuted(BlockResponseDto blockResponseDto, Long workflowId) {
+        Optional<WorkflowActionContext> workflowActionContextOptional =
+                workflowActionRepo.findContext(blockResponseDto.getScenarioId(),
+                        workflowId, blockResponseDto.getExecutedBlockId());
+        if (workflowActionContextOptional.isEmpty()) {
+            throw new IllegalArgumentException("Block context not found");
+        }
+        WorkflowActionContext workflowActionContext = workflowActionContextOptional.get();
+        workflowActionContext.setWorkflowState(WorkflowActionState.COMPLETE);
+        workflowActionContext.setBlockVariables(blockResponseDto.getBlockVariables());
+        workflowActionContext.setCallingSignalId(blockResponseDto.getCallingSignalId());
+        return workflowActionRepo.updateContext(workflowActionContext);
+    }
+
+
+    public boolean checkBlocksReady(UUID scenarioId, Long workflowId){
+        Set<Long> executedBlocks = workflowActionRepo.getScenarioContexts(scenarioId, workflowId)
+                .stream()
+                .flatMap((Function<WorkflowActionContext, Stream<Long>>) workflowActionContext -> {
+                    if (workflowActionContext.getWorkflowActionState() == WorkflowActionState.COMPLETE){
+                        return Stream.of(workflowActionContext.getExecBlock());
+                    }
+                    return null;
+                })
+                .collect(Collectors.toSet());
+        for (Long blockId: allBlockIds){
+            if (!executedBlocks.contains(blockId)){
+                return false;
+            }
+        }
+        return true;
     }
 }

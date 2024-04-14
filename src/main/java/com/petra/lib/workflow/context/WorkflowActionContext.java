@@ -14,37 +14,43 @@ import java.util.UUID;
 public class WorkflowActionContext {
 
     /**
-     * айди сцаенария
+     * Р°Р№РґРё СЃС†Р°РµРЅР°СЂРёСЏ
      */
     final UUID scenarioId;
 
     /**
-     * Айди воркфлоу которая обраюатывает этот блок
+     * РђР№РґРё РІРѕСЂРєС„Р»РѕСѓ РєРѕС‚РѕСЂР°СЏ РѕР±СЂР°СЋР°С‚С‹РІР°РµС‚ СЌС‚РѕС‚ Р±Р»РѕРє
      */
     final Long workflowId;
 
     /**
-     * Исполняемый блок
+     * РСЃРїРѕР»РЅСЏРµРјС‹Р№ Р±Р»РѕРє
      */
     final Long execBlock;
 
     /**
-     * Статус блока
+     * РЎС‚Р°С‚СѓСЃ Р±Р»РѕРєР°
      */
     WorkflowActionState workflowActionState;
 
     /**
-     * загруженные переменные блока
+     * Р·Р°РіСЂСѓР¶РµРЅРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ Р±Р»РѕРєР°
      */
     VariablesContainer blockVariables;
 
+
     /**
-     * Сигнал который вызывает блок
+     * СЃР»РµРґСѓСЋС‰РёР№ РІС‹Р·С‹РІР°РµРјС‹Р№ СЃРёРіРЅР°Р»
+     */
+    Long callingSignalId;
+
+    /**
+     * РЎРёРіРЅР°Р» РєРѕС‚РѕСЂС‹Р№ РІС‹Р·С‹РІР°РµС‚ Р±Р»РѕРє
      */
     final Long currentSignalId;
 
     /**
-     * переменные сигнала
+     * РїРµСЂРµРјРµРЅРЅС‹Рµ СЃРёРіРЅР°Р»Р°
      */
     final VariablesContainer signalVariables;
 
@@ -61,7 +67,7 @@ public class WorkflowActionContext {
 
     /**
      *
-     * @return текущий вызываемый сигнал
+     * @return С‚РµРєСѓС‰РёР№ РІС‹Р·С‹РІР°РµРјС‹Р№ СЃРёРіРЅР°Р»
      */
 //    public SignalId getCurrentSignalId(){
 //        return currentSignalId;
@@ -83,6 +89,10 @@ public class WorkflowActionContext {
         blockVariables.addVariables(newBlockVariables);
     }
 
+    public synchronized void setCallingSignalId(Long callingSignalId){
+        this.callingSignalId = callingSignalId;
+    }
+
 //    public synchronized void setCurrentSignalId(SignalId currentSignalId){
 //        this.currentSignalId = currentSignalId;
 //    }
@@ -96,7 +106,7 @@ public class WorkflowActionContext {
 //    }
 //
 //    /**
-//     * Текущая выполняемая активность
+//     * РўРµРєСѓС‰Р°СЏ РІС‹РїРѕР»РЅСЏРµРјР°СЏ Р°РєС‚РёРІРЅРѕСЃС‚СЊ
 //     * @return
 //     */
 //    public BlockId getCurrentAction(){

@@ -6,7 +6,7 @@ petra:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost/petra_test_db
+    url: jdbc:postgresql://192.168.0.88:5432/petradb
     username: ${dbUsername}
     password: ${dbPassword}
     driver-class-name: org.postgresql.Driver

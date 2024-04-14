@@ -5,21 +5,21 @@ import com.petra.lib.variable.value.VariablesContainer;
 import java.util.Map;
 
 public class SignalManager {
-    private final Map<Long, SignalModel> signalModelsByProducerIds;
+    private Map<Long, SignalModel> signalModelsBySignalIds;
 
     /**
-     * Находит айди сигнала по продюсеру, который этот сигнал отправил
+     * РќР°С…РѕРґРёС‚ Р°Р№РґРё СЃРёРіРЅР°Р»Р° РїРѕ РїСЂРѕРґСЋСЃРµСЂСѓ, РєРѕС‚РѕСЂС‹Р№ СЌС‚РѕС‚ СЃРёРіРЅР°Р» РѕС‚РїСЂР°РІРёР»
      * @param producerBlockId
      * @param producerVariableContainer
      * @return
      */
-    public Signal createParsedSignal(Long producerBlockId, VariablesContainer producerVariableContainer){
-        SignalModel signalModel = signalModelsByProducerIds.get(producerBlockId);
+    public Signal createParsedSignal(Long producerBlockId,Long signalId, VariablesContainer producerVariableContainer){
+        SignalModel signalModel = signalModelsBySignalIds.get(signalId);
         return signalModel.createSignal(producerBlockId, producerVariableContainer);
     }
 
     /**
-     * Создается сигнал по входящим параметрам
+     * РЎРѕР·РґР°РµС‚СЃСЏ СЃРёРіРЅР°Р» РїРѕ РІС…РѕРґСЏС‰РёРј РїР°СЂР°РјРµС‚СЂР°Рј
      * @param signalId
      * @param signalVariables
      * @return

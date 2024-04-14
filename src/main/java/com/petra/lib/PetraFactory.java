@@ -1,6 +1,5 @@
 package com.petra.lib;
 
-import com.petra.lib.state.handler.UserHandlerExecutor;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,7 +15,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 /**
- * Компонент соединяющий петру и спринг
+ * РљРѕРјРїРѕРЅРµРЅС‚ СЃРѕРµРґРёРЅСЏСЋС‰РёР№ РїРµС‚СЂСѓ Рё СЃРїСЂРёРЅРі
  */
 //@Component
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -39,9 +38,9 @@ public final class PetraFactory implements ApplicationContextAware {
 
     @Override
     public synchronized void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        dsasd
-
-        UserHandlerExecutor userHandlerExecutor = new UserHandlerExecutor()
+//        dsasd
+//
+//        UserHandlerExecutor userHandlerExecutor = new UserHandlerExecutor()
 
 //        ThreadManager.setPoolSize(threadsCount);
 //        Map<String, Object> sourceHandlersBeans = applicationContext.getBeansWithAnnotation(WorkflowHandler.class);

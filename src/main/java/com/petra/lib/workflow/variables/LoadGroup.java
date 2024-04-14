@@ -31,7 +31,7 @@ class LoadGroup {
     public void load(WorkflowActionContext workflowActionContext) throws ExecutionException, InterruptedException {
         Collection<Future<SourceResponseDto>> sourceFutures = new ArrayList<>();
         for (SourceLoader sourceLoader : sourceLoaders) {
-//            асинхронно запрашивать переменные и понять что они все были запрошены
+//            Р°СЃРёРЅС…СЂРѕРЅРЅРѕ Р·Р°РїСЂР°С€РёРІР°С‚СЊ РїРµСЂРµРјРµРЅРЅС‹Рµ Рё РїРѕРЅСЏС‚СЊ С‡С‚Рѕ РѕРЅРё РІСЃРµ Р±С‹Р»Рё Р·Р°РїСЂРѕС€РµРЅС‹
             Future<SourceResponseDto> requestSourceFuture =
                     executorService.submit(() -> sourceLoader.load(workflowActionContext));
             sourceFutures.add(requestSourceFuture);

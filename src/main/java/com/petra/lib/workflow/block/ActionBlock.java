@@ -8,6 +8,9 @@ import com.petra.lib.workflow.enums.WorkflowActionState;
 import com.petra.lib.workflow.repo.WorkflowActionRepo;
 import com.petra.lib.workflow.variables.LoadVariablesManager;
 
+/**
+ * Класс отвечает за запуск активности из воркфлоу
+ */
 class ActionBlock implements ExecutionBlock {
 
     Long actionId;
@@ -15,7 +18,8 @@ class ActionBlock implements ExecutionBlock {
 
     BlockRequest blockRequest;
 
-    String serviceName;
+    String producerServiceName;
+    String consumerServiceName;
 
     WorkflowActionRepo workflowActionRepo;
 
@@ -33,9 +37,9 @@ class ActionBlock implements ExecutionBlock {
                 actionId,
                 workflowActionContext.getCurrentSignalId(),
                 workflowActionContext.getBlockVariables(),
-                serviceName
+                producerServiceName
         );
-        BlockRequestResult requestResult = blockRequest.requestBlockExec(blockRequestDto);
+        BlockRequestResult requestResult = blockRequest.requestBlockExec(blockRequestDto,consumerServiceName );
         if (requestResult == BlockRequestResult.REPEAT) return;
 
         workflowActionContext.setWorkflowState(WorkflowActionState.EXECUTING);

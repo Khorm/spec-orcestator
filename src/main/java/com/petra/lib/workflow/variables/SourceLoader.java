@@ -14,13 +14,14 @@ import lombok.experimental.FieldDefaults;
 @RequiredArgsConstructor
 class SourceLoader {
     SourceRequest sourceRequest;
-    Long loadingSourceId;
+    Long requestingSourceId;
     VariableMapper variableMapper;
+    String requestingSourceServiceName;
 
     public SourceResponseDto load(WorkflowActionContext workflowActionContext){
         VariablesContainer sourceContainer = variableMapper.map(workflowActionContext.getBlockVariables());
         SourceRequestDto sourceRequestDto = new SourceRequestDto(workflowActionContext.getScenarioId(),
-                loadingSourceId, sourceContainer);
-        return sourceRequest.send(sourceRequestDto);
+                requestingSourceId, sourceContainer);
+        return sourceRequest.send(sourceRequestDto, requestingSourceServiceName);
     }
 }

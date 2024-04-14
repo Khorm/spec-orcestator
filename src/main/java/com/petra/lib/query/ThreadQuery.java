@@ -4,13 +4,13 @@ public interface ThreadQuery {
     /**
      *
      * @param inputTask
-     * @return true если задача была принята, false если задача была отклонена изза отсуствия потоков
+     * @return true РµСЃР»Рё Р·Р°РґР°С‡Р° Р±С‹Р»Р° РїСЂРёРЅСЏС‚Р°, false РµСЃР»Рё Р·Р°РґР°С‡Р° Р±С‹Р»Р° РѕС‚РєР»РѕРЅРµРЅР° РёР·Р·Р° РѕС‚СЃСѓСЃС‚РІРёСЏ РїРѕС‚РѕРєРѕРІ
      */
     boolean forcedPop(InputTask inputTask);
 
     /**
-     * Поместить задачу в очередь
-     * @param inputTask - задача
+     * РџРѕРјРµСЃС‚РёС‚СЊ Р·Р°РґР°С‡Сѓ РІ РѕС‡РµСЂРµРґСЊ
+     * @param inputTask - Р·Р°РґР°С‡Р°
      */
     void popInQueue(InputTask inputTask);
 

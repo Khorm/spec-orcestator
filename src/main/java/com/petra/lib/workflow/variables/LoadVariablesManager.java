@@ -9,25 +9,25 @@ import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 /**
- * Загрузчик переменных перед исполнением блока
+ * Р—Р°РіСЂСѓР·С‡РёРє РїРµСЂРµРјРµРЅРЅС‹С… РїРµСЂРµРґ РёСЃРїРѕР»РЅРµРЅРёРµРј Р±Р»РѕРєР°
  */
 public class LoadVariablesManager {
 
     Map<Long, VariableMapper> variableMappersBySignalIds;
 
     /**
-     * должна быть сгруппирована по номерам груп от 0
+     * РґРѕР»Р¶РЅР° Р±С‹С‚СЊ СЃРіСЂСѓРїРїРёСЂРѕРІР°РЅР° РїРѕ РЅРѕРјРµСЂР°Рј РіСЂСѓРї РѕС‚ 0
      */
     Collection<LoadGroup> loadGroups;
 
     public void start(WorkflowActionContext workflowActionContext) throws ExecutionException, InterruptedException {
-        //передлываем переменные входящего сигнала в переменные активности
+        //РїРµСЂРµРґР»С‹РІР°РµРј РїРµСЂРµРјРµРЅРЅС‹Рµ РІС…РѕРґСЏС‰РµРіРѕ СЃРёРіРЅР°Р»Р° РІ РїРµСЂРµРјРµРЅРЅС‹Рµ Р°РєС‚РёРІРЅРѕСЃС‚Рё
         VariablesContainer blockContainer =
                 variableMappersBySignalIds.get(workflowActionContext.getCurrentSignalId())
                         .map(workflowActionContext.getSignalVariables());
         workflowActionContext.setBlockVariables(blockContainer);
 
-        //запрашивает сигналы у соурсов
+        //Р·Р°РїСЂР°С€РёРІР°РµС‚ СЃРёРіРЅР°Р»С‹ Сѓ СЃРѕСѓСЂСЃРѕРІ
         for (LoadGroup loadGroup : loadGroups) {
             loadGroup.load(workflowActionContext);
         }

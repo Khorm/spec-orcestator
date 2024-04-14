@@ -1,6 +1,8 @@
 package com.petra.lib.remote.dto;
 
-import com.petra.lib.block.BlockRequestStatus;
+
+import com.petra.lib.remote.enums.BlockRequestResult;
+import com.petra.lib.remote.enums.BlockRequestStatus;
 import com.petra.lib.variable.value.VariablesContainer;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -18,4 +20,5 @@ public class BlockResponseDto {
     VariablesContainer blockVariables;
     BlockRequestStatus blockRequestStatus;
     Long callingSignalId;
+    Long producerBlockId;
 }

@@ -2,8 +2,12 @@ package com.petra.lib.workflow.repo;
 
 import com.petra.lib.workflow.context.WorkflowActionContext;
 
+import java.util.Collection;
+import java.util.Optional;
+import java.util.UUID;
+
 public interface WorkflowActionRepo {
-//    Optional<WorkflowActionContext> findContext(UUID scenarioId, Long workflowId, Long actionId);
+    Optional<WorkflowActionContext> findContext(UUID scenarioId, Long workflowId, Long actionId);
 
 //    void updateWorkflowContextState(UUID scenarioId, BlockId workflowId, BlockId actionId, WorkflowActionState workflowActionState);
 //    void updateWorkflowContextStateAndOuterSignals(UUID scenarioId,
@@ -13,23 +17,25 @@ public interface WorkflowActionRepo {
 //                                                   Collection<ResponseSignal> responseSignals);
 
     /**
-     * Сохраняет несуществующий контекст
+     * РЎРѕС…СЂР°РЅСЏРµС‚ РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№ РєРѕРЅС‚РµРєСЃС‚
      * @param workflowActionContext
      * @return
-     * true - контекст сохранен
-     * false - контекст уже существует
+     * true - РєРѕРЅС‚РµРєСЃС‚ СЃРѕС…СЂР°РЅРµРЅ
+     * false - РєРѕРЅС‚РµРєСЃС‚ СѓР¶Рµ СЃСѓС‰РµСЃС‚РІСѓРµС‚
      *
      */
     boolean saveContext(WorkflowActionContext workflowActionContext);
 
     /**
-     * обновляет контекст
+     * РѕР±РЅРѕРІР»СЏРµС‚ РєРѕРЅС‚РµРєСЃС‚
      * @param workflowActionContext
      * @return
-     * true - удалось обновить стейт контекста
-     * false - не удалось обновить стейт контекста
+     * true - СѓРґР°Р»РѕСЃСЊ РѕР±РЅРѕРІРёС‚СЊ СЃС‚РµР№С‚ РєРѕРЅС‚РµРєСЃС‚Р°
+     * false - РЅРµ СѓРґР°Р»РѕСЃСЊ РѕР±РЅРѕРІРёС‚СЊ СЃС‚РµР№С‚ РєРѕРЅС‚РµРєСЃС‚Р°
      */
     boolean updateContext(WorkflowActionContext workflowActionContext);
+
+    Collection<WorkflowActionContext> getScenarioContexts(UUID scenarioId, Long workflowID);
 
 //    Collection<WorkflowActionContext> findExecutedWorkflows(UUID scenarioId, BlockId workflowId);
 }

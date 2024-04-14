@@ -13,6 +13,8 @@ public class WorkflowBlock implements ExecutionBlock{
     String producerServiceName;
     BlockRequest blockRequest;
     WorkflowActionRepo workflowActionRepo;
+
+    String requestWorkflowServiceName;
     @Override
     public void start(WorkflowActionContext workflowActionContext) {
         BlockRequestDto blockRequestDto = new BlockRequestDto(
@@ -20,11 +22,11 @@ public class WorkflowBlock implements ExecutionBlock{
                 consumerWorkflowId,
                 workflowActionContext.getExecBlock(),
                 workflowActionContext.getCurrentSignalId(),
-                //воркфлоу передается нераспарсеные переменные сигнала
+                //РІРѕСЂРєС„Р»РѕСѓ РїРµСЂРµРґР°РµС‚СЃСЏ РЅРµСЂР°СЃРїР°СЂСЃРµРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ СЃРёРіРЅР°Р»Р°
                 workflowActionContext.getSignalVariables(),
                 producerServiceName
         );
-        BlockRequestResult requestResult = blockRequest.requestBlockExec(blockRequestDto);
+        BlockRequestResult requestResult = blockRequest.requestBlockExec(blockRequestDto, requestWorkflowServiceName);
         if (requestResult == BlockRequestResult.REPEAT) return;
         workflowActionContext.setWorkflowState(WorkflowActionState.EXECUTING);
         workflowActionRepo.updateContext(workflowActionContext);

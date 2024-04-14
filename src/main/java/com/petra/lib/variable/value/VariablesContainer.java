@@ -5,14 +5,14 @@ import java.util.Optional;
 
 public interface VariablesContainer {
     /**
-     * Добавляет новое значение или заменяет старое.
+     * Р”РѕР±Р°РІР»СЏРµС‚ РЅРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ РёР»Рё Р·Р°РјРµРЅСЏРµС‚ СЃС‚Р°СЂРѕРµ.
      * @param processValue
      */
     void addVariable(ProcessValue processValue);
 
     /**
-     * Синхронизирует контекст блока с входящим контектсом.
-     * Заменяет встретившиеся значения
+     * РЎРёРЅС…СЂРѕРЅРёР·РёСЂСѓРµС‚ РєРѕРЅС‚РµРєСЃС‚ Р±Р»РѕРєР° СЃ РІС…РѕРґСЏС‰РёРј РєРѕРЅС‚РµРєС‚СЃРѕРј.
+     * Р—Р°РјРµРЅСЏРµС‚ РІСЃС‚СЂРµС‚РёРІС€РёРµСЃСЏ Р·РЅР°С‡РµРЅРёСЏ
      * @param inputContext
      */
     void addVariables(VariablesContainer inputContext);

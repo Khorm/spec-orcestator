@@ -7,12 +7,12 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.Map;
 
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE)
 class SignalModel {
     Long signalId;
 
     /**
-     * Хранит мапперы в переменные сигнала по айди продюсера сигнала
+     * РҐСЂР°РЅРёС‚ РјР°РїРїРµСЂС‹ РІ РїРµСЂРµРјРµРЅРЅС‹Рµ СЃРёРіРЅР°Р»Р° РїРѕ Р°Р№РґРё РїСЂРѕРґСЋСЃРµСЂР° СЃРёРіРЅР°Р»Р°
      */
     Map<Long, VariableMapper> sourceMapperByProducerBlockId;
 

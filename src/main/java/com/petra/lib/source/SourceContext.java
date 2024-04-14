@@ -14,28 +14,28 @@ import java.util.UUID;
 @Getter
 public class SourceContext {
     /**
-     * ID активности
+     * ID Р°РєС‚РёРІРЅРѕСЃС‚Рё
      */
 //    final Long actionId;
 
     /**
-     * ID текущего соурса
+     * ID С‚РµРєСѓС‰РµРіРѕ СЃРѕСѓСЂСЃР°
      */
     final Long sourceId;
 
     /**
-     * АЙДИ бизнеспроцесса
+     * РђР™Р”Р Р±РёР·РЅРµСЃРїСЂРѕС†РµСЃСЃР°
      */
     final UUID scenarioId;
 
 
     /**
-     * Текущие переменные соурса
+     * РўРµРєСѓС‰РёРµ РїРµСЂРµРјРµРЅРЅС‹Рµ СЃРѕСѓСЂСЃР°
      */
     final VariablesContainer arguments;
 
     /**
-     * Исходник, откуда пришел сигнал на инициализацию
+     * РСЃС…РѕРґРЅРёРє, РѕС‚РєСѓРґР° РїСЂРёС€РµР» СЃРёРіРЅР°Р» РЅР° РёРЅРёС†РёР°Р»РёР·Р°С†РёСЋ
      */
 //    final BlockId requestBlockId;
 //    final String requestServiceName;
