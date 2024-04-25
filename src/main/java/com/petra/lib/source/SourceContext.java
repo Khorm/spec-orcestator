@@ -1,7 +1,7 @@
 package com.petra.lib.source;
 
 import com.petra.lib.variable.value.ProcessValue;
-import com.petra.lib.variable.value.VariablesContainer;
+import com.petra.lib.variable.value.ValuesContainer;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +13,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Getter
 public class SourceContext {
-    /**
-     * ID активности
-     */
-//    final Long actionId;
 
     /**
      * ID текущего соурса
@@ -32,14 +28,18 @@ public class SourceContext {
     /**
      * Текущие переменные соурса
      */
-    final VariablesContainer arguments;
+    final ValuesContainer arguments;
 
     /**
      * Исходник, откуда пришел сигнал на инициализацию
      */
 //    final BlockId requestBlockId;
 //    final String requestServiceName;
-    VariablesContainer resultVariables;
+    ValuesContainer resultVariables;
+    final Long requestingWorkflowId;
+    final String workflowServiceName;
+    final Long requestingBlockId;
+
 
 //    public synchronized void addVariables(VariablesContainer inputVariablesContainer) {
 //        executingVariables.addVariables(inputVariablesContainer);
@@ -49,7 +49,7 @@ public class SourceContext {
         return arguments.getValueByName(variableName);
     }
 
-    public synchronized void setResult(VariablesContainer resultVariables) {
+    public synchronized void setResult(ValuesContainer resultVariables) {
         this.resultVariables = resultVariables;
     }
 

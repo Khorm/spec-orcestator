@@ -1,6 +1,6 @@
 package com.petra.lib.workflow.signal;
 
-import com.petra.lib.variable.value.VariablesContainer;
+import com.petra.lib.variable.value.ValuesContainer;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
@@ -9,9 +9,9 @@ import lombok.experimental.FieldDefaults;
 @Getter
 public class Signal {
     Long signalId;
-    VariablesContainer signalVariables;
+    ValuesContainer signalVariables;
 
-    Signal(Long signalId, VariablesContainer signalVariables) {
+    Signal(Long signalId, ValuesContainer signalVariables) {
         this.signalId = signalId;
         this.signalVariables = signalVariables;
     }

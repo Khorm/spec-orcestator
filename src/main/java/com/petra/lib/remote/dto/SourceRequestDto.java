@@ -1,6 +1,5 @@
 package com.petra.lib.remote.dto;
 
-import com.petra.lib.variable.value.VariablesContainer;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,5 +13,8 @@ import java.util.UUID;
 public class SourceRequestDto {
     UUID scenarioId;
     Long sourceId;
-    VariablesContainer signalVariables;
+    String sourceVariables;
+    Long workflowId;
+    String requestServiceName;
+    Long requestBlockId;
 }

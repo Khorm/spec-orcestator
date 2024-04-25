@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.List;
+
+
 @Getter
 @ToString
 public class ProcessValue {
@@ -27,5 +30,9 @@ public class ProcessValue {
 
     public <T> T getParsedVariable(Class<T> clazz) throws JsonProcessingException {
         return oj.readValue(jsonValue, clazz);
+    }
+
+    public <T> List<T> getParsedList(Class<T> clazz) throws JsonProcessingException {
+        return oj.readValue(jsonValue, oj.getTypeFactory().constructCollectionType(List.class, clazz));
     }
 }

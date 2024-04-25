@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.petra.lib.variable.pure.PureVariable;
 import com.petra.lib.variable.pure.PureVariableList;
 import com.petra.lib.variable.value.ProcessValue;
-import com.petra.lib.variable.value.VariableContainerFactory;
-import com.petra.lib.variable.value.VariablesContainer;
+import com.petra.lib.variable.value.ValuesContainerFactory;
+import com.petra.lib.variable.value.ValuesContainer;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ class UserSourceContextImpl implements UserSourceContext {
     EntityManager entityManager;
 
     @Getter
-    VariablesContainer resultContainer = VariableContainerFactory.getSimpleVariableContainer();
-    VariablesContainer argumentsContainer;
+    ValuesContainer resultContainer = ValuesContainerFactory.getSimpleVariableContainer();
+    ValuesContainer argumentsContainer;
     PureVariableList pureVariableList;
 
     @Override
@@ -36,7 +36,7 @@ class UserSourceContextImpl implements UserSourceContext {
     public void setValue(String variableName, Object value) {
         PureVariable pureVariable = pureVariableList.getVariableByName(variableName);
         try {
-            resultContainer.addVariable(new ProcessValue(pureVariable.getId(), pureVariable.getName(), value));
+            argumentsContainer.addValue(new ProcessValue(pureVariable.getId(), pureVariable.getName(), value));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

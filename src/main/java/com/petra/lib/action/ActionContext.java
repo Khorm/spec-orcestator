@@ -1,7 +1,7 @@
 package com.petra.lib.action;
 
 import com.petra.lib.variable.value.ProcessValue;
-import com.petra.lib.variable.value.VariablesContainer;
+import com.petra.lib.variable.value.ValuesContainer;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class ActionContext {
     /**
      * Текущие переменные активности
      */
-    final VariablesContainer actionVariables;
+    final ValuesContainer actionVariables;
 
 
     /**
@@ -55,10 +55,10 @@ public class ActionContext {
     }
 
     public void setValue(ProcessValue value) {
-        actionVariables.addVariable(value);
+        actionVariables.addValue(value);
     }
 
-    public Optional<ProcessValue> getValueById(Long variableId) {
+    public ProcessValue getValueById(Long variableId) {
         return actionVariables.getValueById(variableId);
     }
 

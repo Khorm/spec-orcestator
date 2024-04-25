@@ -1,12 +1,14 @@
 package com.petra.lib.workflow.context;
 
-import com.petra.lib.variable.value.VariablesContainer;
+import com.petra.lib.variable.value.ValuesContainer;
 import com.petra.lib.workflow.enums.WorkflowActionState;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Set;
 import java.util.UUID;
 @Getter
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ public class WorkflowActionContext {
     final UUID scenarioId;
 
     /**
-     * Айди воркфлоу которая обраюатывает этот блок
+     * Айди воркфлоу которая обрабатывает этот блок
      */
     final Long workflowId;
 
@@ -36,25 +38,35 @@ public class WorkflowActionContext {
     /**
      * загруженные переменные блока
      */
-    VariablesContainer blockVariables;
+    ValuesContainer blockVariables;
 
 
     /**
      * следующий вызываемый сигнал
      */
-    Long callingSignalId;
+    Long nextSignalId;
+
+    /**
+     * переменные вызывающего сигнала
+     */
+    final ValuesContainer callingSignalVariables;
 
     /**
      * Сигнал который вызывает блок
      */
-    final Long currentSignalId;
+    final Long callingSignalId;
+
 
     /**
-     * переменные сигнала
+     * Текущая загружаемая группа
      */
-    final VariablesContainer signalVariables;
+    @Setter
+    int loadingGroup;
 
-
+    /**
+     * Загруженные соурсы
+     */
+    final Set<Long> loadedSources;
 
 
 //    public Optional<ProcessValue> getValueById (Long valueId){
@@ -81,16 +93,22 @@ public class WorkflowActionContext {
         this.workflowActionState = workflowActionState;
     }
 
-    public synchronized void setBlockVariables(VariablesContainer newBlockVariables){
+    public synchronized void setBlockVariables(ValuesContainer newBlockVariables){
         if (blockVariables == null){
             blockVariables = newBlockVariables;
             return;
         }
-        blockVariables.addVariables(newBlockVariables);
+        blockVariables.addValues(newBlockVariables);
     }
 
-    public synchronized void setCallingSignalId(Long callingSignalId){
-        this.callingSignalId = callingSignalId;
+    public synchronized void setNextSignalId(Long nextSignalId){
+        this.nextSignalId = nextSignalId;
+    }
+
+
+
+    public void addLoadSource(Long loadSourceId){
+        loadedSources.add(loadSourceId);
     }
 
 //    public synchronized void setCurrentSignalId(SignalId currentSignalId){

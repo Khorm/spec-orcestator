@@ -1,7 +1,7 @@
 package com.petra.lib.workflow.context;
 
 import com.petra.lib.action.BlockState;
-import com.petra.lib.variable.value.VariablesContainer;
+import com.petra.lib.variable.value.ValuesContainer;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +35,9 @@ public class WorkflowContext {
     final Long signalId;
 
     /**
-     * переменные запустившего сигнала
+     * переменные запустившего воркфлоу сигнала
      */
-    final VariablesContainer signalVariables;
+    final ValuesContainer signalVariables;
 
     /**
      * стейт в котором находится исполняемая воркфлоу
@@ -45,9 +45,11 @@ public class WorkflowContext {
     BlockState workflowState;
 
     /**
-     * Ответные данные воркфлоу
+     * Ответные данные воркфлоу, приходящие из последнего исполненного актиона
      */
-    VariablesContainer responseVariables;
+    ValuesContainer responseVariables;
+
+    Long responseSignal;
 
     /**
      * Имя запрашивающего сервиса
@@ -59,7 +61,7 @@ public class WorkflowContext {
         this.workflowState = workflowState;
     }
 
-    public synchronized void setResponseVariables(VariablesContainer responseVariables) {
+    public synchronized void setResponseVariables(ValuesContainer responseVariables) {
         this.responseVariables = responseVariables;
     }
 

@@ -6,7 +6,7 @@ import org.springframework.web.client.RestTemplate;
 
 class BlockRequestImpl implements BlockRequest {
 
-    RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
     public BlockRequestResult requestBlockExec(BlockRequestDto blockRequestDto, String consumerServiceName) {

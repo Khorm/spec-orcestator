@@ -1,12 +1,13 @@
 package com.petra.lib.transaction;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-public class TransactionManagerImpl implements TransactionManager {
+class TransactionManagerImpl implements TransactionManager {
     private final JpaTransactionManager jpaTransactionManager;
 
     public TransactionManagerImpl(JpaTransactionManager jpaTransactionManager) {
@@ -14,7 +15,7 @@ public class TransactionManagerImpl implements TransactionManager {
     }
 
 
-    public <T> T executeInTransaction(TransactionCallable<T> task, Isolation transactionDefinition) throws Exception {
+    public <T> T executeInTransaction(TransactionCallable<T> task, Isolation transactionDefinition) {
         DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
         definition.setIsolationLevel(transactionDefinition.value());
         definition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -27,19 +28,19 @@ public class TransactionManagerImpl implements TransactionManager {
         } catch (Exception e) {
             e.printStackTrace();
             jpaTransactionManager.rollback(transactionStatus);
-            throw e;
+            throw new RuntimeException(e);
         }
 
     }
 
 
     @Override
-    public <T> T executeInTransaction(TransactionCallable<T> task) throws Exception {
+    public <T> T executeInTransaction(TransactionCallable<T> task) {
         return executeInTransaction(task, Isolation.READ_COMMITTED);
     }
 
     @Override
-    public void executeInTransaction(TransactionRunnable task) throws Exception {
+    public void executeInTransaction(TransactionRunnable task) {
         DefaultTransactionDefinition definition = new DefaultTransactionDefinition();
         definition.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         definition.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
@@ -52,7 +53,7 @@ public class TransactionManagerImpl implements TransactionManager {
         } catch (Exception e) {
             jpaTransactionManager.rollback(transactionStatus);
             e.printStackTrace();
-            throw e;
+            throw new RuntimeException(e);
         }
     }
 

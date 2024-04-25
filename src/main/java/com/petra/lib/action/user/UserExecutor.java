@@ -7,6 +7,7 @@ import com.petra.lib.action.user.handler.UserActionHandler;
 import com.petra.lib.transaction.TransactionManager;
 import com.petra.lib.variable.pure.PureVariableList;
 import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
@@ -19,7 +20,33 @@ import java.util.Objects;
  */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Log4j2
+@RequiredArgsConstructor
 public class UserExecutor {
+    TransactionManager transactionManager;
+    UserActionHandler userActionHandler;
+
+    ActionRepo actionRepo;
+    PureVariableList actionVariables;
+
+    /**
+     * В одной транзакции выставляет стейт и обработывает пользоватский обработчик.
+     *
+     * @param context - current execution context
+     * @throws Exception
+     */
+    public void execute(ActionContext context) throws Exception {
+        transactionManager.executeInTransaction(jpaTransactionManager -> {
+
+            EntityManager entityManager = EntityManagerFactoryUtils
+                    .getTransactionalEntityManager(Objects.requireNonNull(jpaTransactionManager.getEntityManagerFactory()));
+            UserActionContextImpl userContext = new UserActionContextImpl(entityManager, context, actionVariables);
+            userActionHandler.execute(userContext);
+
+            context.setActionState(BlockState.EXECUTED);
+            actionRepo.updateActionContextVariables(context.getScenarioId(), context.getActionId(),
+                    context.getActionVariables(), context.getActionState());
+        });
+    }
 
 //    UserHandler userHandler;
 //    StateManager stateManager;
@@ -126,37 +153,16 @@ public class UserExecutor {
 //        });
 //    }
 
-    TransactionManager transactionManager;
-    UserActionHandler userActionHandler;
 
-    ActionRepo actionRepo;
-    PureVariableList pureVariablesList;
 
-    UserExecutor(TransactionManager transactionManager, UserActionHandler userActionHandler, ActionRepo actionRepo, PureVariableList pureVariablesList) {
-        this.transactionManager = transactionManager;
-        this.userActionHandler = userActionHandler;
-        this.actionRepo = actionRepo;
-        this.pureVariablesList = pureVariablesList;
-    }
+//    UserExecutor(TransactionManager transactionManager, UserActionHandler userActionHandler,
+//                 ActionRepo actionRepo, PureVariableList pureVariablesList) {
+//        this.transactionManager = transactionManager;
+//        this.userActionHandler = userActionHandler;
+//        this.actionRepo = actionRepo;
+//        this.pureVariablesList = pureVariablesList;
+//    }
 
-    /**
-     * В одной транзакции выставляет стейт и обработывает пользоватский обработчик.
-     *
-     * @param context - current execution context
-     * @throws Exception
-     */
-    public void execute(ActionContext context) throws Exception {
-        transactionManager.executeInTransaction(jpaTransactionManager -> {
 
-            EntityManager entityManager = EntityManagerFactoryUtils
-                    .getTransactionalEntityManager(Objects.requireNonNull(jpaTransactionManager.getEntityManagerFactory()));
-            UserActionContextImpl userContext = new UserActionContextImpl(entityManager, context, pureVariablesList);
-            userActionHandler.execute(userContext);
-
-            context.setActionState(BlockState.EXECUTED);
-            actionRepo.updateActionContextVariables(context.getScenarioId(), context.getActionId(),
-                    context.getActionVariables(), context.getActionState());
-        });
-    }
 
 }

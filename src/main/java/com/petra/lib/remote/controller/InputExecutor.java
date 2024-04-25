@@ -85,13 +85,20 @@ public class InputExecutor {
     }
 
 
-    SourceResponseDto handleSource(SourceRequestDto sourceRequestDto) {
+    BlockRequestResult handleSource(SourceRequestDto sourceRequestDto) {
         try {
             Source source = sources.get(sourceRequestDto.getSourceId());
             return source.execute(sourceRequestDto);
         } catch (Exception e) {
-            return new SourceResponseDto(null, null, null, SourceResultStatus.ERROR);
+            e.printStackTrace();
+            return BlockRequestResult.ERROR;
         }
+    }
+
+
+    BlockResponseResult sourceAnswer(SourceResponseDto sourceResponseDto){
+        Workflow workflow = workflows.get(sourceResponseDto.getRequestingWorkflowId());
+        return workflow.sourceAnswer(sourceResponseDto);
     }
 
 //    private ResponseDto executeBlock(Block execitingBlock, RequestDto inputSignal){

@@ -1,24 +1,41 @@
 package com.petra.lib.workflow.signal;
 
-import com.petra.lib.variable.mapper.VariableMapper;
-import com.petra.lib.variable.value.VariablesContainer;
+import com.petra.lib.variable.pure.PureVariableList;
+import com.petra.lib.variable.value.ProcessValue;
+import com.petra.lib.variable.value.ValuesContainer;
+import com.petra.lib.variable.value.ValuesContainerFactory;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Map;
+import java.util.Collection;
 
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 class SignalModel {
+
+    @Getter
     Long signalId;
 
     /**
      * Хранит мапперы в переменные сигнала по айди продюсера сигнала
      */
-    Map<Long, VariableMapper> sourceMapperByProducerBlockId;
+//    Map<Long, PureVariableList> signalValuesListByProducerBlockId;
 
-    public Signal createSignal(Long producerBlockId, VariablesContainer producerVariableContainer){
-        VariablesContainer sourceContainer = sourceMapperByProducerBlockId.get(producerBlockId).map(producerVariableContainer);
-        return new Signal(signalId, sourceContainer);
+    /**
+     * Хранит переменные сигнала
+     */
+    PureVariableList signalVariablesList;
+
+    SignalModel(Long signalId, PureVariableList signalVariablesList) {
+        this.signalId = signalId;
+        this.signalVariablesList = signalVariablesList;
+    }
+
+    public Signal createSignal(ValuesContainer producerVariableContainer) {
+
+        Collection<ProcessValue> signalValues = signalVariablesList
+                .parseVariables(producerVariableContainer.getValues());
+        return new Signal(signalId, ValuesContainerFactory.createValuesContainer(signalValues));
     }
 
 

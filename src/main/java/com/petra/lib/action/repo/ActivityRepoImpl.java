@@ -2,19 +2,17 @@ package com.petra.lib.action.repo;
 
 import com.petra.lib.action.ActionContext;
 import com.petra.lib.action.BlockState;
-import com.petra.lib.exception.RepeatedExecutionException;
 import com.petra.lib.transaction.Transaction;
-import com.petra.lib.transaction.TransactionCallable;
 import com.petra.lib.transaction.TransactionManager;
-import com.petra.lib.variable.value.VariablesContainer;
+import com.petra.lib.variable.value.ValuesContainer;
+import com.petra.lib.variable.value.ValuesContainerFactory;
+import com.petra.lib.workflow.repo.mapper.WorkflowContextRowMapper;
 import lombok.RequiredArgsConstructor;
-import org.postgresql.util.PSQLException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.orm.jpa.JpaTransactionManager;
 
-import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -24,14 +22,15 @@ class ActivityRepoImpl implements ActionRepo {
     private final TransactionManager transactionManager;
 
     @Override
-    public boolean updateActionContextVariables(UUID scenario, Long actionId, VariablesContainer actionVariables,
-                                                BlockState actionState) throws Exception {
+    public boolean updateActionContextVariables(UUID scenario, Long actionId, ValuesContainer actionVariables,
+                                                BlockState actionState) {
         return transactionManager.executeInTransaction(transaction -> {
-            String updateSql = "UPDATE action_context SET action_variables = 'HELLO' , action_state = :status " +
+            String updateSql = "UPDATE action_context SET action_variables = :actionVariables , action_state = :status " +
                     " where action_id = :actionId AND scenario_id = :scenarioId;";
             NamedParameterJdbcTemplate namedParameterJdbcTemplate
                     = new NamedParameterJdbcTemplate(Objects.requireNonNull(transaction.getDataSource()));
             SqlParameterSource updateParams = new MapSqlParameterSource()
+                    .addValue("actionVariables", ValuesContainerFactory.toJson(actionVariables))
                     .addValue("actionId", actionId)
                     .addValue("scenarioId", scenario)
                     .addValue("status", actionState.name());
@@ -51,7 +50,7 @@ class ActivityRepoImpl implements ActionRepo {
     }
 
     @Override
-    public boolean updateActionState(UUID scenario, Long actionId, BlockState actionState) throws Exception {
+    public boolean updateActionState(UUID scenario, Long actionId, BlockState actionState) {
         return transactionManager.executeInTransaction(transaction -> {
             boolean result = setActionState(scenario, actionId, actionState, transaction);
             if (!result){
@@ -67,15 +66,32 @@ class ActivityRepoImpl implements ActionRepo {
                 " :requestWorkflowId, :requestServiceName)";
         NamedParameterJdbcTemplate namedParameterJdbcTemplate
                 = new NamedParameterJdbcTemplate(Objects.requireNonNull(transactionManager.getJpaTransactionManager().getDataSource()));
+
         SqlParameterSource updateParams = new MapSqlParameterSource()
                 .addValue("actionId", actionContext.getActionId())
                 .addValue("scenarioId", actionContext.getScenarioId())
                 .addValue("actionState", actionContext.getActionState())
-                .addValue("actionVariables", actionContext.getActionVariables().toJson())
+                .addValue("actionVariables", ValuesContainerFactory.toJson(actionContext.getActionVariables()))
                 .addValue("requestWorkflowId", actionContext.getRequestWorkflowId())
                 .addValue("requestServiceName", actionContext.getRequestServiceName());
 
         return namedParameterJdbcTemplate.update(sql, updateParams) == 1;
+    }
+
+    @Override
+    public Collection<ActionContext> findNotCompletedContexts(Long actionId) {
+        return transactionManager.executeInTransaction(task -> {
+            NamedParameterJdbcTemplate namedParameterJdbcTemplate
+                    = new NamedParameterJdbcTemplate(Objects.requireNonNull(transactionManager.getJpaTransactionManager().getDataSource()));
+
+            SqlParameterSource namedParameters = new MapSqlParameterSource()
+                    .addValue("workflowId", actionId);
+
+            return namedParameterJdbcTemplate.query("SELECT * FROM action_context " +
+                            " WHERE action_id = :actionId AND (workflow_state = 'EXECUTING' OR " +
+                            " workflow_state = 'EXECUTED') ",
+                    namedParameters, new ActionContextRowMapper());
+        });
     }
 
     private boolean setActionState(UUID scenario, Long actionId, BlockState actionState, Transaction transaction){

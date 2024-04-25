@@ -1,6 +1,6 @@
 package com.petra.lib.remote.dto;
 
-import com.petra.lib.variable.value.VariablesContainer;
+import com.petra.lib.variable.value.ValuesContainer;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,7 +33,7 @@ public class BlockRequestDto {
     /**
      * Подготовленные переменные консумера
      */
-    VariablesContainer blockVariables;
+    String blockVariables;
 
     /**
      * Имя сервиса

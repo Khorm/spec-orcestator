@@ -3,6 +3,11 @@ petra:
     servers: localhost:29092
   thread:
     count: 4
+  services:
+    - name: service_one
+      url: 192.168.0.92
+    - name: service_two
+      url: 192.168.0.92
 
 spring:
   datasource:

@@ -29,9 +29,14 @@ public class PetraController {
     }
 
 
-    @PostMapping(path = "source")
-    public SourceResponseDto getSource(SourceRequestDto sourceRequestDto) {
+    @PostMapping(path = "source_request")
+    public BlockRequestResult getSource(SourceRequestDto sourceRequestDto) {
         return inputController.handleSource(sourceRequestDto);
+    }
+
+    @PostMapping(path = "service_response")
+    public BlockResponseResult sourceAnswer(SourceResponseDto sourceResponseDto){
+        return inputController.sourceAnswer(sourceResponseDto);
     }
 
 
